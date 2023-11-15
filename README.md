@@ -18,11 +18,11 @@ Hello, World!
 
 ## Changes, Thoughts and Learnings (newest first)
 - November 15th, 2023
+    - split code into modules, reduced a lot of duplicate code.
+    - wrote abstractions for the functions provided by the svg crate, since colors, line width, the absence of fill etc. can be hard coded, as those things don't matter to a pen plotter.
     - added lines from border from the grid field to the circle center
       
 ![groups of 2 cirles in a 5 by 5 grid, bleck lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00003.png?raw=true)
-    - split code into modules, reduced a lot of duplicate code.
-    - wrote abstractions for the functions provided by the svg crate, since colors, line width, the absence of fill etc. can be hard coded, as those things don't matter to a pen plotter. 
 
 - November 14th, 2023
     - changed distored squares to circles in a 5x5 grid
