@@ -1,6 +1,6 @@
 use svg::node::element::{Path, Circle};
-use svg::node::{self, element::path::Data};
-use svg::{Document, Node};
+use svg::node::element::path::Data;
+
 
 use crate::lib::{layout, random_numbers};
 
