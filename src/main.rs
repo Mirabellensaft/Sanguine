@@ -28,8 +28,8 @@ fn form_group(layout: &layout::Format) -> node::element::Group {
             let mut rng = thread_rng();
             let radius = rng.gen_range(0..=10);
 
-            let cx = random_numbers::coordinate(&layout.field_container[row as usize][col as usize]).0;
-            let cy= random_numbers::coordinate(&layout.field_container[row as usize][col as usize]).1;
+            let cx = random_numbers::coordinate(&layout.field_container[row as usize][col as usize], radius).0;
+            let cy= random_numbers::coordinate(&layout.field_container[row as usize][col as usize], radius).1;
     
             let circle =shapes::circle(cx, cy, radius);
             graph.append(circle);
@@ -37,6 +37,8 @@ fn form_group(layout: &layout::Format) -> node::element::Group {
             let coordinates = random_numbers::coordinates_on_border(&layout.field_container[row as usize][col as usize]);
 
             for i in 0..40 {
+                // gerade
+            
                 let line = shapes::line(coordinates[i].0, coordinates[i].1, cx, cy);
                 graph.append(line);
                 

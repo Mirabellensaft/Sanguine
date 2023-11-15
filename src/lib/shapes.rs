@@ -16,10 +16,10 @@ fn path(data: Data) -> Path {
 
 pub fn distorted_square(field: layout::Field) -> Path {
     let data = Data::new()
-        .move_to((random_numbers::coordinate(&field).0, random_numbers::coordinate(&field).1))
-        .line_to((random_numbers::coordinate(&field).0, random_numbers::coordinate(&field).1))
-        .line_to((random_numbers::coordinate(&field).0, random_numbers::coordinate(&field).1))
-        .line_to((random_numbers::coordinate(&field).0, random_numbers::coordinate(&field).1))
+        .move_to((random_numbers::coordinate(&field, 0).0, random_numbers::coordinate(&field, 0).1))
+        .line_to((random_numbers::coordinate(&field, 0).0, random_numbers::coordinate(&field, 0).1))
+        .line_to((random_numbers::coordinate(&field, 0).0, random_numbers::coordinate(&field, 0).1))
+        .line_to((random_numbers::coordinate(&field, 0).0, random_numbers::coordinate(&field, 0).1))
         .close();
 
     let path = path(data);
