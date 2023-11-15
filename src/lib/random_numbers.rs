@@ -1,4 +1,4 @@
-use crate::lib::layout::{self, Field};
+use crate::lib::layout;
 use rand::{thread_rng, Rng};
 
 pub fn coordinate(field: &layout::Field) -> (i32, i32) {
@@ -18,7 +18,7 @@ pub fn coordinate(field: &layout::Field) -> (i32, i32) {
     randoms
 }
 
-fn coordinates_on_border(field: &layout::Field) -> [(i32, i32); 40] {
+pub fn coordinates_on_border(field: &layout::Field) -> [(i32, i32); 40] {
 
     let mut coordinates: [(i32, i32); 40] = [(0,0);40];
     
@@ -43,3 +43,4 @@ fn coordinates_on_border(field: &layout::Field) -> [(i32, i32); 40] {
     }
 
     coordinates
+}
