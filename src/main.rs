@@ -31,17 +31,16 @@ fn form_group(layout: &layout::Format) -> node::element::Group {
             let center = random_numbers::coordinate(&layout.field_container[row as usize][col as usize], radius);
         
     
-            let circle =shapes::circle(center, radius);
-            graph.append(circle);
+            let circle =shapes::Circle::new(center, radius);
+            graph.append(circle.draw());
                    
             let coordinates = random_numbers::coordinates_on_border(&layout.field_container[row as usize][col as usize]);
 
             for i in 0..40 {
 
-                let line = math::Line::new(coordinates[i], center);
+                let line = shapes::Line::new(coordinates[i], center);
                 
-                let line = shapes::line(line);
-                graph.append(line);
+                graph.append(line.draw());
                 
             }
                     
