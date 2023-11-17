@@ -2,7 +2,8 @@ use svg::node::element::{Path, Circle};
 use svg::node::element::path::Data;
 
 
-use crate::lib::{layout, random_numbers};
+use crate::lib::{layout, random_numbers, math};
+
 
 fn path(data: Data) -> Path {
     let path = Path::new()
@@ -16,31 +17,31 @@ fn path(data: Data) -> Path {
 
 pub fn distorted_square(field: layout::Field) -> Path {
     let data = Data::new()
-        .move_to((random_numbers::coordinate(&field, 0).0, random_numbers::coordinate(&field, 0).1))
-        .line_to((random_numbers::coordinate(&field, 0).0, random_numbers::coordinate(&field, 0).1))
-        .line_to((random_numbers::coordinate(&field, 0).0, random_numbers::coordinate(&field, 0).1))
-        .line_to((random_numbers::coordinate(&field, 0).0, random_numbers::coordinate(&field, 0).1))
+        .move_to((random_numbers::coordinate(&field, 0).x, random_numbers::coordinate(&field, 0).y))
+        .line_to((random_numbers::coordinate(&field, 0).x, random_numbers::coordinate(&field, 0).y))
+        .line_to((random_numbers::coordinate(&field, 0).x, random_numbers::coordinate(&field, 0).y))
+        .line_to((random_numbers::coordinate(&field, 0).x, random_numbers::coordinate(&field, 0).y))
         .close();
 
     let path = path(data);
     path
 }
 
-pub fn circle(cx: i32, cy: i32, radius: i32) -> Circle {
+pub fn circle(center: math::Point, radius: i32) -> Circle {
     let circle = Circle::new()
                 .set("fill", "none")
                 .set("stroke", "black")
                 .set("stroke-width", 1)
-                .set("cx", cx)
-                .set("cy", cy)
+                .set("cx", center.x)
+                .set("cy", center.y)
                 .set("r", radius);
     circle
 }
 
-pub fn line(start_x: i32, start_y:i32, end_x: i32, end_y: i32) -> Path {
+pub fn line(line: math::Line) -> Path {
     let data = Data::new()
-        .move_to((start_x, start_y))
-        .line_to((end_x, end_y));
+        .move_to((line.start.x, line.start.y))
+        .line_to((line.end.x, line.end.y));
 
     let path = path(data);
     path
