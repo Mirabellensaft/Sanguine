@@ -23,8 +23,11 @@ Hello, World!
 ![a 5x5 grid of the star burst shape, lines sort of end at the circle. sort of.](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00005.png?raw=true)
 
 - November 15th, 2023
+    - split code into modules, reduced a lot of duplicate code.
+    - wrote abstractions for the functions provided by the svg crate, since colors, line width, the absence of fill etc. can be hard coded, as those things don't matter to a pen plotter.
     - added lines from border from the grid field to the circle center
-![a 5x5 grid of random circles with lines groing from the field border to the center of the circle. The star burst shape](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00003.png?raw=true)
+
+![a 5x5 grid of random circles with lines going from the field border to the center of the circle. The star burst shape](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00003.png?raw=true)
     - split code into modules, reduced a lot of duplicate code.
     - wrote abstractions for the functions provided by the svg crate, since colors, line width, the absence of fill etc. can be hard coded, as those things don't matter to a pen plotter. 
 
@@ -32,7 +35,10 @@ Hello, World!
     - changed distored squares to circles in a 5x5 grid
 ![groups of 2 cirles in a 5 by 5 grid, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00001.png?raw=true)
 
+
 - November 11th, 2023
     - Hello, World!
+      
     ![Hello, World! a 3 by 3 grid of 9 groups of 2 distorted squares, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/hello_world.png?raw=true)
+  
     - I ran into an ownership problem with instances of the type `std::ops::Range<i32>` when generating that range early and using it in an iteration. The current solution is passing the values of the range and generating the range inside that function that is called in the iteration.
