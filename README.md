@@ -12,33 +12,42 @@ Hello, World!
 ## Features I have in mind:
 
 - [ ] generate art as svg
+- [ ] project layout that allows for easy transitions between creating art work with lots of predefined functions, writing custom parts for the frame work and switching between different works of art.
 - [ ] generate art without svg output, by adressing the pen plotter directly
 - [ ] input from hardware rngs
 
 
 ## Changes, Thoughts and Learnings (newest first)
-- November 17th, 2023
-    - added support for some math operations to generate lines and points and not just plot random shapes. This lead to an understanding, that this framework has different layers: a more abtract one that generates the lines to be plottet, and the svg functions that visualize the generated works. Currently it makes sense to me, to have the an `fn draw()` method for every shape that does just that. 
-    -another oldie but good to remember: on paper algebraic solutions are simpler, in programming, iterative methods are more elegant and flexible. 
+### November 17th, 2023
+
+ - added support for some math operations to generate lines and points and not just plot random shapes. This lead to an understanding, that this framework has different layers: a more abtract one that generates the lines to be plottet, and the svg functions that visualize the generated works. Currently it makes sense to me, to have the an `fn draw()` method for every shape that does just that. 
+- another oldie but good to remember: on paper algebraic solutions are simpler, in programming, iterative methods are more elegant and flexible. 
+
 ![a 5x5 grid of the star burst shape, lines sort of end at the circle. sort of.](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00005.png?raw=true)
 
-- November 15th, 2023
-    - split code into modules, reduced a lot of duplicate code.
-    - wrote abstractions for the functions provided by the svg crate, since colors, line width, the absence of fill etc. can be hard coded, as those things don't matter to a pen plotter.
-    - added lines from border from the grid field to the circle center
+### November 15th, 2023
+- split code into modules, reduced a lot of duplicate code.
+- wrote abstractions for the functions provided by the svg crate, since colors, line width, the absence of fill etc. can be hard coded, as those things don't matter to a pen plotter.
+- split code into modules, reduced a lot of duplicate code.
+- wrote abstractions for the functions provided by the svg crate, since colors, line width, the absence of fill etc. can be hard coded, as those things don't matter to a pen plotter. 
+
+- added lines from border from the grid field to the circle center
 
 ![a 5x5 grid of random circles with lines going from the field border to the center of the circle. The star burst shape](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00003.png?raw=true)
-    - split code into modules, reduced a lot of duplicate code.
-    - wrote abstractions for the functions provided by the svg crate, since colors, line width, the absence of fill etc. can be hard coded, as those things don't matter to a pen plotter. 
 
-- November 14th, 2023
-    - changed distored squares to circles in a 5x5 grid
+
+### November 14th, 2023
+- changed distored squares to circles in a 5x5 grid
+
 ![groups of 2 cirles in a 5 by 5 grid, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00001.png?raw=true)
 
 
-- November 11th, 2023
-    - Hello, World!
+### November 11th, 2023
+
+- I ran into an ownership problem with instances of the type `std::ops::Range<i32>` when generating that range early and using it in an iteration. The current solution is passing the values of the range and generating the range inside that function that is called in the iteration.
+
+- Hello, World!
       
-    ![Hello, World! a 3 by 3 grid of 9 groups of 2 distorted squares, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/hello_world.png?raw=true)
+![Hello, World! a 3 by 3 grid of 9 groups of 2 distorted squares, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/hello_world.png?raw=true)
   
-    - I ran into an ownership problem with instances of the type `std::ops::Range<i32>` when generating that range early and using it in an iteration. The current solution is passing the values of the range and generating the range inside that function that is called in the iteration.
+   
