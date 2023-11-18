@@ -8,6 +8,15 @@ pub struct Format {
     pub field_container: Vec<Vec<Field>>,
 }
 
+
+#[derive(Debug, Clone, Copy)]
+pub enum Orientation {
+    Top,
+    Bottom,
+    Left,
+    Right,
+}
+
 #[derive(Debug, Copy, Clone)]
 pub struct Field {
     pub x: i32, 
