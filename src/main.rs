@@ -1,5 +1,4 @@
-use svg::node::element::Path;
-use svg::node::{self, element::path::Data};
+use svg::node;
 use svg::{Document, Node};
 
 use rand::{thread_rng, Rng};
@@ -8,6 +7,7 @@ mod lib;
 use lib::layout;
 use lib::random_numbers;
 use lib::shapes;
+use lib::math;
 
 fn main() {
 
@@ -28,17 +28,19 @@ fn form_group(layout: &layout::Format) -> node::element::Group {
             let mut rng = thread_rng();
             let radius = rng.gen_range(0..=10);
 
-            let cx = random_numbers::coordinate(&layout.field_container[row as usize][col as usize]).0;
-            let cy= random_numbers::coordinate(&layout.field_container[row as usize][col as usize]).1;
+            let center = random_numbers::coordinate(&layout.field_container[row as usize][col as usize], radius);
+        
     
-            let circle =shapes::circle(cx, cy, radius);
-            graph.append(circle);
+            let circle =shapes::Circle::new(center, radius);
+            graph.append(circle.draw());
                    
             let coordinates = random_numbers::coordinates_on_border(&layout.field_container[row as usize][col as usize]);
 
             for i in 0..40 {
-                let line = shapes::line(coordinates[i].0, coordinates[i].1, cx, cy);
-                graph.append(line);
+
+                let line = shapes::Line::new(coordinates[i], center);
+                
+                graph.append(line.draw());
                 
             }
                     

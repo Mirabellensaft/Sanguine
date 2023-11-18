@@ -26,8 +26,9 @@ Hello, World!
 
 - November 14th, 2023
     - changed distored squares to circles in a 5x5 grid
-      
-![groups of 2 cirles in a 5 by 5 grid, bleck lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00000.png?raw=true)
+
+![groups of 2 cirles in a 5 by 5 grid, bleck lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00001.png?raw=true)
+
 
 - November 11th, 2023
     - Hello, World!
