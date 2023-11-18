@@ -1,5 +1,9 @@
 {
     "rust-analyzer.linkedProjects": [
-        "./Cargo.toml"
+        "./Cargo.toml",
+        "./sanguine/Cargo.toml",
+        "./sanguine_lib/Cargo.toml",
+        "./sanguine_lib/Cargo.toml",
+        "./sanguine_lib/Cargo.toml"
     ]
 }
