@@ -16,6 +16,8 @@ pub enum Orientation {
     Right,
 }
 
+
+
 #[derive(Debug, Copy, Clone)]
 pub struct Field {
     pub x: i32,

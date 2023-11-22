@@ -4,9 +4,9 @@ use svg::Node;
 use rand::{thread_rng, Rng};
 
 use sanguine_lib::resources::{
-    layout::{self, Orientation},
+    layout,
     random_numbers,
-    shapes::{self, Point},
+    shapes,
 };
 
 pub fn form_group(layout: &layout::Format) -> node::element::Group {
@@ -37,7 +37,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
 
             let center = random_numbers::coordinate(
                 &layout.field_container[row as usize][col as usize],
-                radius,
+                radius * 2,
             );
 
             let circle = shapes::Circle::new(center, radius as f32);

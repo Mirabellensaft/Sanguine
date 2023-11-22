@@ -1,10 +1,9 @@
 use crate::resources::{layout, shapes};
 use rand::{thread_rng, Rng};
 
-use super::layout::Orientation;
-
 pub fn coordinate(field: &layout::Field, margin: i32) -> shapes::Point {
     let mut rng = thread_rng();
+    println!("yeah3");
 
     let horizontal: std::ops::Range<i32> = std::ops::Range {
         start: field.x + margin,
@@ -15,7 +14,7 @@ pub fn coordinate(field: &layout::Field, margin: i32) -> shapes::Point {
         start: field.y + margin,
         end: field.y + field.row_height - margin,
     };
-
+    println!("h {:?}, v {:?}", horizontal, vertical);
     shapes::Point::new(
         rng.gen_range(horizontal) as f32,
         rng.gen_range(vertical) as f32,
@@ -48,12 +47,6 @@ pub fn coordinates_on_border(field: &layout::Field) -> [[shapes::Point; 10]; 4] 
         coordinates[3][i] = shapes::Point::new(field.x as f32 + field.column_width as f32, y);
         // println!("coordinates:{:?}", coordinates[side][i]);
     }
-
-    // println!(
-    //     "COORDS {:?}",
-    //     coordinates
-    // );
-
     coordinates
 }
 
@@ -69,7 +62,6 @@ pub fn all_border_coordinates(format: &layout::Format) -> Vec<Vec<[[shapes::Poin
         }
         vec.push(inner);
     }
-
     vec
 }
 

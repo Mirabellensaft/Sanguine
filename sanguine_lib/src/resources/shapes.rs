@@ -124,7 +124,6 @@ impl Line {
     }
 
     pub fn intersection(&self, other: Line, step: f32) -> Option<Point> {
-        let mut point = Point { x: 0.0, y: 0.0 };
 
         let mut diff = 10000000000.0;
         println!("step {}", step);
@@ -140,7 +139,7 @@ impl Line {
 
                   
                     if point_1.y < point_2.y + 2.0 && point_1.y > point_2.y - 2.0  {
-                        point = Point { x: x as f32, y: point_1.y };
+                        let point = Point { x: x as f32, y: point_1.y };
                         return Some(point)
                     } else {
 
@@ -188,8 +187,6 @@ impl Circle {
     }
 
     pub fn intersection(&self, line: Line, step: f32) -> Option<Point> {
-        let mut point = Point { x: 0.0, y: 0.0 };
-
 
         let mut diff = 10000000000.0;
         println!("\n\nstep {}", step);
@@ -198,10 +195,10 @@ impl Circle {
         if self.center.x == line.start.x {
             println!("x=x");
             if self.center.y > line.start.y {
-                point = Point::new(self.center.x, self.center.y - self.radius);
+                let point = Point::new(self.center.x, self.center.y - self.radius);
                 return Some(point)
             } else {
-                point = Point::new(self.center.x, self.center.y + self.radius);
+                let point = Point::new(self.center.x, self.center.y + self.radius);
                 return Some(point)
             }
         }
@@ -224,7 +221,7 @@ impl Circle {
                         } else {
                             println!("left to center");
 
-                            point = Point { x: x as f32, y: point_1.y };
+                            let point = Point { x: x as f32, y: point_1.y };
                     
                             return Some(point)
 
@@ -245,7 +242,7 @@ impl Circle {
                     if self.contains(point_1) == false {
                         if self.center.distance_to(&point_1) < self.radius + 1.0 {
                             println!("out of circle");
-                            point = Point { x: x as f32, y: point_1.y };
+                            let point = Point { x: x as f32, y: point_1.y };
                             return Some(point)
                             // if let Some(point) = line.return_point_on_line(x - step){
                             //     return Some(point)
