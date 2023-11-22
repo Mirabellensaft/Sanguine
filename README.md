@@ -16,8 +16,15 @@ Hello, World!
 - [ ] generate art without svg output, by adressing the pen plotter directly
 - [ ] input from hardware rngs
 
-
 ## Changes, Thoughts and Learnings (newest first)
+
+### November 20th, 2023
+- support for tesselation 
+- cleaner collision of lines with circles. Probably good enough for plotting. 
+- also, we now get into the territory of panics, calculations that go on indefinetly... so there was `Some()` introduction of Options.
+![the single tiles become less dominant when the rays of the cicle each meet a ray from the neighboring fiel on the border.](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00007.png?raw=true)
+
+
 ### November 17th, 2023
 
  - added support for some math operations to generate lines and points and not just plot random shapes. This lead to an understanding, that this framework has different layers: a more abtract one that generates the lines to be plottet, and the svg functions that visualize the generated works. Currently it makes sense to me, to have the an `fn draw()` method for every shape that does just that. 
