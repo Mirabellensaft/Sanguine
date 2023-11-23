@@ -1,3 +1,5 @@
+use svg::{node::{self, element::{Path, path::Data, Group}}, Node};
+
 #[derive(Debug, Clone)]
 pub struct Format {
     pub height: i32,
@@ -59,4 +61,37 @@ impl Format {
 
         work
     }
+}
+
+pub fn backgound(layout: &Format) -> node::element::Group {
+
+        let mut graph = node::element::Group::new();
+   
+
+        let data = node::element::path::Data::new()
+            .move_to((0,0))
+            .line_to((0,layout.width))
+            .line_to(
+                (layout.height,
+                layout.width,)
+            )
+            .line_to((layout.height, 0)
+            )
+            .close();
+    
+        let path = path(data);
+        graph.append(path);
+        graph
+
+
+}
+
+fn path(data: Data) -> Path {
+    let path = Path::new()
+        .set("fill", "white")
+        .set("stroke", "none")
+        .set("stroke-width", 1)
+        .set("d", data);
+
+    path
 }
