@@ -17,11 +17,16 @@ Hello, World!
 - [ ] input from hardware rngs
 
 ## Changes, Thoughts and Learnings (newest first)
+### November 22th, 2023
+- added compositional layer, that sets random centers of attention
+
+![few larger circles are surrounded by smaller ones, the rest are the smallest cirles](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00008.png?raw=true)
 
 ### November 20th, 2023
 - support for tesselation 
 - cleaner collision of lines with circles. Probably good enough for plotting. 
 - also, we now get into the territory of panics, calculations that go on indefinetly... so there was `Some()` introduction of Options.
+
 ![the single tiles become less dominant when the rays of the cicle each meet a ray from the neighboring fiel on the border.](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00007.png?raw=true)
 
 
