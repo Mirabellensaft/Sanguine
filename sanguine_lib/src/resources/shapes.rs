@@ -189,11 +189,11 @@ impl Circle {
     pub fn intersection(&self, line: Line, step: f32) -> Option<Point> {
 
         let mut diff = 10000000000.0;
-        println!("\n\nstep {}", step);
-        println!("line slope {:?}", line.slope());
+        // println!("\n\nstep {}", step);
+        // println!("line slope {:?}", line.slope());
 
         if self.center.x == line.start.x {
-            println!("x=x");
+            // println!("x=x");
             if self.center.y > line.start.y {
                 let point = Point::new(self.center.x, self.center.y - self.radius);
                 return Some(point)
@@ -211,15 +211,15 @@ impl Circle {
             let x = iter_min + i;
             
             if let Some(point_1) = line.return_point_on_line(x) {
-                println!("x: {}, y: {}", point_1.x, point_1.y);
+                // println!("x: {}, y: {}", point_1.x, point_1.y);
 
                 if self.center.x > line.start.x {
                     if self.contains(point_1) {
-                        if self.center.distance_to(&point_1) < self.radius - 1.0 {
+                        if self.center.distance_to(&point_1) < self.radius - 0.5 {
                             return self.intersection(line, step/10.0);
 
                         } else {
-                            println!("left to center");
+                            // println!("left to center");
 
                             let point = Point { x: x as f32, y: point_1.y };
                     
@@ -237,11 +237,11 @@ impl Circle {
                         }
                     }
                 } else if self.center.x < line.start.x {
-                    println!("center to right");
+                    // println!("center to right");
 
                     if self.contains(point_1) == false {
-                        if self.center.distance_to(&point_1) < self.radius + 1.0 {
-                            println!("out of circle");
+                        if self.center.distance_to(&point_1) < self.radius + 0.5 {
+                            // println!("out of circle");
                             let point = Point { x: x as f32, y: point_1.y };
                             return Some(point)
                             // if let Some(point) = line.return_point_on_line(x - step){

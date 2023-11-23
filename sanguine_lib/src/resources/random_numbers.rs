@@ -3,7 +3,6 @@ use rand::{thread_rng, Rng};
 
 pub fn coordinate(field: &layout::Field, margin: i32) -> shapes::Point {
     let mut rng = thread_rng();
-    println!("yeah3");
 
     let horizontal: std::ops::Range<i32> = std::ops::Range {
         start: field.x + margin,
@@ -14,7 +13,7 @@ pub fn coordinate(field: &layout::Field, margin: i32) -> shapes::Point {
         start: field.y + margin,
         end: field.y + field.row_height - margin,
     };
-    println!("h {:?}, v {:?}", horizontal, vertical);
+    // println!("h {:?}, v {:?}", horizontal, vertical);
     shapes::Point::new(
         rng.gen_range(horizontal) as f32,
         rng.gen_range(vertical) as f32,
