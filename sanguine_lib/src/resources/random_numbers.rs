@@ -20,34 +20,86 @@ pub fn coordinate(field: &layout::Field, margin: i32) -> shapes::Point {
     )
 }
 
-pub fn coordinates_on_border(field: &layout::Field) -> [[shapes::Point; 10]; 4] {
+fn random_value_on_side(start_value: i32, distance: i32, margin: i32) -> f32 {
+    let mut rng = thread_rng();
+
+    let range: std::ops::Range<i32> = std::ops::Range {
+        start: start_value + margin,
+        end: start_value + distance - margin,
+    };
+
+    rng.gen_range(range) as f32  
+}
+
+fn array_of_values(start_value: i32, distance: i32, margin: i32) -> [f32; 10] {
+    let mut array = [0.0;10];
+    for i in 0..10 {
+        array[i] = random_value_on_side(start_value,distance,margin)
+    }
+    array = repl_duplicates(array, start_value, distance, margin);
+    array = correct_distance(array, start_value, distance, margin);
+    array
+}
+fn coordinates_on_border(field: &layout::Field) -> [[shapes::Point; 10]; 4] {
     let mut coordinates: [[shapes::Point; 10]; 4] = [[shapes::Point::new(0.0, 0.0); 10]; 4];
 
+    let x = array_of_values(field.x, field.column_width,1);
     for i in 0..10 {
-        let x = coordinate(field, 1).x;
-        coordinates[0][i] = shapes::Point::new(x, field.y as f32);
+        
+        coordinates[0][i] = shapes::Point::new(x[i], field.y as f32);
         // println!("coordinates:{:?}", coordinates[side][i]);
     }
 
+    let y = array_of_values(field.y, field.row_height,1);
     for i in 0..10 {
-        let y = coordinate(field, 1).y;
-        coordinates[1][i] = shapes::Point::new(field.x as f32, y);
+        coordinates[1][i] = shapes::Point::new(field.x as f32, y[i]);
         // println!("coordinates:{:?}", coordinates[side][i]);
     }
 
+    let x = array_of_values(field.x, field.column_width,1);
     for i in 0..10 {
-        let x = coordinate(field, 1).x;
-        coordinates[2][i] = shapes::Point::new(x, field.y as f32 + field.row_height as f32);
+        coordinates[2][i] = shapes::Point::new(x[i], field.y as f32 + field.row_height as f32);
         // println!("coordinates:{:?}", coordinates[side][i]);
     }
 
+    let y = array_of_values(field.y, field.row_height,1);
     for i in 0..10 {
-        let y = coordinate(field, 1).y;
-        coordinates[3][i] = shapes::Point::new(field.x as f32 + field.column_width as f32, y);
+        coordinates[3][i] = shapes::Point::new(field.x as f32 + field.column_width as f32, y[i]);
         // println!("coordinates:{:?}", coordinates[side][i]);
     }
     coordinates
 }
+fn repl_duplicates(mut array: [f32;10], start_value: i32, distance: i32, margin: i32) -> [f32;10] {
+
+        for i in 1..=10 {
+            if array[i..].contains(&array[i - 1]) {
+                array[i-1] = random_value_on_side(start_value, distance, margin);
+                array = repl_duplicates(array, start_value, distance, margin);
+            }
+        }
+        
+        array
+}
+
+fn correct_distance(mut array: [f32;10], start_value: i32, distance: i32, margin: i32) -> [f32;10] {
+    for i in 0..10 {
+        for j in 0..10 {
+            if i != j {
+                if (array[i] - array[j]).abs() < 3.0 {
+                    array[i] = random_value_on_side(start_value,distance,margin);
+                }
+
+            }
+
+
+        }
+        
+    }
+
+    array
+}
+
+
 
 pub fn all_border_coordinates(format: &layout::Format) -> Vec<Vec<[[shapes::Point; 10]; 4]>> {
     let mut vec = Vec::new();
@@ -67,3 +119,14 @@ pub fn all_border_coordinates(format: &layout::Format) -> Vec<Vec<[[shapes::Poin
 // pub fn point_on_circle(cx: i32, cy: i32, radius: i32) -> (i32, i32) {
 
 // }
+
+// assert_eq!(has_dup(&[1, 2, 3, 2, 5, 6]), true);
+//     assert_eq!(has_dup(&[1, 2, 3, 4, 5, 6]), false);
+
+    // #[cfg(test)]
+    // use crate::resources;
+    // #[test]
+    
+    // fn duplicates() {
+    //     println!("{:?}", check_duplicates_repl([1, 2, 3, 2, 5, 6, 7, 8, 9, 10]));
+    // }
