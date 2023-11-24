@@ -3,17 +3,12 @@ use svg::Node;
 
 use rand::{thread_rng, Rng};
 
-use sanguine_lib::resources::{
-    layout,
-    random_numbers,
-    shapes,
-};
+use sanguine_lib::resources::{layout, random_numbers, shapes};
 
 pub fn form_group(layout: &layout::Format) -> node::element::Group {
     let mut graph = node::element::Group::new();
 
     let mut all_coords = random_numbers::all_border_coordinates(layout);
-    let mut counter = 0;
 
     for row in 0..layout.rows {
         for col in 0..layout.columns {
@@ -54,8 +49,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         "{}, {}, start: {:?}, center:{:?} \n",
                         side, point, all_coords[row][col][side][point], center
                     );
-                    let mut prelim_line =
-                        shapes::Line::new(all_coords[row][col][side][point], center);
+                    let prelim_line = shapes::Line::new(all_coords[row][col][side][point], center);
                     let step = 1.0;
 
                     if let Some(endpoint) = circle.intersection(prelim_line, step) {

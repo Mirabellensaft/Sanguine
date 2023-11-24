@@ -146,7 +146,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         };
                     }
                 }
-           
+
                 Density::Corner(direction) => {
                     let mut first_side = 0;
                     let mut sec_side = 0;
@@ -155,20 +155,20 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         Direction::LeftDown => {
                             first_side = 1;
                             sec_side = 2;
-                        },
+                        }
                         Direction::LeftUp => {
                             first_side = 1;
                             sec_side = 0;
-                        },
+                        }
                         Direction::RightDown => {
                             first_side = 3;
                             sec_side = 2;
-                        },
+                        }
                         Direction::RightUp => {
                             first_side = 3;
                             sec_side = 0;
-                        },
-                        _=> (),
+                        }
+                        _ => (),
                     };
                     for point in 0..10 {
                         let line = shapes::Line::new(
@@ -177,13 +177,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         );
                         graph.append(line.draw());
                     }
-
-                    
-
-                        
-
-                    
-                },
+                }
                 Density::ThreeWay(direction) => {
                     let mut first_side = 0;
                     let mut mid_side = 0;
@@ -194,7 +188,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                             first_side = 0;
                             mid_side = 3;
                             last_side = 2;
-                        },
+                        }
                         Direction::Up => {
                             first_side = 1;
                             mid_side = 2;
@@ -204,13 +198,13 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                             first_side = 1;
                             mid_side = 0;
                             last_side = 3;
-                        },
+                        }
                         Direction::Right => {
                             first_side = 0;
                             mid_side = 1;
                             last_side = 2;
-                        },
-                        _=> (),
+                        }
+                        _ => (),
                     };
                     for point in 0..5 {
                         let line = shapes::Line::new(
@@ -221,11 +215,11 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                     }
 
                     for point in 5..10 {
-                            let line = shapes::Line::new(
-                                all_coords[row][col][first_side][point],
-                                all_coords[row][col][mid_side][9 - (point-5)],
-                            );
-                            graph.append(line.draw());
+                        let line = shapes::Line::new(
+                            all_coords[row][col][first_side][point],
+                            all_coords[row][col][mid_side][9 - (point - 5)],
+                        );
+                        graph.append(line.draw());
                     }
 
                     for point in 5..10 {
@@ -235,8 +229,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         );
                         graph.append(line.draw());
                     }
-
-                },
+                }
 
                 _ => {
                     let center = random_numbers::coordinate(

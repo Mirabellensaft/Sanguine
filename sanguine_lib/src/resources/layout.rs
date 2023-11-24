@@ -1,4 +1,4 @@
-use svg::{node::{self, element::{Path, path::Data, Group}}, Node};
+use svg::{node::{self, element::{Path, path::Data}}, Node};
 
 #[derive(Debug, Clone)]
 pub struct Format {
@@ -70,12 +70,12 @@ pub fn backgound(layout: &Format) -> node::element::Group {
 
         let data = node::element::path::Data::new()
             .move_to((0,0))
-            .line_to((0,layout.width))
+            .line_to((0,layout.height))
             .line_to(
-                (layout.height,
-                layout.width,)
+                (layout.width,
+                layout.height,)
             )
-            .line_to((layout.height, 0)
+            .line_to((layout.width, 0)
             )
             .close();
     

@@ -93,24 +93,19 @@ impl Line {
 
     pub fn y_intercept(&self) -> Option<f32> {
 
-        let mut b = Some(0.0);
         if let Some(i) = self.slope()  {
-            b = Some(self.end.y - (i * self.end.x));
+            Some(self.end.y - (i * self.end.x))
         } else {
-            b = None
+            None
         }
-        b
     }
 
     pub fn return_point_on_line(&self, x: f32) -> Option<Point> {
-
-        let mut y = 0.0;
-        let mut point = Point { x: x, y: y };
         
         if let Some(y_i) = self.y_intercept() {
             if let Some(i) = self.slope()  {
-                y = (i * x) + y_i;
-                point = Point { x: x, y: y };
+                let y = (i * x) + y_i;
+                let point = Point { x: x, y: y };
                 Some(point)
             } else {
                 None
@@ -119,8 +114,6 @@ impl Line {
         } else {
             None
         }
-
-        
     }
 
     pub fn intersection(&self, other: Line, step: f32) -> Option<Point> {
