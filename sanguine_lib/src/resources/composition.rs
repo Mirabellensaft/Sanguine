@@ -96,12 +96,12 @@ impl CompositionOverlay {
 
     /// This function makes sure, that different Focal points are connected 
     /// through fields of Density::Mid.
-    pub fn connect_centers(&mut self, format: &layout::Format) {
+    pub fn connect_centers(&mut self) {
         let mut last_center: (usize, usize) = (0,0);
 
         // this identifies the first center
-        'first: for row in 0..format.rows {
-            for col in 0..format.columns {
+        'first: for row in 0..self.0.len() {
+            for col in 0..self.0[row].len() {
                 match self.0[row][col] {
                     Density::Focus => {
                         last_center = (row, col);
@@ -113,8 +113,8 @@ impl CompositionOverlay {
         }
 
         // this finds the next center, connects it to the first, and repeats for the second center etc.
-        for row in 0..format.rows {
-            for col in 0..format.columns {
+        for row in 0..self.0.len() {
+            for col in 0..self.0[row].len() {
                 match self.0[row][col] {
                     Density::Focus => {
                         for i in last_center.0+1..=row {
@@ -221,8 +221,8 @@ impl CompositionOverlay {
     /// Fills gaps in the composition with Density variants Edge, ThreeWay, 
     /// Corner, Low and Transition in their respective direction.
     pub fn retro_composition(&mut self, layout: &layout::Format) {
-        for row in 0..layout.rows {
-            for col in 0..layout.columns {
+        for row in 0..self.0.len() {
+            for col in 0..self.0[row].len() {
                 match self.0[row][col] {
                     Density::Empty => {
                         let contact = self.direction_of_contact(row, col, layout);
