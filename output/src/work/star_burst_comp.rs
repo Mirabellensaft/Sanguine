@@ -43,8 +43,12 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                 Density::High => radius = rng.gen_range(RADIUS_HIGH),
                 Density::Focus => radius = rng.gen_range(RADIUS_FOCUS),
                 Density::Edge(_) => radius = rng.gen_range(RADIUS_MID),
+                Density::ThreeWay(_) => radius = rng.gen_range(RADIUS_MID),
                 _ => (),
             }
+
+            let mut rng = thread_rng();
+            let i = rng.gen_bool(1.0/3.0);
 
             match comp.0[row][col] {
                 Density::Empty => (),
@@ -71,14 +75,11 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
 
                 Density::Low => {
                     // 1 -> 2 3 -> 0 oder 1 -> 0, 3 -> 2
-                    let mut rng = thread_rng();
-
                     let side = rng.gen_range(0..=1);
                     let mut second_side = 0;
                     let mut third_side = 0;
                     let mut dir = Direction::Up;
           
-
                     if side == 0 {
                         second_side = 3;
                         third_side = 1;
@@ -104,8 +105,6 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         &layout.field_container[row as usize][col as usize],
                         radius * 2,
                     );
-                    let circle = Circle::new(center, radius as f32);
-                    graph.append(circle.draw());
 
                     let side = match direction {
                         Direction::Up => 0,
@@ -115,18 +114,11 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         _ => 5,
                     };
 
-                    for point in 0..10 {
-                        let prelim_line =
-                            Line::new(all_coords.0[row][col].0[side].0[point], center);
-                        let step = 1.0;
+                    let circle = Circle::new(center, radius as f32);
+                    graph.append(circle.draw());
 
-                        if let Some(endpoint) = circle.intersection(prelim_line, step) {
-                            // println!("Point {:?}, EP {:?}", point, endpoint);
-                            let line =
-                                Line::new(all_coords.0[row][col].0[side].0[point], endpoint);
-                            graph.append(line.draw());
-                        };
-                    }
+                    let the_side = &all_coords.0[row][col].0[side];
+                    lines_to_circle(&mut graph, the_side, &circle, 0, 10);
                 }
 
                 Density::Corner(direction) => {
@@ -158,6 +150,10 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                 }
 
                 Density::ThreeWay(direction) => {
+                    
+                    if i {
+
+                    }
                   
 
                     match direction {
@@ -203,20 +199,8 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                     graph.append(circle.draw());
 
                     for side in 0..4 {
-                        for point in 0..10 {
-                            let prelim_line =
-                                Line::new(all_coords.0[row][col].0[side].0[point], center);
-                            let step = 1.0;
-
-                            if let Some(endpoint) = circle.intersection(prelim_line, step) {
-                                // println!("Point {:?}, EP {:?}", point, endpoint);
-                                let line =
-                                    Line::new(all_coords.0[row][col].0[side].0[point], endpoint);
-                                graph.append(line.draw());
-                            } else {
-                                println!("shit!");
-                            };
-                        }
+                        let the_side = &all_coords.0[row][col].0[side];
+                        lines_to_circle(&mut graph, the_side, &circle, 0, 10);
                     }
                 }
             }
@@ -225,6 +209,24 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
 
     graph
 }
+
+fn lines_to_circle(graph: &mut Group, side: &OneSide, circle: &Circle, min: usize, max: usize) {
+    for point in min..max {
+        let prelim_line =
+            Line::new(side.0[point], circle.center);
+        let step = 1.0;
+
+        if let Some(endpoint) = circle.intersection(prelim_line, step) {
+            // println!("Point {:?}, EP {:?}", point, endpoint);
+            let line =
+                Line::new(side.0[point], endpoint);
+            graph.append(line.draw());
+        } else {
+            println!("shit!");
+        };
+    }
+}
+
 
 fn nice_diagonal_lines(graph: &mut Group, direction: Direction, first_side:  &OneSide, second_side: &OneSide, min: usize, max: usize) {
 
