@@ -1,7 +1,8 @@
 use svg::node::element::path::Data;
 use svg::node::element::{Circle as CirclePath, Path};
+use rand::{thread_rng, Rng};
 
-use crate::resources::{layout, random_numbers};
+use crate::resources::layout;
 
 /// This module contains types related to shapes that show up in the rendered or plotted image.
 /// Everything is hard coded to generate black lines of 1px width, as this is the only relevant 
@@ -22,20 +23,20 @@ fn path(data: Data) -> Path {
 pub fn distorted_square(field: layout::Field) -> Path {
     let data = Data::new()
         .move_to((
-            random_numbers::coordinate(&field, 0).x,
-            random_numbers::coordinate(&field, 0).y,
+            Point::random_coordinate(&field, 0).x,
+            Point::random_coordinate(&field, 0).y,
         ))
         .line_to((
-            random_numbers::coordinate(&field, 0).x,
-            random_numbers::coordinate(&field, 0).y,
+            Point::random_coordinate(&field, 0).x,
+            Point::random_coordinate(&field, 0).y,
         ))
         .line_to((
-            random_numbers::coordinate(&field, 0).x,
-            random_numbers::coordinate(&field, 0).y,
+            Point::random_coordinate(&field, 0).x,
+            Point::random_coordinate(&field, 0).y,
         ))
         .line_to((
-            random_numbers::coordinate(&field, 0).x,
-            random_numbers::coordinate(&field, 0).y,
+            Point::random_coordinate(&field, 0).x,
+            Point::random_coordinate(&field, 0).y,
         ))
         .close();
 
@@ -58,6 +59,25 @@ impl Point {
         let point = Point { x: x, y: y };
 
         point
+    }
+    /// Creates a random Point within a field
+    pub fn random_coordinate(field: &layout::Field, margin: i32) -> Self {
+        let mut rng = thread_rng();
+
+        let horizontal: std::ops::Range<i32> = std::ops::Range {
+            start: field.x + margin,
+            end: field.x + field.column_width - margin,
+        };
+
+        let vertical: std::ops::Range<i32> = std::ops::Range {
+            start: field.y + margin,
+            end: field.y + field.row_height - margin,
+        };
+    // println!("h {:?}, v {:?}", horizontal, vertical);
+        Point::new(
+            rng.gen_range(horizontal) as f32,
+            rng.gen_range(vertical) as f32,
+        )
     }
 
     /// Calculates the distance to another point.
@@ -292,20 +312,20 @@ impl Circle {
 /// Helper function that returns a valid range between two values.
 fn range(x_1: f32, x_2: f32) -> std::ops::Range<i32> {
 
-    let mut range = 0..1;
-
     if x_1 > x_2 {
-        range = std::ops::Range {
+        let range = std::ops::Range {
             start: x_2 as i32,
             end: x_1 as i32,
         };
+        return range
     } else {
-        range = std::ops::Range {
+        let range = std::ops::Range {
             start: x_1 as i32,
             end: x_2 as i32,
         };
-    } 
-    range
+
+        return range
+    };
 }
 
 /// Helper function that returns the lower of two values

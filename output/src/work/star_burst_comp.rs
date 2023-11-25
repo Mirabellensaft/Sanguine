@@ -4,8 +4,8 @@ use svg::Node;
 use rand::{thread_rng, Rng};
 
 use sanguine_lib::resources::{
-    composition::{self, Density, Direction},
-    layout, random_numbers, shapes,
+    composition::{Density, Direction, CompositionOverlay},
+    layout, border_coordinates, shapes::{Line, Point, Circle},
 };
 
 const RADIUS_MID: std::ops::RangeInclusive<i32> = 3_i32..=6_i32;
@@ -16,32 +16,14 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
     let mut graph = node::element::Group::new();
 
     // Creates a baseline composition
-    let mut comp = composition::CompositionOverlay::new_empty(layout);
+    let mut comp = CompositionOverlay::new_empty(layout);
     comp.add_random_low(30, layout);
     comp.add_random_center(6, layout);
     comp.connect_centers(layout);
     comp.add_random_low(10, layout);
 
-    let mut all_coords = random_numbers::all_border_coordinates(layout);
-
-    // Tesselation, makes sure that points on the edges of a field are corresponding with the neighboring edge
-    // 0 = top
-    // 1 = left
-    // 2 = bottom
-    // 3 = right
-
-    for row in 0..layout.rows {
-        for col in 0..layout.columns {
-            if row == 0 && col != 0 {
-                all_coords[row][col][1] = all_coords[row][col - 1][3];
-            } else if row != 0 && col == 0 {
-                all_coords[row][col][0] = all_coords[row - 1][col][2];
-            } else if row != 0 && col != 0 {
-                all_coords[row][col][1] = all_coords[row][col - 1][3];
-                all_coords[row][col][0] = all_coords[row - 1][col][2];
-            }
-        }
-    }
+    let mut all_coords = border_coordinates::AllBorderCoordinates::new(layout, 10);
+    all_coords.tesselate(layout);
 
     // Fills the gaps and edges in the baseline composition
     comp.retro_composition(layout);
@@ -66,9 +48,9 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                 Density::Transition(Direction::UpDown) => {
                     // 1 -> 3 2 -> 0
                     for point in 0..10 {
-                        let line = shapes::Line::new(
-                            all_coords[row][col][2][point],
-                            all_coords[row][col][0][9 - point],
+                        let line = Line::new(
+                            all_coords.0[row][col].0[2].0[point],
+                            all_coords.0[row][col].0[0].0[9 - point],
                         );
                         graph.append(line.draw());
                     }
@@ -76,9 +58,9 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
 
                 Density::Transition(Direction::LeftRight) => {
                     for point in 0..10 {
-                        let line = shapes::Line::new(
-                            all_coords[row][col][1][point],
-                            all_coords[row][col][3][9 - point],
+                        let line = Line::new(
+                            all_coords.0[row][col].0[1].0[point],
+                            all_coords.0[row][col].0[3].0[9 - point],
                         );
                         graph.append(line.draw());
                     }
@@ -101,28 +83,28 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                     }
 
                     for point in 0..10 {
-                        let line = shapes::Line::new(
-                            all_coords[row][col][side][point],
-                            all_coords[row][col][sec_side][9 - point],
+                        let line = Line::new(
+                            all_coords.0[row][col].0[side].0[point],
+                            all_coords.0[row][col].0[sec_side].0[9 - point],
                         );
                         graph.append(line.draw());
                     }
 
                     for point in 0..10 {
-                        let line = shapes::Line::new(
-                            all_coords[row][col][third_side][point],
-                            all_coords[row][col][2][9 - point],
+                        let line = Line::new(
+                            all_coords.0[row][col].0[third_side].0[point],
+                            all_coords.0[row][col].0[2].0[9 - point],
                         );
                         graph.append(line.draw());
                     }
                 }
 
                 Density::Edge(direction) => {
-                    let center = random_numbers::coordinate(
+                    let center = Point::random_coordinate(
                         &layout.field_container[row as usize][col as usize],
                         radius * 2,
                     );
-                    let circle = shapes::Circle::new(center, radius as f32);
+                    let circle = Circle::new(center, radius as f32);
                     graph.append(circle.draw());
 
                     let side = match direction {
@@ -135,13 +117,13 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
 
                     for point in 0..10 {
                         let prelim_line =
-                            shapes::Line::new(all_coords[row][col][side][point], center);
+                            Line::new(all_coords.0[row][col].0[side].0[point], center);
                         let step = 1.0;
 
                         if let Some(endpoint) = circle.intersection(prelim_line, step) {
                             // println!("Point {:?}, EP {:?}", point, endpoint);
                             let line =
-                                shapes::Line::new(all_coords[row][col][side][point], endpoint);
+                                Line::new(all_coords.0[row][col].0[side].0[point], endpoint);
                             graph.append(line.draw());
                         };
                     }
@@ -172,9 +154,9 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                     };
                     
                     for point in 0..10 {
-                        let line = shapes::Line::new(
-                            all_coords[row][col][first_side][point],
-                            all_coords[row][col][sec_side][9 - point],
+                        let line = Line::new(
+                            all_coords.0[row][col].0[first_side].0[point],
+                            all_coords.0[row][col].0[sec_side].0[9 - point],
                         );
                         graph.append(line.draw());
                     }
@@ -209,49 +191,49 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         _ => (),
                     };
                     for point in 0..5 {
-                        let line = shapes::Line::new(
-                            all_coords[row][col][first_side][point],
-                            all_coords[row][col][last_side][9 - point],
+                        let line = Line::new(
+                            all_coords.0[row][col].0[first_side].0[point],
+                            all_coords.0[row][col].0[last_side].0[9 - point],
                         );
                         graph.append(line.draw());
                     }
 
                     for point in 5..10 {
-                        let line = shapes::Line::new(
-                            all_coords[row][col][first_side][point],
-                            all_coords[row][col][mid_side][9 - (point - 5)],
+                        let line = Line::new(
+                            all_coords.0[row][col].0[first_side].0[point],
+                            all_coords.0[row][col].0[mid_side].0[9 - (point - 5)],
                         );
                         graph.append(line.draw());
                     }
 
                     for point in 5..10 {
-                        let line = shapes::Line::new(
-                            all_coords[row][col][mid_side][point],
-                            all_coords[row][col][last_side][9 - point],
+                        let line = Line::new(
+                            all_coords.0[row][col].0[mid_side].0[point],
+                            all_coords.0[row][col].0[last_side].0[9 - point],
                         );
                         graph.append(line.draw());
                     }
                 }
 
                 _ => {
-                    let center = random_numbers::coordinate(
+                    let center = Point::random_coordinate(
                         &layout.field_container[row as usize][col as usize],
                         radius,
                     );
 
-                    let circle = shapes::Circle::new(center, radius as f32);
+                    let circle = Circle::new(center, radius as f32);
                     graph.append(circle.draw());
 
                     for side in 0..4 {
                         for point in 0..10 {
                             let prelim_line =
-                                shapes::Line::new(all_coords[row][col][side][point], center);
+                                Line::new(all_coords.0[row][col].0[side].0[point], center);
                             let step = 1.0;
 
                             if let Some(endpoint) = circle.intersection(prelim_line, step) {
                                 // println!("Point {:?}, EP {:?}", point, endpoint);
                                 let line =
-                                    shapes::Line::new(all_coords[row][col][side][point], endpoint);
+                                    Line::new(all_coords.0[row][col].0[side].0[point], endpoint);
                                 graph.append(line.draw());
                             } else {
                                 println!("shit!");
