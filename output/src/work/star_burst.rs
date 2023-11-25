@@ -9,7 +9,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
     let mut graph = node::element::Group::new();
 
     let mut all_coords = border_coordinates::AllBorderCoordinates::new(layout, 10);
-    all_coords.tesselate(layout);
+    all_coords.tesselate();
 
     // let coordinates = shapes::Point::random_coordinates_on_border(&layout.field_container[row as usize][col as usize]);
 
