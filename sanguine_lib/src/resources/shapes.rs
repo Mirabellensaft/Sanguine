@@ -3,6 +3,11 @@ use svg::node::element::{Circle as CirclePath, Path};
 
 use crate::resources::{layout, random_numbers};
 
+/// This module contains types related to shapes that show up in the rendered or plotted image.
+/// Everything is hard coded to generate black lines of 1px width, as this is the only relevant 
+/// setting for the plotter
+
+/// Hard coded path data
 fn path(data: Data) -> Path {
     let path = Path::new()
         .set("fill", "none")
@@ -13,6 +18,7 @@ fn path(data: Data) -> Path {
     path
 }
 
+/// Creates a random distorted square
 pub fn distorted_square(field: layout::Field) -> Path {
     let data = Data::new()
         .move_to((
@@ -37,20 +43,24 @@ pub fn distorted_square(field: layout::Field) -> Path {
     path
 }
 
+/// A Point.
 #[derive(Copy, Clone, Debug, PartialEq)]
-
 pub struct Point {
+    /// Value on the x axis
     pub x: f32,
+    /// Value on the y axis
     pub y: f32,
 }
 
 impl Point {
+    /// Creates a new point with a given x and y value.
     pub fn new(x: f32, y: f32) -> Self {
         let point = Point { x: x, y: y };
 
         point
     }
 
+    /// Calculates the distance to another point.
     pub fn distance_to(&self, other: &Self) -> f32 {
         let dx = self.x - other.x;
         let dy = self.y - other.y;
@@ -58,12 +68,16 @@ impl Point {
     }
 }
 
+/// A line between two points.
 pub struct Line {
+    /// starting point
     pub start: Point,
+    /// end point
     pub end: Point,
 }
 
 impl Line {
+    /// Creates a new line between two given points.
     pub fn new(start: Point, end: Point) -> Self {
         let line: Line = Line {
             start: start,
@@ -73,11 +87,11 @@ impl Line {
         line
     }
 
+    /// Calculates the slope of a line, returns none the line is vertical
     pub fn slope(&self) -> Option<f32> {
 
         let d_x = self.start.x - self.end.x;
         let d_y = self.start.y - self.end.y;
-
         
         // println!("d_y: {}", d_y);
         // println!("d_x: {}", d_x);
@@ -91,6 +105,8 @@ impl Line {
         }
     }
 
+    /// Returns the y intercept of a line. Returns None if the line is vertical and 
+    /// does not cross the y-axis.
     pub fn y_intercept(&self) -> Option<f32> {
 
         if let Some(i) = self.slope()  {
@@ -100,6 +116,8 @@ impl Line {
         }
     }
 
+    /// Returns the point on a line for a given x value. Returns none if there 
+    /// is no point for that x value, usually the case when the line is vertical.
     pub fn return_point_on_line(&self, x: f32) -> Option<Point> {
         
         if let Some(y_i) = self.y_intercept() {
@@ -116,6 +134,7 @@ impl Line {
         }
     }
 
+    /// Returns the point where two lines intersect, returns None, if they don't intersect.
     pub fn intersection(&self, other: Line, step: f32) -> Option<Point> {
 
         let mut diff = 10000000000.0;
@@ -123,6 +142,8 @@ impl Line {
 
         // statt 0, start von start.x, was genau muss der hächste wert hier sein? x max?
         // geht collision mit dem kreis nicht auch so und besser?????
+
+        // compare slopes for easy "None" exit for parallel lines.
     
         for x in (0..300 * ((1.0/step) as i32)).map(|x| x as f32 * step){
             if let Some(point_1) = self.return_point_on_line(x as f32) {
@@ -150,6 +171,7 @@ impl Line {
         None
     }
 
+    /// Creates an svg path for a line
     pub fn draw(&self) -> Path {
         let data = Data::new()
             .move_to((self.start.x, self.start.y))
@@ -160,12 +182,16 @@ impl Line {
     }
 }
 
+/// A circle around a center point with a radius.
 pub struct Circle {
+    /// The center point
     pub center: Point,
+    /// The radius
     pub radius: f32,
 }
 
 impl Circle {
+    /// creates a new circle around a center point with a radius.
     pub fn new(center: Point, radius: f32) -> Self {
         let circle = Circle {
             center: center,
@@ -174,17 +200,22 @@ impl Circle {
         circle
     }
 
+    /// Returns true, if a given point is within the area of the circle.
     pub fn contains(&self, point: Point) -> bool {
 
         self.center.distance_to(&point) <= self.radius
     }
 
+    /// Returns the point where a line from the starting point to the center of 
+    /// the circle hits the circle boundary. 
+    /// 
+    /// ⚠️ If the provided line does not go through the center of the circle, 
+    /// the point returned will be off!
     pub fn intersection(&self, line: Line, step: f32) -> Option<Point> {
 
         let mut diff = 10000000000.0;
         // println!("\n\nstep {}", step);
         // println!("line slope {:?}", line.slope());
-
         if self.center.x == line.start.x {
             // println!("x=x");
             if self.center.y > line.start.y {
@@ -210,17 +241,11 @@ impl Circle {
                     if self.contains(point_1) {
                         if self.center.distance_to(&point_1) < self.radius - 0.5 {
                             return self.intersection(line, step/10.0);
-
                         } else {
                             // println!("left to center");
-
                             let point = Point { x: x as f32, y: point_1.y };
-                    
                             return Some(point)
-
                         }
-
-                    
                     } else {
                         if diff > self.center.distance_to(&point_1) {
                             diff = self.center.distance_to(&point_1)
@@ -231,7 +256,6 @@ impl Circle {
                     }
                 } else if self.center.x < line.start.x {
                     // println!("center to right");
-
                     if self.contains(point_1) == false {
                         if self.center.distance_to(&point_1) < self.radius + 0.5 {
                             // println!("out of circle");
@@ -239,23 +263,20 @@ impl Circle {
                             return Some(point)
                             // if let Some(point) = line.return_point_on_line(x - step){
                             //     return Some(point)
-                            // }
-                            
+                            // }                           
                         } else {
                             return self.intersection(line, step/10.0);
                         }
                     } 
-                    
-                    
                 } else {
-
-                    
+  
                 }
             }     
         }
         None
     }
 
+    /// Creates an svg path for the circle
     pub fn draw(&self) -> CirclePath {
         let circle = CirclePath::new()
             .set("fill", "none")
@@ -268,7 +289,8 @@ impl Circle {
     }
 }
 
-pub fn range(x_1: f32, x_2: f32) -> std::ops::Range<i32> {
+/// Helper function that returns a valid range between two values.
+fn range(x_1: f32, x_2: f32) -> std::ops::Range<i32> {
 
     let mut range = 0..1;
 
@@ -282,13 +304,12 @@ pub fn range(x_1: f32, x_2: f32) -> std::ops::Range<i32> {
             start: x_1 as i32,
             end: x_2 as i32,
         };
-
     } 
     range
-
 }
 
-pub fn smallest_x(x_1: f32, x_2: f32) -> f32 {
+/// Helper function that returns the lower of two values
+fn smallest_x(x_1: f32, x_2: f32) -> f32 {
     if x_1 > x_2 {
         x_2 
     } else {

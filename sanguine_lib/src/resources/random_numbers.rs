@@ -1,6 +1,13 @@
 use crate::resources::{layout, shapes};
 use rand::{thread_rng, Rng};
 
+/// This module contains a bunch of functions that create random values for coordinates.
+/// 
+/// It's currently very specific to the needs of one work of art, needs to be adapted to 
+/// be more open for different use cases.
+
+
+/// Creates a random Point within a field
 pub fn coordinate(field: &layout::Field, margin: i32) -> shapes::Point {
     let mut rng = thread_rng();
 
@@ -20,6 +27,7 @@ pub fn coordinate(field: &layout::Field, margin: i32) -> shapes::Point {
     )
 }
 
+/// Creates a random value that can be used as x or y value, of the other one is fixed.
 fn random_value_on_side(start_value: i32, distance: i32, margin: i32) -> f32 {
     let mut rng = thread_rng();
 
@@ -31,6 +39,7 @@ fn random_value_on_side(start_value: i32, distance: i32, margin: i32) -> f32 {
     rng.gen_range(range) as f32  
 }
 
+/// Crates an array of 10 values to be used as x or y values, if the other one is fixed.
 fn array_of_values(start_value: i32, distance: i32, margin: i32) -> [f32; 10] {
     let mut array = [0.0;10];
     for i in 0..10 {
@@ -40,6 +49,8 @@ fn array_of_values(start_value: i32, distance: i32, margin: i32) -> [f32; 10] {
     array = correct_distance(array, start_value, distance, margin);
     array
 }
+
+/// Returns an array of 4 arrays of 10 random points, so you have random points around the edge of a field.
 fn coordinates_on_border(field: &layout::Field) -> [[shapes::Point; 10]; 4] {
     let mut coordinates: [[shapes::Point; 10]; 4] = [[shapes::Point::new(0.0, 0.0); 10]; 4];
 
@@ -69,6 +80,8 @@ fn coordinates_on_border(field: &layout::Field) -> [[shapes::Point; 10]; 4] {
     }
     coordinates
 }
+
+/// Replaces duplicate values in a value array.
 fn repl_duplicates(mut array: [f32;10], start_value: i32, distance: i32, margin: i32) -> [f32;10] {
 
         for i in 1..=10 {
@@ -77,10 +90,10 @@ fn repl_duplicates(mut array: [f32;10], start_value: i32, distance: i32, margin:
                 array = repl_duplicates(array, start_value, distance, margin);
             }
         }
-        
         array
 }
 
+/// Replaces values in an array if they are too close together.
 fn correct_distance(mut array: [f32;10], start_value: i32, distance: i32, margin: i32) -> [f32;10] {
     for i in 0..10 {
         for j in 0..10 {
@@ -88,19 +101,14 @@ fn correct_distance(mut array: [f32;10], start_value: i32, distance: i32, margin
                 if (array[i] - array[j]).abs() < 3.0 {
                     array[i] = random_value_on_side(start_value,distance,margin);
                 }
-
             }
-
-
-        }
-        
+        }  
     }
-
     array
 }
 
 
-
+/// Returns a Vector of edge points for an entire work of art. 
 pub fn all_border_coordinates(format: &layout::Format) -> Vec<Vec<[[shapes::Point; 10]; 4]>> {
     let mut vec = Vec::new();
 

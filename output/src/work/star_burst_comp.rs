@@ -15,7 +15,7 @@ const RADIUS_FOCUS: std::ops::RangeInclusive<i32> = 10_i32..=20_i32;
 pub fn form_group(layout: &layout::Format) -> node::element::Group {
     let mut graph = node::element::Group::new();
 
-    // General compositional rules
+    // Creates a baseline composition
     let mut comp = composition::CompositionOverlay::new_empty(layout);
     comp.add_random_low(30, layout);
     comp.add_random_center(6, layout);
@@ -43,7 +43,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
         }
     }
 
-    // this is where the filling of the composition needs to happen
+    // Fills the gaps and edges in the baseline composition
     comp.retro_composition(layout);
 
     // Drawing of the Elements
@@ -58,7 +58,6 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                 Density::High => radius = rng.gen_range(RADIUS_HIGH),
                 Density::Focus => radius = rng.gen_range(RADIUS_FOCUS),
                 Density::Edge(_) => radius = rng.gen_range(RADIUS_MID),
-
                 _ => (),
             }
 
@@ -117,10 +116,11 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         graph.append(line.draw());
                     }
                 }
+
                 Density::Edge(direction) => {
                     let center = random_numbers::coordinate(
                         &layout.field_container[row as usize][col as usize],
-                        radius,
+                        radius * 2,
                     );
                     let circle = shapes::Circle::new(center, radius as f32);
                     graph.append(circle.draw());
@@ -170,6 +170,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         }
                         _ => (),
                     };
+                    
                     for point in 0..10 {
                         let line = shapes::Line::new(
                             all_coords[row][col][first_side][point],
@@ -178,6 +179,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
                         graph.append(line.draw());
                     }
                 }
+
                 Density::ThreeWay(direction) => {
                     let mut first_side = 0;
                     let mut mid_side = 0;
