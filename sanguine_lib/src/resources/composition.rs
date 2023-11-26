@@ -1,6 +1,14 @@
 use super::layout;
 use rand::{thread_rng, Rng};
 
+/// This module only prescribes compositional elements. How they are rendered depends highly on the
+/// individual project. It's probably helpful to provide a code template for this. 
+
+/// The Density variants are used to describe centers of attention and allow to generate gradients. 
+/// Some variants can have a direction marker. 
+/// 
+/// I omit an exact defintion of every single variant, as the interpretation will 
+/// vary from art work to art work.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Density {
     Transition(Direction),
@@ -14,6 +22,12 @@ pub enum Density {
     Focus,
 }
 
+/// Direction variants describe from where to where something is going in a field. 
+/// There is currently no 'None' option, a workouround is to just not read out a 
+/// set direction when rendering the Density variant that has a direction. 
+/// 
+/// I omit an exact defintion of every single variant, as the interpretation will 
+/// vary from art work to art work.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Direction {
     LeftRight,
@@ -28,6 +42,8 @@ pub enum Direction {
     Right,
 }
 
+/// A possibility to set a center in the entire composition.
+/// This is not properly implemented yet.
 pub enum CompositionCenter {
     TopLeft,
     TopMid,
@@ -40,11 +56,15 @@ pub enum CompositionCenter {
     BottomRight,
 }
 
+/// This type contains the density variants for the entire grid.
 pub struct CompositionOverlay (
     pub Vec<Vec<Density>>
 );
 
 impl CompositionOverlay {
+    /// Creates a new grid where all fields have the Density::Empty variant
+    /// This is to start with a homogenous field of "nothing", depending 
+    /// on how rendering of the variant is set.
     pub fn new_empty(format: &layout::Format) -> Self {
         let mut vec = Vec::new();
 
@@ -56,8 +76,11 @@ impl CompositionOverlay {
             vec.push(inner);
         }
         CompositionOverlay(vec)
-
     }
+
+    /// Creates a new grid where all fields have the Density::Mid variant.
+    /// This is to start with a homogenous field of "something", depending 
+    /// on how rendering of the variant is set.
     pub fn new_flat(format: &layout::Format) -> Self {
         let mut vec = Vec::new();
 
@@ -70,47 +93,51 @@ impl CompositionOverlay {
         }
         CompositionOverlay(vec)
     }
-    pub fn connect_centers(&mut self, format: &layout::Format) {
+
+    /// This function makes sure, that different Focal points are connected 
+    /// through fields of Density::Mid.
+    pub fn connect_centers(&mut self) {
         let mut last_center: (usize, usize) = (0,0);
-        'first: for row in 0..format.rows {
-            for col in 0..format.columns {
+
+        // this identifies the first center
+        'first: for row in 0..self.0.len() {
+            for col in 0..self.0[row].len() {
                 match self.0[row][col] {
                     Density::Focus => {
                         last_center = (row, col);
                         break 'first;
                     },
+                    _ => (), 
+                }
+            }
+        }
+
+        // this finds the next center, connects it to the first, and repeats for the second center etc.
+        for row in 0..self.0.len() {
+            for col in 0..self.0[row].len() {
+                match self.0[row][col] {
+                    Density::Focus => {
+                        for i in last_center.0+1..=row {
+                            for j in last_center.1+1..=col {
+                                match self.0[i][j] {
+                                    Density::Empty => {
+                                        self.0[i][j]=Density::Mid;
+                                        self.0[i][j+1]=Density::Mid;
+                                    }
+                                    _ => ()
+                                }
+                            }
+                        }
+                        last_center = (row, col);
+                    },
                     _ => (),
                     
                 }
             }
-        }
-                for row in 0..format.rows {
-                    for col in 0..format.columns {
-                        match self.0[row][col] {
-                            Density::Focus => {
-                                for i in last_center.0+1..=row {
-                                    for j in last_center.1+1..=col {
-                                        match self.0[i][j] {
-                                            Density::Empty => {
-                                                self.0[i][j]=Density::Mid;
-                                                self.0[i][j+1]=Density::Mid;
-                                            }
-                                            _ => ()
-                                        
-                                        }
-                                    }
-                                }
-                                last_center = (row, col);
-                            },
-                            _ => (),
-                            
-                        }
-
-                    }
-                }
-
+        }          
     }
 
+    /// Adds a specified number of random centers with Density::Focus and surrounds them Density::High.
     pub fn add_random_center(&mut self, amount: usize, format: &layout::Format) {
         let mut rng = thread_rng();
 
@@ -130,6 +157,7 @@ impl CompositionOverlay {
         }
     }
 
+    /// Adds a specified number of random locations with Density::Low 
     pub fn add_random_low(&mut self, amount: usize, format: &layout::Format) {
         let mut rng = thread_rng();
 
@@ -142,7 +170,7 @@ impl CompositionOverlay {
         }
     }
 
-
+    /// Implements a compositional center. Not properly implemented yet.
     pub fn add_center(&mut self, center: CompositionCenter, format: &layout::Format) {
 
         let multiplicator_rows = format.rows / 5;
@@ -190,9 +218,11 @@ impl CompositionOverlay {
         }
     }
 
+    /// Fills gaps in the composition with Density variants Edge, ThreeWay, 
+    /// Corner, Low and Transition in their respective direction.
     pub fn retro_composition(&mut self, layout: &layout::Format) {
-        for row in 0..layout.rows {
-            for col in 0..layout.columns {
+        for row in 0..self.0.len() {
+            for col in 0..self.0[row].len() {
                 match self.0[row][col] {
                     Density::Empty => {
                         let contact = self.direction_of_contact(row, col, layout);
@@ -230,6 +260,9 @@ impl CompositionOverlay {
         }
     }
     
+    /// Helper function that determines the contact points of each empty field detected by fn retro_composition and
+    /// returns an array of 4 bools that each represent a side of the field. 
+    /// 
     fn direction_of_contact(&mut self, row: usize, col: usize, layout: &layout::Format) -> [bool;4] {
         // Direction of the Edge variant points towards the block
         // edge on the right or left side of a block

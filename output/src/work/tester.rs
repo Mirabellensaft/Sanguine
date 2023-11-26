@@ -1,6 +1,6 @@
 use rand::thread_rng;
 use rand::Rng;
-use sanguine_lib::resources::{layout, random_numbers, shapes};
+use sanguine_lib::resources::{layout, shapes};
 use svg::node;
 use svg::Node;
 
@@ -11,7 +11,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
             let mut rng = thread_rng();
             let radius = rng.gen_range(3..=10);
 
-            let center = random_numbers::coordinate(
+            let center = shapes::Point::random_coordinate(
                 &layout.field_container[row as usize][col as usize],
                 radius * 2,
             );
@@ -25,7 +25,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
             );
 
             let y =
-                random_numbers::coordinate(&layout.field_container[row as usize][col as usize], 1)
+                shapes::Point::random_coordinate(&layout.field_container[row as usize][col as usize], 1)
                     .y;
             let point_2 = shapes::Point::new(
                 layout.field_container[row as usize][col as usize].x as f32,
@@ -33,7 +33,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
             );
 
             let x =
-                random_numbers::coordinate(&layout.field_container[row as usize][col as usize], 1)
+                shapes::Point::random_coordinate(&layout.field_container[row as usize][col as usize], 1)
                     .x;
             let point_3 = shapes::Point::new(
                 x,
@@ -42,7 +42,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
             );
 
             let y =
-                random_numbers::coordinate(&layout.field_container[row as usize][col as usize], 1)
+                shapes::Point::random_coordinate(&layout.field_container[row as usize][col as usize], 1)
                     .y;
             let point_4 = shapes::Point::new(
                 layout.field_container[row as usize][col as usize].x as f32
