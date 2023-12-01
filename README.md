@@ -12,6 +12,7 @@ Hello, World!
 ## Features I have in mind:
 
 - [x] generate art as svg
+- [ ] add more organic ways to generate images, such as voronoi diagrams and L-systems.
 - [ ] add camera input, so the generated art can be a reaction to what already is on paper.
 - [ ] project layout that allows for easy transitions between creating art work with lots of predefined functions, writing custom parts for the frame work and switching between different works of art.
 - [ ] generate art without svg output, by adressing the pen plotter directly
