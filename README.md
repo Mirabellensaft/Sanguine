@@ -11,18 +11,44 @@ Hello, World!
 
 ## Features I have in mind:
 
-- [ ] generate art as svg
+- [x] generate art as svg
+- [ ] add camera input, so the generated art can be a reaction to what already is on paper.
 - [ ] project layout that allows for easy transitions between creating art work with lots of predefined functions, writing custom parts for the frame work and switching between different works of art.
 - [ ] generate art without svg output, by adressing the pen plotter directly
 - [ ] input from hardware rngs
 
 ## Changes, Thoughts and Learnings (newest first)
+
+### December 1st, 2023
+
+[link to a video on instagram showing the finished plots](https://www.instagram.com/p/C0T4Er_KML1/)
+
+You can buy one to support this work!
+
+### November 26th, 2023
+
+- put an order to the generated coordinates for the lines, so they are no completely random. The effort was well spent, the images look a lot cleaner, without looking too ordered, but the many "stray" looking lines are gone.
+- added a compositional feature that sets the focus of generation into the bottom third of the image. This feature needs a lot of improvement.
+- decided this is good enough for a first series, generated 100, and selected the 10 I liked and started plotting them.
+
+![Photograph of my plotter doing the work](https://github.com/Mirabellensaft/sanguine/blob/main/images/plot.jpeg)
+
+### November 24th, 2023
+
+- changed how coordinates are generated to be more versatile in use
+- avoid doubles and coordinates that are too close together (this still needs improvement, but its also good enough for now)
+- added more graphical elements that are derived from the original star_burst motif and different algorithms that place them. (This turned out to be a key part in the development of the first series)
+
+![empty space, different compositional elements derived from the star_burst pattern](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00009.png?raw=true)
+
 ### November 22th, 2023
+
 - added compositional layer, that sets random centers of attention
 
 ![few larger circles are surrounded by smaller ones, the rest are the smallest cirles](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00008.png?raw=true)
 
 ### November 20th, 2023
+
 - support for tesselation 
 - cleaner collision of lines with circles. Probably good enough for plotting. 
 - also, we now get into the territory of panics, calculations that go on indefinetly... so there was `Some()` introduction of Options.
