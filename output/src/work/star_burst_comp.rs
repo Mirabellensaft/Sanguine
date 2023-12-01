@@ -19,6 +19,7 @@ pub fn form_group(layout: &layout::Format) -> node::element::Group {
 
     // Creates a baseline composition
     let mut comp = CompositionOverlay::new_empty(layout);
+    comp.add_center(sanguine_lib::resources::composition::CompositionCenter::Bottom, layout);
     comp.add_random_low(30, layout);
     comp.add_random_center(6, layout);
     comp.connect_centers();

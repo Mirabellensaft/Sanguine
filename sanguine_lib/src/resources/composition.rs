@@ -54,6 +54,12 @@ pub enum CompositionCenter {
     BottomLeft,
     BottomMid,
     BottomRight,
+    Bottom,
+    Top,
+    Left,
+    Right,
+    VerticalCenter,
+    HorizontalCenter,
 }
 
 /// This type contains the density variants for the entire grid.
@@ -173,46 +179,131 @@ impl CompositionOverlay {
     /// Implements a compositional center. Not properly implemented yet.
     pub fn add_center(&mut self, center: CompositionCenter, format: &layout::Format) {
 
-        let multiplicator_rows = format.rows / 5;
-        let multiplicator_columns = format.columns / 5;
+        let multiplicator_rows = format.rows / 3;
+        let multiplicator_columns = format.columns / 3;
         println!("{}, {}", multiplicator_columns, multiplicator_rows);
 
         let center_row = format.rows / 2;
         let center_col = format.columns / 2; 
+
+        let mut rng = thread_rng();
+        let mut truth = false;
         
         match center {
             CompositionCenter::TopLeft => {
                 for i in 0..multiplicator_rows + 1 {
                     for j in 0..multiplicator_columns + 1 {
-                        self.0[i][j] = Density::Focus;
-                        self.0[i][j+1] = Density::High;
-                        self.0[i+1][j] = Density::High;
-                        self.0[i+1][j+1] = Density::High;
+                        truth = rng.gen_bool(1.0/3.0);
+
+                        if truth {
+                            self.0[i][j] = Density::Mid;
+                        }
+                        self.0[i][j] = Density::Empty;
                     }
                 }    
             },
             CompositionCenter::TopMid => {
-                self.0[0][center_col] = Density::Focus;
-            
+                for i in 0..multiplicator_rows + 1 {
+                    for j in multiplicator_columns..multiplicator_columns*2 {
+                        self.0[i][j] = Density::Mid;
+                    }
+                }
              },
             CompositionCenter::TopRight => {
-                self.0[0][format.columns-1] = Density::Focus; },
+                for i in 0..multiplicator_rows + 1 {
+                    for j in multiplicator_columns*2..format.columns {
+                        self.0[i][j] = Density::Mid;
+                    }
+                } 
+            },
             CompositionCenter::MidLeft => {
-                self.0[center_row][0] = Density::Focus;
+                for i in multiplicator_rows..multiplicator_rows*2 {
+                    for j in 0..multiplicator_columns + 1 {
+                        self.0[i][j] = Density::Mid;
+                    }
+                }  
             },
             CompositionCenter::MidMid => {
-                self.0[center_row][center_col] = Density::Focus;  
+                for i in multiplicator_rows..multiplicator_rows*2 {
+                    for j in multiplicator_columns..multiplicator_columns*2 {
+                        self.0[i][j] = Density::Mid;
+                    }
+                }   
             },
             CompositionCenter::MidRight => {
-                self.0[center_row][format.columns-1] = Density::Focus;},
+                for i in multiplicator_rows..multiplicator_rows*2 {
+                    for j in multiplicator_columns*2..format.columns {
+                        self.0[i][j] = Density::Mid;
+                    }
+                } 
+            }
             CompositionCenter::BottomLeft => {
-                self.0[format.rows-1][0] = Density::Focus;
+                for i in multiplicator_rows*2..format.rows {
+                    for j in 0..multiplicator_columns + 1 {
+                        self.0[i][j] = Density::Mid;
+                    }
+                }  
             },
             CompositionCenter::BottomMid => {
-                self.0[format.rows-1][center_col] = Density::Focus;
+                for i in multiplicator_rows*2..format.rows {
+                    for j in multiplicator_columns..multiplicator_columns*2 {
+                        self.0[i][j] = Density::Mid;
+                    }
+                }  
             },
             CompositionCenter::BottomRight => {
-                self.0[format.rows-1][format.columns-1] = Density::Focus;
+                for i in multiplicator_rows*2..format.rows {
+                    for j in multiplicator_columns*2..format.columns {
+                        self.0[i][j] = Density::Mid;
+                    }
+                } 
+            },
+            CompositionCenter::Bottom => {
+                for i in multiplicator_rows*2..format.rows {
+                    for j in 0..format.columns {
+                        truth = rng.gen_bool(1.0/3.0);
+                        if truth {
+                            self.0[i][j] = Density::Mid;
+                        } else {
+                            self.0[i][j] = Density::Empty;
+                        }
+                    }
+                } 
+            },
+            CompositionCenter::Top => {
+                for i in 0..multiplicator_rows + 1 {
+                    for j in 0..format.columns {
+                        self.0[i][j] = Density::Mid;
+                    }
+                }  
+            },
+            CompositionCenter::Left => {
+                for i in 0..format.rows {
+                    for j in 0..multiplicator_columns {
+                        self.0[i][j] = Density::Mid;
+                    }
+                } 
+            },
+            CompositionCenter::Right => {
+                for i in 0..format.rows {
+                    for j in multiplicator_columns*2..format.columns {
+                        self.0[i][j] = Density::Mid;
+                    }
+                } 
+            },
+            CompositionCenter::VerticalCenter => {
+                for i in 0..format.rows {
+                    for j in multiplicator_columns..multiplicator_columns*2 {
+                        self.0[i][j] = Density::Mid;
+                    }
+                }
+            },
+            CompositionCenter::HorizontalCenter => {
+                for i in multiplicator_rows..multiplicator_rows*2 {
+                    for j in 0..format.columns {
+                        self.0[i][j] = Density::Mid;
+                    }
+                }
             },
 
         }
