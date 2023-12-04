@@ -6,3 +6,5 @@ pub mod border_coordinates;
 pub mod shapes;
 /// This module only prescribes compositional elements.
 pub mod composition;
+
+pub mod exclusion;
