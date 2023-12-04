@@ -1,4 +1,4 @@
-use crate::resources::{layout, shapes::Point};
+use crate::resources::{layout, shapes::point::Point};
 use rand::{thread_rng, Rng};
 
 /// This module contains a bunch of functions that create random coordinates on field borders.
