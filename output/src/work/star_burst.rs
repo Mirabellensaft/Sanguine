@@ -1,54 +1,60 @@
-use svg::node;
-use svg::Node;
-
 use rand::{thread_rng, Rng};
+use svg::node::element::Group;
 
-use sanguine_lib::resources::{layout, border_coordinates, shapes};
+use sanguine_lib::resources::{
+    border_coordinates::AllBorderCoordinates,
+    composition::{CompositionCenter, CompositionOverlay, Density},
+    layout,
+};
 
-pub fn form_group(layout: &layout::Format) -> node::element::Group {
-    let mut graph = node::element::Group::new();
+use super::star_burst_lib;
 
-    let mut all_coords = border_coordinates::AllBorderCoordinates::new(layout, 10);
+const RADIUS_MID: std::ops::RangeInclusive<i32> = 3_i32..=6_i32;
+const RADIUS_HIGH: std::ops::RangeInclusive<i32> = 5_i32..=10_i32;
+const RADIUS_FOCUS: std::ops::RangeInclusive<i32> = 10_i32..=20_i32;
+
+pub fn form_group(layout: &layout::Format) -> Group {
+    let mut graph = Group::new();
+
+    // Creates a baseline composition
+    let mut comp = CompositionOverlay::new_empty(layout);
+    comp.add_center(CompositionCenter::Bottom, layout);
+    comp.add_random_low(30, layout);
+    comp.add_random_center(6, layout);
+    comp.connect_centers();
+    comp.add_random_low(10, layout);
+
+    let mut all_coords = AllBorderCoordinates::new(layout, 10);
     all_coords.tesselate();
+    all_coords.slight_chaos();
 
-    // let coordinates = shapes::Point::random_coordinates_on_border(&layout.field_container[row as usize][col as usize]);
+    // Fills the gaps and edges in the baseline composition
+    comp.retro_composition(layout);
 
+    // Drawing of the Elements
     for row in 0..layout.rows {
-        for col in 0..layout.rows {
+        for col in 0..layout.columns {
             let mut rng = thread_rng();
-            let radius = rng.gen_range(3..=10);
 
-            let center = shapes::Point::random_coordinate(
-                &layout.field_container[row as usize][col as usize],
-                radius * 2,
-            );
+            let mut radius = 0;
 
-            let circle = shapes::Circle::new(center, radius as f32);
-            graph.append(circle.draw());
-
-            // println!(
-            //     "COORDS {:?}",
-            //     all_coords[row][col]
-            // );
-
-            for side in 0..4 {
-                for point in 0..10 {
-                    print!(
-                        "{}, {}, start: {:?}, center:{:?} \n",
-                        side, point, all_coords.0[row][col].0[side].0[point], center
-                    );
-                    let prelim_line = shapes::Line::new(all_coords.0[row][col].0[side].0[point], center);
-                    let step = 1.0;
-
-                    if let Some(endpoint) = circle.intersection(prelim_line, step) {
-                        println!("Point {:?}, EP {:?}", point, endpoint);
-                        let line = shapes::Line::new(all_coords.0[row][col].0[side].0[point], endpoint);
-                        graph.append(line.draw());
-                    };
-                }
+            match comp.0[row][col] {
+                Density::Mid => radius = rng.gen_range(RADIUS_MID),
+                Density::High => radius = rng.gen_range(RADIUS_HIGH),
+                Density::Focus => radius = rng.gen_range(RADIUS_FOCUS),
+                Density::Edge(_) => radius = rng.gen_range(RADIUS_MID),
+                Density::ThreeWay(_) => radius = rng.gen_range(RADIUS_MID),
+                _ => (),
             }
+
+            graph = star_burst_lib::draw::everything(
+                comp.0[row][col],
+                &all_coords.0[row][col],
+                &layout.field_container[row as usize][col as usize],
+                radius,
+                graph,
+            );
         }
     }
-
     graph
 }
