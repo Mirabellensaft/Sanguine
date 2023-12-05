@@ -1,64 +1,98 @@
 use rand::thread_rng;
 use rand::Rng;
-use sanguine_lib::resources::{layout, shapes};
+use sanguine_lib::resources::border_coordinates::AllBorderCoordinates;
+use sanguine_lib::resources::composition::CompositionOverlay;
+use sanguine_lib::resources::exclusion::Exclusion;
+use sanguine_lib::resources::{
+    layout,
+    shapes::{circle::Circle, line::Line, point::Point, Shape},
+};
 use svg::node;
 use svg::Node;
 
-pub fn form_group(layout: &layout::Format) -> node::element::Group {
+pub fn form_group(layout: &layout::Format, ex: &Exclusion) -> node::element::Group {
     let mut graph = node::element::Group::new();
+
+    let mut comp = CompositionOverlay::new_flat(layout);
+
+    let mut all_coords = AllBorderCoordinates::new(layout, 10);
+    all_coords.tesselate();
+    all_coords.slight_chaos();
+
     for row in 0..layout.rows {
         for col in 0..layout.columns {
             let mut rng = thread_rng();
-            let radius = rng.gen_range(3..=10);
 
-            let center = shapes::Point::random_coordinate(
+            let radius = rng.gen_range(7..=15);
+
+            let center = Point::random_coordinate(
                 &layout.field_container[row as usize][col as usize],
                 radius * 2,
             );
 
-            let circle = shapes::Circle::new(center, radius as f32);
-            graph.append(circle.draw());
+            if ex.0[0].contains(center) == false {
+                let circle = Circle::new(center, radius as f32);
+                graph.append(circle.draw());
 
-            let point_1 = shapes::Point::new(
-                circle.center.x + 3.0,
-                layout.field_container[row as usize][col as usize].y as f32,
-            );
+                for side in 0..4 {
+                    let the_side = &all_coords.0[row][col].0[side];
+                    let circle = Circle::new(center, radius as f32);
 
-            let y =
-                shapes::Point::random_coordinate(&layout.field_container[row as usize][col as usize], 1)
-                    .y;
-            let point_2 = shapes::Point::new(
-                layout.field_container[row as usize][col as usize].x as f32,
-                y,
-            );
+                    for point in 0..10 {
+                        if ex.0[0].contains(all_coords.0[row][col].0[side].0[point]) {
+                            let prelim_line = Line::new(
+                                all_coords.0[row][col].0[side].0[point],
+                                ex.0[0].return_center(),
+                            );
+                            let step = 1.0;
 
-            let x =
-                shapes::Point::random_coordinate(&layout.field_container[row as usize][col as usize], 1)
-                    .x;
-            let point_3 = shapes::Point::new(
-                x,
-                layout.field_container[row as usize][col as usize].y as f32
-                    + layout.field_container[row as usize][col as usize].row_height as f32,
-            );
+                            if let Some(endpoint) = ex.0[0].intersection(prelim_line, step) {
+                                // println!("Point {:?}, EP {:?}", point, endpoint);
+                                let line =
+                                    Line::new(all_coords.0[row][col].0[side].0[point], endpoint);
+                                graph.append(line.draw());
+                            } else {
+                                // println!("shit!");
+                            };
+                        } else {
+                            let prelim_line =
+                                Line::new(all_coords.0[row][col].0[side].0[point], circle.center);
+                            let step = 1.0;
 
-            let y =
-                shapes::Point::random_coordinate(&layout.field_container[row as usize][col as usize], 1)
-                    .y;
-            let point_4 = shapes::Point::new(
-                layout.field_container[row as usize][col as usize].x as f32
-                    + layout.field_container[row as usize][col as usize].column_width as f32,
-                y,
-            );
+                            if let Some(endpoint) = circle.intersection(prelim_line, step) {
+                                // println!("Point {:?}, EP {:?}", point, endpoint);
+                                let line =
+                                    Line::new(all_coords.0[row][col].0[side].0[point], endpoint);
+                                graph.append(line.draw());
+                            } else {
+                                // println!("shit!");
+                            };
+                        }
+                    }
+                }
+            } else {
+                for side in 0..4 {
+                    // let the_side = &all_coords.0[row][col].0[side];
+                    // let circle = shapes::circle::Circle::new(center, radius as f32);
 
-            let points = [point_1, point_2, point_3, point_4];
+                    for point in 0..10 {
+                        if ex.0[0].contains(all_coords.0[row][col].0[side].0[point]) == false {
+                            let prelim_line = Line::new(
+                                all_coords.0[row][col].0[side].0[point],
+                                ex.0[0].return_center(),
+                            );
+                            let step = 1.0;
 
-            for point in points {
-                let step = 1.0;
-                let prelim_line = shapes::Line::new(point, circle.center);
-                if let Some(endpoint) = circle.intersection(prelim_line, step) {
-                    println!("Point {:?}, EP {:?}", point, endpoint);
-                    let line = shapes::Line::new(point, endpoint);
-                    graph.append(line.draw());
+                            if let Some(endpoint) = ex.0[0].intersection(prelim_line, step) {
+                                // println!("Point {:?}, EP {:?}", point, endpoint);
+                                let line =
+                                    Line::new(all_coords.0[row][col].0[side].0[point], endpoint);
+                                graph.append(line.draw());
+                            } else {
+                                // println!("shit!");
+                            };
+                        }
+                    }
                 }
             }
         }
