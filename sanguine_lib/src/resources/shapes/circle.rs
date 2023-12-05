@@ -2,6 +2,8 @@
 use svg::node::element::Circle as CirclePath;
 use crate::resources::shapes::{line::Line,point::Point};
 
+use super::Shape;
+
 /// This module contains types related to shapes that show up in the rendered or plotted image.
 /// Everything is hard coded to generate black lines of 1px width, as this is the only relevant 
 /// setting for the plotter
@@ -23,18 +25,21 @@ impl Circle {
         };
         circle
     }
+}
+
+impl Shape for Circle {
 
     /// Returns true, if a given point is within the area of the circle.
-    pub fn contains(&self, point: Point) -> bool {
+    fn contains(&self, point: Point) -> bool {
         self.center.distance_to(&point) <= self.radius
     }
 
-    /// Returns the point where a line from the starting point to the center of 
+        /// Returns the point where a line from the starting point to the center of 
     /// the circle hits the circle boundary. 
     /// 
     /// ⚠️ If the provided line does not go through the center of the circle, 
     /// the point returned will be off!
-    pub fn intersection(&self, line: Line, step: f32) -> Option<Point> {
+    fn intersection(&self, line: Line, step: f32) -> Option<Point> {
 
         let mut diff = 10000000000.0;
         // println!("\n\nstep {}", step);
@@ -115,7 +120,7 @@ impl Circle {
     }
 
     /// Creates an svg path for the circle
-    pub fn draw(&self) -> CirclePath {
+    fn draw(&self) -> CirclePath {
         let circle = CirclePath::new()
             .set("fill", "none")
             .set("stroke", "black")
@@ -125,7 +130,10 @@ impl Circle {
             .set("r", self.radius);
         circle
     }
+
 }
+
+
 
 /// Helper function that returns a valid range between two values.
 fn range(x_1: f32, x_2: f32) -> std::ops::Range<i32> {

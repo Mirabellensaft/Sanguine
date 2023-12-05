@@ -1,7 +1,9 @@
-use svg::node::element::path::Data;
+use svg::node::element::{path::Data, Ellipse};
 use svg::node::element::Path;
 
 use crate::resources::shapes::{path, point::Point};
+
+use super::Shape;
 
 
 /// This module contains types related to shapes that show up in the rendered or plotted image.
@@ -25,6 +27,23 @@ impl Line {
         };
 
         line
+    }
+
+    /// Returns the point on a line for a given x value. Returns none if there 
+    /// is no point for that x value, usually the case when the line is vertical.
+    pub fn return_point_on_line(&self, x: f32) -> Option<Point> {
+        
+        if let Some(y_i) = self.y_intercept() {
+            if let Some(i) = self.slope()  {
+                let y = (i * x) + y_i;
+                let point = Point { x: x, y: y };
+                Some(point)
+            } else {
+                None
+            }
+        } else {
+            None
+        }
     }
 
     /// Calculates the slope of a line, returns none the line is vertical
@@ -52,26 +71,16 @@ impl Line {
             None
         }
     }
+}
 
-    /// Returns the point on a line for a given x value. Returns none if there 
-    /// is no point for that x value, usually the case when the line is vertical.
-    pub fn return_point_on_line(&self, x: f32) -> Option<Point> {
-        
-        if let Some(y_i) = self.y_intercept() {
-            if let Some(i) = self.slope()  {
-                let y = (i * x) + y_i;
-                let point = Point { x: x, y: y };
-                Some(point)
-            } else {
-                None
-            }
-        } else {
-            None
-        }
+impl Shape for Line {
+
+    fn contains(&self, point: Point) -> bool {
+        unimplemented!()
     }
 
     /// Returns the point where two lines intersect, returns None, if they don't intersect.
-    pub fn intersection(&self, other: Line, step: f32) -> Option<Point> {
+    fn intersection(&self, other: Line, step: f32) -> Option<Point> {
 
         let mut diff = 10000000000.0;
         println!("step {}", step);
@@ -108,7 +117,7 @@ impl Line {
     }
 
     /// Creates an svg path for a line
-    pub fn draw(&self) -> Path {
+    fn draw(&self) -> Path {
         let data = Data::new()
             .move_to((self.start.x, self.start.y))
             .line_to((self.end.x, self.end.y));
