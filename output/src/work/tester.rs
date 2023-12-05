@@ -1,7 +1,7 @@
 use rand::thread_rng;
 use rand::Rng;
 use sanguine_lib::resources::border_coordinates::AllBorderCoordinates;
-use sanguine_lib::resources::composition::CompositionOverlay;
+use sanguine_lib::resources::composition::grid::CompositionOverlay;
 use sanguine_lib::resources::exclusion::Exclusion;
 use sanguine_lib::resources::{
     layout,
@@ -10,7 +10,7 @@ use sanguine_lib::resources::{
 use svg::node;
 use svg::Node;
 
-pub fn form_group(layout: &layout::Format, ex: &Exclusion) -> node::element::Group {
+pub fn form_group(layout: &layout::Grid, ex: &Exclusion) -> node::element::Group {
     let mut graph = node::element::Group::new();
 
     let mut comp = CompositionOverlay::new_flat(layout);

@@ -3,7 +3,7 @@ use svg::node::element::Group;
 
 use sanguine_lib::resources::{
     border_coordinates::AllBorderCoordinates,
-    composition::{CompositionCenter, CompositionOverlay, Density},
+    composition::grid::{CompositionCenter, CompositionOverlay, Density},
     layout,
 };
 
@@ -13,7 +13,7 @@ const RADIUS_MID: std::ops::RangeInclusive<i32> = 3_i32..=6_i32;
 const RADIUS_HIGH: std::ops::RangeInclusive<i32> = 5_i32..=10_i32;
 const RADIUS_FOCUS: std::ops::RangeInclusive<i32> = 10_i32..=20_i32;
 
-pub fn form_group(layout: &layout::Format) -> Group {
+pub fn form_group(layout: &layout::Grid) -> Group {
     let mut graph = Group::new();
 
     // Creates a baseline composition

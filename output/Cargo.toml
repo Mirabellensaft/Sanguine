@@ -9,5 +9,6 @@ edition = "2021"
 rand = "0.8.2"
 svg = "0.14.0"
 sanguine_lib = { path = "../sanguine_lib" }
+voronator = "0.2.1"
 
 

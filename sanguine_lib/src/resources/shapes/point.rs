@@ -1,4 +1,5 @@
 use rand::{thread_rng, Rng};
+use svg::node::element::{Circle as CirclePath, self};
 
 use crate::resources::layout;
 
@@ -47,6 +48,17 @@ impl Point {
         let dx = self.x - other.x;
         let dy = self.y - other.y;
         (dx * dx + dy * dy).sqrt()
+    }
+
+    pub fn draw(&self) -> CirclePath {
+        let circle = CirclePath::new()
+            .set("fill", "none")
+            .set("stroke", "black")
+            .set("stroke-width", 1)
+            .set("cx", self.x)
+            .set("cy", self.y)
+            .set("r", 1);
+        circle
     }
 }
 

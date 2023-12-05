@@ -2,7 +2,7 @@ use super::{lines, threeways};
 use rand::{thread_rng, Rng};
 use sanguine_lib::resources::{
     border_coordinates::BorderCoordinates,
-    composition::{Density, Direction},
+    composition::grid::{Density, Direction},
     layout::Field,
     shapes::{circle::Circle, line::Line, point::Point, Shape},
 };

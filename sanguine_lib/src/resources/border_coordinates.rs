@@ -158,7 +158,7 @@ pub struct AllBorderCoordinates(
 
 impl AllBorderCoordinates {
     /// Returns a Vector of edge points for an entire work of art. 
-    pub fn new(format: &layout::Format, amount: usize) -> Self {
+    pub fn new(format: &layout::Grid, amount: usize) -> Self {
         let mut vec = Vec::new();
 
         for row in 0..format.rows {

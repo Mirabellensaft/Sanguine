@@ -71,7 +71,7 @@ impl CompositionOverlay {
     /// Creates a new grid where all fields have the Density::Empty variant
     /// This is to start with a homogenous field of "nothing", depending 
     /// on how rendering of the variant is set.
-    pub fn new_empty(format: &layout::Format) -> Self {
+    pub fn new_empty(format: &layout::Grid) -> Self {
         let mut vec = Vec::new();
 
         for _row in 0..format.rows {
@@ -87,7 +87,7 @@ impl CompositionOverlay {
     /// Creates a new grid where all fields have the Density::Mid variant.
     /// This is to start with a homogenous field of "something", depending 
     /// on how rendering of the variant is set.
-    pub fn new_flat(format: &layout::Format) -> Self {
+    pub fn new_flat(format: &layout::Grid) -> Self {
         let mut vec = Vec::new();
 
         for _row in 0..format.rows {
@@ -144,7 +144,7 @@ impl CompositionOverlay {
     }
 
     /// Adds a specified number of random centers with Density::Focus and surrounds them Density::High.
-    pub fn add_random_center(&mut self, amount: usize, format: &layout::Format) {
+    pub fn add_random_center(&mut self, amount: usize, format: &layout::Grid) {
         let mut rng = thread_rng();
 
         for _i in 0..amount {
@@ -164,7 +164,7 @@ impl CompositionOverlay {
     }
 
     /// Adds a specified number of random locations with Density::Low 
-    pub fn add_random_low(&mut self, amount: usize, format: &layout::Format) {
+    pub fn add_random_low(&mut self, amount: usize, format: &layout::Grid) {
         let mut rng = thread_rng();
 
         for _i in 0..amount {
@@ -177,7 +177,7 @@ impl CompositionOverlay {
     }
 
     /// Implements a compositional center. Not properly implemented yet.
-    pub fn add_center(&mut self, center: CompositionCenter, format: &layout::Format) {
+    pub fn add_center(&mut self, center: CompositionCenter, format: &layout::Grid) {
 
         let multiplicator_rows = format.rows / 3;
         let multiplicator_columns = format.columns / 3;
@@ -311,7 +311,7 @@ impl CompositionOverlay {
 
     /// Fills gaps in the composition with Density variants Edge, ThreeWay, 
     /// Corner, Low and Transition in their respective direction.
-    pub fn retro_composition(&mut self, layout: &layout::Format) {
+    pub fn retro_composition(&mut self, layout: &layout::Grid) {
         for row in 0..self.0.len() {
             for col in 0..self.0[row].len() {
                 match self.0[row][col] {
@@ -354,7 +354,7 @@ impl CompositionOverlay {
     /// Helper function that determines the contact points of each empty field detected by fn retro_composition and
     /// returns an array of 4 bools that each represent a side of the field. 
     /// 
-    fn direction_of_contact(&mut self, row: usize, col: usize, layout: &layout::Format) -> [bool;4] {
+    fn direction_of_contact(&mut self, row: usize, col: usize, layout: &layout::Grid) -> [bool;4] {
         // Direction of the Edge variant points towards the block
         // edge on the right or left side of a block
         let mut sides = [false; 4];
@@ -468,7 +468,7 @@ impl CompositionOverlay {
 #[test]
 
 fn corner_test() {
-    let work = layout::Format::new(100, 100, 1, 5, 5,);
+    let work = layout::Grid::new(100, 100, 1, 5, 5,);
     let mut comp = CompositionOverlay::new_empty(&work);
     comp.0[0][4] = Density::Mid;
     comp.0[0][3] = Density::Mid;

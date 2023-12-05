@@ -12,13 +12,30 @@ Hello, World!
 ## Features I have in mind:
 
 - [x] generate art as svg
-- [ ] add more organic ways to generate images, such as voronoi diagrams and L-systems.
+- [ ] parse a limited number of shapes from svg files (WIP).
+- [x] add more organic ways to generate images, such as voronoi diagrams
+- [ ] adapt composition things to work with voronoi diagrams
+- [ ] experiment with L-systems.
 - [ ] add camera input, so the generated art can be a reaction to what already is on paper.
 - [ ] project layout that allows for easy transitions between creating art work with lots of predefined functions, writing custom parts for the frame work and switching between different works of art.
 - [ ] generate art without svg output, by adressing the pen plotter directly
 - [ ] input from hardware rngs
 
 ## Changes, Thoughts and Learnings (newest first)
+
+### December 5th, 2023
+
+Off to new experiments! I implemented the ability to generate the cells of a voronoi diagram, and draw the lines.
+
+![drawn cells of a voronoi diagram](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00011.png?raw=true)
+
+### December 4th, 2023
+
+I have started to work on parsing svg files. While the results for my art work are currently not very usable, the general principle works and it lead to implementing `Shape` as a `trait` and usage of it as a trait object with all the pitfalls of sized types that comes with it. I decided to drop the topic of including vectorizations from a camera for now, to pic it up later again, as I figured I don't want to work on a grid based system with this. 
+
+![An experiment with colling lines with the edges of an ellipse that is in the parsed file](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00010.png?raw=true)
+
+
 
 ### December 1st, 2023
 

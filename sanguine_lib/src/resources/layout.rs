@@ -1,12 +1,14 @@
 use svg::{node::{self, element::{Path, path::Data}}, Node};
 
+use super::shapes::point::Point;
+
 /// This module contains types that describe the fundamental properties of the work.
 /// 
 /// Currently everything is grid based. 
 
 /// Format contains the works's properties and a container for the grid.
 #[derive(Debug, Clone)]
-pub struct Format {
+pub struct Grid {
     /// Work height in pixels
     pub height: i32,
     /// Work width in pixels
@@ -44,7 +46,7 @@ pub struct Field {
     pub row_height: i32,
 }
 
-impl Format {
+impl Grid {
     /// Creates a new grid.
     pub fn new(height: i32, width: i32, margin: i32, rows: usize, columns: usize) -> Self {
         let column_width = width / columns as i32;
@@ -66,7 +68,7 @@ impl Format {
             fields.push(inner)
         }
 
-        let work = Format {
+        let work = Grid {
             height: height,
             width: width,
             margin: margin,
@@ -80,7 +82,7 @@ impl Format {
 }
 
 /// Adds a white background so png conversion is easier.
-pub fn backgound(layout: &Format) -> node::element::Group {
+pub fn backgound(layout: &Grid) -> node::element::Group {
 
         let mut graph = node::element::Group::new();
    
@@ -111,4 +113,30 @@ fn path(data: Data) -> Path {
         .set("d", data);
 
     path
+}
+
+#[derive(Debug, Clone)]
+pub struct Voronoi {
+    /// Work height in pixels
+    pub height: i32,
+    /// Work width in pixels
+    pub width: i32,
+    /// A margin, value is currently never applied anywhere.
+    pub margin: i32,
+    /// Vector that contains the grid.
+    pub field_container: Vec<Point>,
+}
+
+impl Voronoi {
+    pub fn new(height: i32, width: i32, margin: i32) -> Self {
+        let work = Voronoi {
+            height: height,
+            width: width,
+            margin: margin,
+            field_container: Vec::new(),
+        };
+
+        work
+    }
+    
 }
