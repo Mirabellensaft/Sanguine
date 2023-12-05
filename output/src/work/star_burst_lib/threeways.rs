@@ -1,6 +1,6 @@
 use sanguine_lib::resources::{
     border_coordinates::OneSide,
-    composition::Direction,
+    composition::grid::Direction,
     shapes::{line::Line, Shape},
 };
 use svg::{node::element::Group, Node};
