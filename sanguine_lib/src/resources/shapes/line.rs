@@ -71,9 +71,22 @@ impl Line {
             None
         }
     }
+
+    /// Creates an svg path for a line
+    pub fn draw(&self) -> Path {
+        let data = Data::new()
+            .move_to((self.start.x, self.start.y))
+            .line_to((self.end.x, self.end.y));
+
+        let path = path(data);
+        path
+    }
 }
 
 impl Shape for Line {
+    fn return_center(&self) -> Point {
+        unimplemented!()
+    }
 
     fn contains(&self, point: Point) -> bool {
         unimplemented!()
@@ -114,16 +127,6 @@ impl Shape for Line {
             }
         }
         None
-    }
-
-    /// Creates an svg path for a line
-    fn draw(&self) -> Path {
-        let data = Data::new()
-            .move_to((self.start.x, self.start.y))
-            .line_to((self.end.x, self.end.y));
-
-        let path = path(data);
-        path
     }
 }
 

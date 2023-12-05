@@ -1,5 +1,5 @@
 
-use svg::node::element::Circle as CirclePath;
+use svg::node::element::{Circle as CirclePath, self};
 use crate::resources::shapes::{line::Line,point::Point};
 
 use super::Shape;
@@ -25,9 +25,24 @@ impl Circle {
         };
         circle
     }
+
+    /// Creates an svg path for the circle
+    pub fn draw(&self) -> CirclePath {
+        let circle = CirclePath::new()
+            .set("fill", "none")
+            .set("stroke", "black")
+            .set("stroke-width", 1)
+            .set("cx", self.center.x)
+            .set("cy", self.center.y)
+            .set("r", self.radius);
+        circle
+    }
 }
 
 impl Shape for Circle {
+    fn return_center(&self) -> Point {
+        self.center
+    }
 
     /// Returns true, if a given point is within the area of the circle.
     fn contains(&self, point: Point) -> bool {
@@ -117,18 +132,6 @@ impl Shape for Circle {
             }     
         }
         None
-    }
-
-    /// Creates an svg path for the circle
-    fn draw(&self) -> CirclePath {
-        let circle = CirclePath::new()
-            .set("fill", "none")
-            .set("stroke", "black")
-            .set("stroke-width", 1)
-            .set("cx", self.center.x)
-            .set("cy", self.center.y)
-            .set("r", self.radius);
-        circle
     }
 
 }

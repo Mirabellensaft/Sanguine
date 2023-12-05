@@ -2,12 +2,10 @@ use rand::{thread_rng, Rng};
 use sanguine_lib::resources::{
     composition::{Density, Direction}, 
     border_coordinates::BorderCoordinates, 
-    shapes::{line::Line, point::Point, circle::Circle}, layout::Field
+    shapes::{Shape, line::Line, point::Point, circle::Circle}, layout::Field
 };
 use svg::{node::element::Group, Node};
-
 use super::{lines, threeways};
-
 
 pub fn everything(density: Density, border_coordinates: &BorderCoordinates, field: &Field, radius: i32, mut graph: Group) -> Group {
     let mut rng = thread_rng();

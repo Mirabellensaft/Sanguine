@@ -1,4 +1,5 @@
 use svg::node::element::path::Data;
+use svg::node::element::{Circle as CirclePath, self};
 use svg::node::element::Path;
 
 use crate::resources::{layout, shapes::{line::Line,point::Point}};
@@ -51,9 +52,10 @@ pub trait Shape {
 
     fn contains(&self, point: Point) -> bool;
     fn intersection(&self, line: Line, step: f32) -> Option<Point>;
-    fn draw(&self) -> Path;
+    fn return_center(&self) -> Point;
 
 }
+
 
 
 

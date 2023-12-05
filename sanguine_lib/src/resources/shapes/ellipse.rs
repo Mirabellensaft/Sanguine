@@ -1,5 +1,5 @@
 
-use svg::node::element::Circle as CirclePath;
+use svg::node::element::{Circle as CirclePath, self};
 use crate::resources::shapes::{line::Line,point::Point};
 
 use super::{circle::smallest_x, Shape};
@@ -27,9 +27,25 @@ impl Ellipse {
         };
         ellipse
     }
+
+     /// Creates an svg path for the ellipse
+    pub fn draw(&self) ->  element::Path {
+        unimplemented!()
+        // let circle = CirclePath::new()
+        //     .set("fill", "none")
+        //     .set("stroke", "black")
+        //     .set("stroke-width", 1)
+        //     .set("cx", self.center.x)
+        //     .set("cy", self.center.y)
+        //     .set("r", self.radius);
+        // circle
+    }
 }
 
 impl Shape for Ellipse {
+    fn return_center(&self) -> Point {
+        self.center
+    }
 
 
     /// Returns true, if a given point is within the area of the ellipse.
@@ -122,17 +138,5 @@ impl Shape for Ellipse {
             }     
         }
         None
-    }
-
-    /// Creates an svg path for the circle
-    fn draw(&self) -> CirclePath {
-        let circle = CirclePath::new()
-            .set("fill", "none")
-            .set("stroke", "black")
-            .set("stroke-width", 1)
-            .set("cx", self.center.x)
-            .set("cy", self.center.y)
-            .set("r", self.radius);
-        circle
     }
 }
