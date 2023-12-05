@@ -49,7 +49,6 @@ pub fn distorted_square(field: layout::Field) -> Path {
 }
 
 pub trait Shape {
-
     fn contains(&self, point: Point) -> bool;
     fn intersection(&self, line: Line, step: f32) -> Option<Point>;
     fn return_center(&self) -> Point;

@@ -1,13 +1,20 @@
+use super::{lines, threeways};
 use rand::{thread_rng, Rng};
 use sanguine_lib::resources::{
-    composition::{Density, Direction}, 
-    border_coordinates::BorderCoordinates, 
-    shapes::{Shape, line::Line, point::Point, circle::Circle}, layout::Field
+    border_coordinates::BorderCoordinates,
+    composition::{Density, Direction},
+    layout::Field,
+    shapes::{circle::Circle, line::Line, point::Point, Shape},
 };
 use svg::{node::element::Group, Node};
-use super::{lines, threeways};
 
-pub fn everything(density: Density, border_coordinates: &BorderCoordinates, field: &Field, radius: i32, mut graph: Group) -> Group {
+pub fn everything(
+    density: Density,
+    border_coordinates: &BorderCoordinates,
+    field: &Field,
+    radius: i32,
+    mut graph: Group,
+) -> Group {
     let mut rng = thread_rng();
     match density {
         Density::Empty => (),
@@ -38,12 +45,11 @@ pub fn everything(density: Density, border_coordinates: &BorderCoordinates, fiel
             let mut second_side = 0;
             let mut third_side = 0;
             let mut dir = Direction::Up;
-  
+
             if side == 0 {
                 second_side = 3;
                 third_side = 1;
                 dir = Direction::RightUp;
-                
             } else if side == 1 {
                 second_side = 0;
                 third_side = 3;
@@ -60,10 +66,7 @@ pub fn everything(density: Density, border_coordinates: &BorderCoordinates, fiel
         }
 
         Density::Edge(direction) => {
-            let center = Point::random_coordinate(
-                field,
-                radius * 2,
-            );
+            let center = Point::random_coordinate(field, radius * 2);
 
             let side = match direction {
                 Direction::Up => 0,
@@ -81,8 +84,6 @@ pub fn everything(density: Density, border_coordinates: &BorderCoordinates, fiel
         }
 
         Density::Corner(direction) => {
-
-
             match direction {
                 Direction::LeftDown => {
                     let second_side = &border_coordinates.0[1];
@@ -109,7 +110,6 @@ pub fn everything(density: Density, border_coordinates: &BorderCoordinates, fiel
         }
 
         Density::ThreeWay(direction) => {
-
             match direction {
                 Direction::Left => {
                     let first_side = &border_coordinates.0[0];
@@ -141,13 +141,10 @@ pub fn everything(density: Density, border_coordinates: &BorderCoordinates, fiel
                 }
                 _ => (),
             };
-        },   
+        }
 
         _ => {
-            let center = Point::random_coordinate(
-                field,
-                radius,
-            );
+            let center = Point::random_coordinate(field, radius);
 
             let circle = Circle::new(center, radius as f32);
             graph.append(circle.draw());

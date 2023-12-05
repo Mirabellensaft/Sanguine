@@ -47,7 +47,6 @@ impl Shape for Ellipse {
         self.center
     }
 
-
     /// Returns true, if a given point is within the area of the ellipse.
     fn contains(&self, point: Point) -> bool {
         // println!("center: {:?} point: {:?}", self.center, point);

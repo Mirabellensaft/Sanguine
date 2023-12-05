@@ -1,13 +1,13 @@
-use svg::node::element::Group;
 use rand::{thread_rng, Rng};
+use svg::node::element::Group;
 
 use sanguine_lib::resources::{
-    composition::{Density, CompositionOverlay, CompositionCenter},
-    layout, border_coordinates::AllBorderCoordinates,
+    border_coordinates::AllBorderCoordinates,
+    composition::{CompositionCenter, CompositionOverlay, Density},
+    layout,
 };
 
 use super::star_burst_lib;
-
 
 const RADIUS_MID: std::ops::RangeInclusive<i32> = 3_i32..=6_i32;
 const RADIUS_HIGH: std::ops::RangeInclusive<i32> = 5_i32..=10_i32;
@@ -47,10 +47,14 @@ pub fn form_group(layout: &layout::Format) -> Group {
                 _ => (),
             }
 
-            graph = star_burst_lib::draw::everything(comp.0[row][col], &all_coords.0[row][col],&layout.field_container[row as usize][col as usize], radius, graph);
+            graph = star_burst_lib::draw::everything(
+                comp.0[row][col],
+                &all_coords.0[row][col],
+                &layout.field_container[row as usize][col as usize],
+                radius,
+                graph,
+            );
         }
     }
     graph
 }
-            
-            
