@@ -4,7 +4,7 @@ use sanguine_lib::resources::{
     border_coordinates::BorderCoordinates,
     composition::grid::{Density, Direction},
     layout::Field,
-    shapes::{circle::Circle, line::Line, point::Point, Shape},
+    shapes::{circle::Circle, line::Line, point::Point},
 };
 use svg::{node::element::Group, Node};
 

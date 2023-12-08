@@ -1,10 +1,16 @@
-use svg::{node::{self, element::{Path, path::Data}}, Node};
+use svg::{
+    node::{
+        self,
+        element::{path::Data, Path},
+    },
+    Node,
+};
 
 use super::shapes::point::Point;
 
 /// This module contains types that describe the fundamental properties of the work.
-/// 
-/// Currently everything is grid based. 
+///
+/// Currently everything is grid based.
 
 /// Format contains the works's properties and a container for the grid.
 #[derive(Debug, Clone)]
@@ -32,7 +38,7 @@ pub enum Orientation {
     Right,
 }
 
-/// Measurement properties of one field. 
+/// Measurement properties of one field.
 /// Maybe width and height can go somewhere else, because its the same for every field?
 #[derive(Debug, Copy, Clone)]
 pub struct Field {
@@ -82,27 +88,19 @@ impl Grid {
 }
 
 /// Adds a white background so png conversion is easier.
-pub fn backgound(layout: &Grid) -> node::element::Group {
+pub fn background(layout: &Grid) -> node::element::Group {
+    let mut graph = node::element::Group::new();
 
-        let mut graph = node::element::Group::new();
-   
+    let data = node::element::path::Data::new()
+        .move_to((0, 0))
+        .line_to((0, layout.height))
+        .line_to((layout.width, layout.height))
+        .line_to((layout.width, 0))
+        .close();
 
-        let data = node::element::path::Data::new()
-            .move_to((0,0))
-            .line_to((0,layout.height))
-            .line_to(
-                (layout.width,
-                layout.height,)
-            )
-            .line_to((layout.width, 0)
-            )
-            .close();
-    
-        let path = path(data);
-        graph.append(path);
-        graph
-
-
+    let path = path(data);
+    graph.append(path);
+    graph
 }
 /// Helper function for the background path.
 fn path(data: Data) -> Path {
@@ -135,8 +133,6 @@ impl Voronoi {
             margin: margin,
             field_container: Vec::new(),
         };
-
         work
     }
-    
 }

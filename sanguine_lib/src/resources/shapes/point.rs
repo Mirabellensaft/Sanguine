@@ -1,10 +1,10 @@
 use rand::{thread_rng, Rng};
-use svg::node::element::{Circle as CirclePath, self};
+use svg::node::element::{self, Circle as CirclePath};
 
 use crate::resources::layout;
 
 /// This module contains types related to shapes that show up in the rendered or plotted image.
-/// Everything is hard coded to generate black lines of 1px width, as this is the only relevant 
+/// Everything is hard coded to generate black lines of 1px width, as this is the only relevant
 /// setting for the plotter
 
 /// A Point.
@@ -36,7 +36,7 @@ impl Point {
             start: field.y + margin,
             end: field.y + field.row_height - margin,
         };
-    // println!("h {:?}, v {:?}", horizontal, vertical);
+        // println!("h {:?}, v {:?}", horizontal, vertical);
         Point::new(
             rng.gen_range(horizontal) as f32,
             rng.gen_range(vertical) as f32,
@@ -61,5 +61,3 @@ impl Point {
         circle
     }
 }
-
-

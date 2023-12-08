@@ -1,15 +1,18 @@
 use svg::node::element::path::Data;
-use svg::node::element::{Circle as CirclePath, self};
 use svg::node::element::Path;
+use svg::node::element::{self, Circle as CirclePath};
 
-use crate::resources::{layout, shapes::{line::Line,point::Point}};
+use crate::resources::{
+    layout,
+    shapes::{line::Line, point::Point},
+};
 
-pub mod line;
 pub mod circle;
-pub mod point;
 pub mod ellipse;
+pub mod line;
+pub mod point;
 /// This module contains types related to shapes that show up in the rendered or plotted image.
-/// Everything is hard coded to generate black lines of 1px width, as this is the only relevant 
+/// Everything is hard coded to generate black lines of 1px width, as this is the only relevant
 /// setting for the plotter
 
 /// Hard coded path data
@@ -52,10 +55,4 @@ pub trait Shape {
     fn contains(&self, point: Point) -> bool;
     fn intersection(&self, line: Line, step: f32) -> Option<Point>;
     fn return_center(&self) -> Point;
-
 }
-
-
-
-
-
