@@ -1,6 +1,5 @@
 use svg::node::element::path::Data;
 use svg::node::element::Path;
-use svg::node::element::{self, Circle as CirclePath};
 
 use crate::resources::{
     layout,

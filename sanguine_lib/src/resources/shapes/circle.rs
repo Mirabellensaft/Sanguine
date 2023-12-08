@@ -1,5 +1,5 @@
 use crate::resources::shapes::{line::Line, point::Point};
-use svg::node::element::{self, Circle as CirclePath};
+use svg::node::element::Circle as CirclePath;
 
 use super::Shape;
 

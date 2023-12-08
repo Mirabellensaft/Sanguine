@@ -1,5 +1,5 @@
 use rand::{thread_rng, Rng};
-use svg::node::element::{self, Circle as CirclePath};
+use svg::node::element::Circle as CirclePath;
 
 use crate::resources::layout;
 

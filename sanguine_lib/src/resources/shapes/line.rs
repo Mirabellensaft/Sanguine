@@ -1,5 +1,5 @@
+use svg::node::element::path::Data;
 use svg::node::element::Path;
-use svg::node::element::{path::Data, Ellipse};
 
 use crate::resources::shapes::{path, point::Point};
 
