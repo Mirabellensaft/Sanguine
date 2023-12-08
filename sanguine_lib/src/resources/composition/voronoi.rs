@@ -3,10 +3,16 @@ use rand::prelude::*;
 use voronator::delaunator::Point as VoiPoint;
 use voronator::VoronoiDiagram as VoiDi;
 
-use crate::resources::layout;
-use crate::resources::shapes::line::Line;
-use crate::resources::shapes::point::Point;
-pub struct Cell(pub Vec<Line>);
+use crate::resources::{
+    layout,
+    shapes::{line::Line, point::Point},
+};
+
+#[derive()]
+pub struct Cell {
+    pub border_lines: Vec<Line>,
+    pub center: Point,
+}
 pub struct VoronoiDiagram {
     pub centers: Vec<(f64, f64)>,
     pub cells: Vec<Cell>,
@@ -54,8 +60,9 @@ impl VoronoiDiagram {
         }
 
         let mut cells = Vec::new();
+
         for polygon in diagram.cells() {
-            let mut cell = Vec::new();
+            let mut cell_border_lines = Vec::new();
 
             let points = polygon.points();
 
@@ -65,7 +72,7 @@ impl VoronoiDiagram {
                     Point::new(points[i + 1].x as f32, points[i + 1].y as f32),
                 );
 
-                cell.push(line);
+                cell_border_lines.push(line);
             }
             // the closing line
             let line = Line::new(
@@ -75,8 +82,13 @@ impl VoronoiDiagram {
                 ),
                 Point::new(points[0].x as f32, points[0].y as f32),
             );
-            cell.push(line);
-            cells.push(Cell(cell));
+            cell_border_lines.push(line);
+
+            // The centers for each cell are currently set to zero.
+            cells.push(Cell {
+                border_lines: cell_border_lines,
+                center: Point::new(0.0, 0.0),
+            });
         }
         let diagram = VoronoiDiagram {
             centers: centers,
