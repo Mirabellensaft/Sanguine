@@ -20,7 +20,7 @@ fn main() {
             let work = layout::Grid::new(1200, 600, 2, 8, 4);
             let document = Document::new()
                 .set("viewBox", (0, 0, work.width, work.height))
-                .add(layout::backgound(&work))
+                .add(layout::background(&work))
                 .add(voronoi::form_group(&work));
 
             let path = format!("image_{}.svg", i);

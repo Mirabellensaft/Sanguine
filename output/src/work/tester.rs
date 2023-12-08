@@ -1,7 +1,6 @@
 use rand::thread_rng;
 use rand::Rng;
 use sanguine_lib::resources::border_coordinates::AllBorderCoordinates;
-use sanguine_lib::resources::composition::grid::CompositionOverlay;
 use sanguine_lib::resources::exclusion::Exclusion;
 use sanguine_lib::resources::{
     layout,
@@ -13,7 +12,7 @@ use svg::Node;
 pub fn form_group(layout: &layout::Grid, ex: &Exclusion) -> node::element::Group {
     let mut graph = node::element::Group::new();
 
-    let mut comp = CompositionOverlay::new_flat(layout);
+    // let comp = CompositionOverlay::new_flat(layout);
 
     let mut all_coords = AllBorderCoordinates::new(layout, 10);
     all_coords.tesselate();
@@ -31,11 +30,18 @@ pub fn form_group(layout: &layout::Grid, ex: &Exclusion) -> node::element::Group
             );
 
             if ex.0[0].contains(center) == false {
-                let circle = Circle::new(center, radius as f32);
+                let circle = {
+                    let radius = radius as f32;
+                    let circle = Circle {
+                        center: center,
+                        radius: radius,
+                    };
+                    circle
+                };
                 graph.append(circle.draw());
 
                 for side in 0..4 {
-                    let the_side = &all_coords.0[row][col].0[side];
+                    // let the_side = &all_coords.0[row][col].0[side];
                     let circle = Circle::new(center, radius as f32);
 
                     for point in 0..10 {
