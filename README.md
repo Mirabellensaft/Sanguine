@@ -18,32 +18,44 @@ Hello, World!
 - [ ] experiment with L-systems.
 - [ ] add camera input, so the generated art can be a reaction to what already is on paper.
 - [ ] project layout that allows for easy transitions between creating art work with lots of predefined functions, writing custom parts for the frame work and switching between different works of art.
-- [ ] generate art without svg output, by adressing the pen plotter directly
+- [ ] generate art without svg output, by addressing the pen plotter directly
 - [ ] input from hardware rngs
 
 ## Changes, Thoughts and Learnings (newest first)
+
+### December 8th, 2023
+
+Added a characteristic timestamp to the filename of the generated images. The timestamp can later be part of the stamp on the backside of the image. 
+
+![Screenshot showing file names in the format "nr_000_%Y%m%d_%H%M%S.](https://github.com/Mirabellensaft/sanguine/blob/main/images/filename.png?raw=true)
+
+Added the type that keeps data for the polygons, so that the center may be saved with each cell, to be able to address each cell by the center point. Following this I am also starting to think about how to order the center points in a meaningful way. 
 
 ### December 5th, 2023
 
 Off to new experiments! I implemented the ability to generate the cells of a voronoi diagram, and draw the lines.
 
-![drawn cells of a voronoi diagram](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00011.png?raw=true)
 <figure>
     <img 
         src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00011.png"
-        width="200"
-        height="100"
-        alt="Albuquerque, New Mexico">
-    <figcaption>A single track trail outside of Albuquerque, New Mexico.</figcaption>
+        width="150"
+        height="300"
+        alt="Drawn cells of a voronoi diagram">
+    <figcaption>Drawn cells of a voronoi diagram.</figcaption>
 </figure>
 
 ### December 4th, 2023
 
-I have started to work on parsing svg files. While the results for my art work are currently not very usable, the general principle works and it lead to implementing `Shape` as a `trait` and usage of it as a trait object with all the pitfalls of sized types that comes with it. I decided to drop the topic of including vectorizations from a camera for now, to pic it up later again, as I figured I don't want to work on a grid based system with this. 
+I have started to work on parsing svg files. While the results for my art work are currently not very usable, the general principle works and it lead to implementing `Shape` as a `trait` and usage of it as a trait object with all the pitfalls of sized types that comes with it. I decided to drop the topic of including vectorization from a camera for now, to pic it up later again, as I figured I don't want to work on a grid based system with this. 
 
-![An experiment with colling lines with the edges of an ellipse that is in the parsed file](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00010.png?raw=true)
-
-
+<figure>
+    <img 
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00010.png"
+        width="150"
+        height="300"
+        alt="An experiment with colliding lines with the edges of an ellipse that is in the parsed file">
+    <figcaption>An experiment with colliding lines with the edges of an ellipse that is in the parsed file.</figcaption>
+</figure>
 
 ### December 1st, 2023
 
@@ -57,7 +69,16 @@ You can buy one to support this work!
 - added a compositional feature that sets the focus of generation into the bottom third of the image. This feature needs a lot of improvement.
 - decided this is good enough for a first series, generated 100, and selected the 10 I liked and started plotting them.
 
-![Photograph of my plotter doing the work](https://github.com/Mirabellensaft/sanguine/blob/main/images/plot.jpeg)
+
+
+<figure>
+    <img 
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/plot.jpeg"
+        width="166"
+        height="295"
+        alt="Photograph of my plotter doing the work">
+    <figcaption>Photograph of my plotter doing the work.</figcaption>
+</figure>
 
 ### November 24th, 2023
 
@@ -67,11 +88,27 @@ You can buy one to support this work!
 
 ![empty space, different compositional elements derived from the star_burst pattern](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00009.png?raw=true)
 
+<figure>
+    <img 
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00009.png"
+        width="150"
+        height="300"
+        alt="Empty space, different compositional elements derived from the star_burst pattern">
+    <figcaption>Empty space, different compositional elements derived from the star_burst pattern.</figcaption>
+</figure>
+
 ### November 22th, 2023
 
 - added compositional layer, that sets random centers of attention
 
-![few larger circles are surrounded by smaller ones, the rest are the smallest cirles](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00008.png?raw=true)
+<figure>
+    <img 
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00009.png"
+        width="150"
+        height="300"
+        alt="Few larger circles are surrounded by smaller ones, the rest are the smallest circles.">
+    <figcaption>Few larger circles are surrounded by smaller ones, the rest are the smallest circles.</figcaption>
+</figure>
 
 ### November 20th, 2023
 
