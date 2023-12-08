@@ -2,6 +2,7 @@ use sanguine_lib::resources::{exclusion, layout};
 use svg::Document;
 
 use std::env;
+use chrono::{DateTime, Local};
 
 mod work;
 use work::{star_burst, tester, voronoi};
@@ -11,6 +12,7 @@ fn main() {
 
     let path = "exclusion.svg";
     let mut content = String::new();
+
 
     // voronoi::form_group();
 
@@ -23,7 +25,8 @@ fn main() {
                 .add(layout::background(&work))
                 .add(voronoi::form_group(&work));
 
-            let path = format!("image_{}.svg", i);
+            let local_time = Local::now();
+            let path = format!("nr_{:03}_{}.svg", i, local_time.format("%Y%m%d_%H%M%S"));
             svg::save(path, &document).unwrap();
         }
     };
