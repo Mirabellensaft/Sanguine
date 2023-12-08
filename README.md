@@ -27,7 +27,7 @@ Hello, World!
 
 Added a characteristic timestamp to the filename of the generated images. The timestamp can later be part of the stamp on the backside of the image. 
 
-![Screenshot showing file names in the format "nr_000_%Y%m%d_%H%M%S.](https://github.com/Mirabellensaft/sanguine/blob/main/images/filename.png?raw=true)
+![Screenshot showing file names in the format "nr_000_%Y%m%d_%H%M%S.](https://github.com/Mirabellensaft/sanguine/blob/main/images/filename.png)
 
 Added the type that keeps data for the polygons, so that the center may be saved with each cell, to be able to address each cell by the center point. Following this I am also starting to think about how to order the center points in a meaningful way. 
 
@@ -86,7 +86,6 @@ You can buy one to support this work!
 - avoid doubles and coordinates that are too close together (this still needs improvement, but its also good enough for now)
 - added more graphical elements that are derived from the original star_burst motif and different algorithms that place them. (This turned out to be a key part in the development of the first series)
 
-![empty space, different compositional elements derived from the star_burst pattern](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00009.png?raw=true)
 
 <figure>
     <img 
@@ -103,7 +102,7 @@ You can buy one to support this work!
 
 <figure>
     <img 
-        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00009.png"
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00008.png"
         width="150"
         height="300"
         alt="Few larger circles are surrounded by smaller ones, the rest are the smallest circles.">
