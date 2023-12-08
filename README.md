@@ -1,6 +1,6 @@
 # Sanguine
 
-Or red chalk is a mineral pigment made of clay and hematite (Fe<sub>2</sub>O<sub>3</sub>). It is deep red in color and has been used for artistic expression already by the neandertales. 
+Or red chalk is a mineral pigment made of clay and hematite (Fe<sub>2</sub>O<sub>3</sub>). It is deep red in color and has been used for artistic expression already by the neanderthals. 
 Since the renaissance it has been shaped into a kind of pencil, used mainly for sketches similar to graphite pencils today.
 
 The goal is to build a framework for generative art for pen plotters in Rust.
@@ -28,6 +28,14 @@ Hello, World!
 Off to new experiments! I implemented the ability to generate the cells of a voronoi diagram, and draw the lines.
 
 ![drawn cells of a voronoi diagram](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00011.png?raw=true)
+<figure>
+    <img 
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00011.png"
+        width="200"
+        height="100"
+        alt="Albuquerque, New Mexico">
+    <figcaption>A single track trail outside of Albuquerque, New Mexico.</figcaption>
+</figure>
 
 ### December 4th, 2023
 
