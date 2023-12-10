@@ -15,7 +15,7 @@ impl Exclusion {
         let mut vec: Vec<Box<dyn Shape>> = Vec::new();
 
         for event in svg::open(path, content).unwrap() {
-            println!("{:?}\n", event);
+            // println!("{:?}\n", event);
             match event {
                 Event::Tag(path, _, attributes) => {
                     match path {
@@ -41,7 +41,7 @@ impl Exclusion {
                                 .parse()
                                 .expect("Not a valid number");
 
-                            println!("cy: {} cx: {}, rx: {}, ry: {}", cx, cy, rx, ry);
+                            // println!("cy: {} cx: {}, rx: {}, ry: {}", cx, cy, rx, ry);
 
                             let ellipse = Ellipse::new(Point::new(cx, cy), rx, ry);
                             let b = Box::new(ellipse);
@@ -64,7 +64,7 @@ impl Exclusion {
                                 .parse()
                                 .expect("Not a valid number");
 
-                            println!("cy: {} cx: {}, r: {}", cx, cy, r);
+                            // println!("cy: {} cx: {}, r: {}", cx, cy, r);
 
                             let circle = Circle::new(Point::new(cx, cy), r);
                             let b = Box::new(circle);
@@ -73,9 +73,9 @@ impl Exclusion {
                         _ => {}
                     }
 
-                    println!("attributes {:?}\n", attributes);
+                    // println!("attributes {:?}\n", attributes);
                     if let Some(data) = attributes.get("d") {
-                        println!("data {:?}", data);
+                        // println!("data {:?}", data);
                         let data = Data::parse(data).unwrap();
 
                         for command in data.iter() {
@@ -83,7 +83,7 @@ impl Exclusion {
                                 &Command::Move(..) => { /* … */ }
                                 &Command::Line(..) => { /* … */ }
                                 &Command::EllipticalArc(..) => {
-                                    println!("EllipticalArc");
+                                    // println!("EllipticalArc");
                                 }
                                 _ => {}
                             }
