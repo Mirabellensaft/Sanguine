@@ -8,22 +8,31 @@ use crate::resources::{
     shapes::{line::Line, point::Point},
 };
 
-#[derive()]
+/// Contains the border lines and center point of a cell in a voronoi diagram
+#[derive(Clone)]
 pub struct Cell {
     pub border_lines: Vec<Line>,
     pub center: Point,
 }
+
+/// Contains the cells and center points of a voronoi diagram
+#[derive(Clone)]
 pub struct VoronoiDiagram {
     pub centers: Vec<(f64, f64)>,
     pub cells: Vec<Cell>,
 }
 
+/// Two ways a voronoi diagram can be constructed: by either
+#[derive(Clone)]
 pub enum VoronoiType {
+    /// providing a vector of points
     Custom(Vec<Point>),
+    /// or an amount of points that will be distributed uniformly.
     Uniform(i32),
 }
 
 impl VoronoiDiagram {
+    /// Constructs a voronoi diagram either from an amount of points or a vector of provided points
     pub fn new(layout: &layout::Grid, diagram_type: VoronoiType) -> Self {
         let mut rng = rand::thread_rng();
         let height = Uniform::new(0., layout.height as f64);
@@ -43,6 +52,8 @@ impl VoronoiDiagram {
                     .collect();
             }
         }
+        let mut centers_copy: Vec<(f64, f64)> = Vec::new();
+        centers.clone_into(&mut centers_copy);
 
         let diagram = VoiDi::<VoiPoint>::from_tuple(
             &(0., 0.),
@@ -90,6 +101,11 @@ impl VoronoiDiagram {
                 center: Point::new(0.0, 0.0),
             });
         }
+
+        for i in 0..centers_copy.len() {
+            cells[i].center = Point::new(centers_copy[i].0 as f32, centers_copy[i].1 as f32);
+        }
+
         let diagram = VoronoiDiagram {
             centers: centers,
             cells: cells,
