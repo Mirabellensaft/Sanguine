@@ -1,4 +1,4 @@
-use sanguine_lib::resources::{exclusion, layout};
+use sanguine_lib::resources::{exclusion, layout::{self, Parameters, LayoutType::VoronoiBased}};
 use svg::Document;
 
 use std::env;
@@ -19,10 +19,11 @@ fn main() {
     if let Some(exclusion) = exclusion::Exclusion::make_exclusion(path, &mut content) {
         println!("Some");
         for i in 0..5 {
-            let work = layout::Grid::new(1200, 600, 2, 8, 4);
+            let parameters = Parameters{ height: 1200, width: 600, margin: 2, rows: 0, columns: 0, layout_type: VoronoiBased };
+            let work = layout::Work::new(parameters);
             let document = Document::new()
-                .set("viewBox", (0, 0, work.width, work.height))
-                .add(layout::background(&work))
+                .set("viewBox", (0, 0, work.0.get_width(), work.0.get_height()))
+                .add(work.background())
                 .add(voronoi::form_group(&work));
 
             let local_time = Local::now();

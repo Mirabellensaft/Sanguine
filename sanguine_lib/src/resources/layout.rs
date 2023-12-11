@@ -6,13 +6,78 @@ use svg::{
     Node,
 };
 
-use super::shapes::point::Point;
+use super::{shapes::point::Point, composition::voronoi};
 
 /// This module contains types that describe the fundamental properties of the work.
 ///
 /// Currently everything is grid based.
 
 /// Format contains the works's properties and a container for the grid.
+pub trait Layout {
+    fn new(parameters: Parameters) -> Self where Self: Sized;
+    fn get_width(&self) -> i32;
+    fn get_height(&self) -> i32;
+
+
+    
+}
+
+pub struct Parameters {
+    pub height: i32, 
+    pub width: i32, 
+    pub margin: i32, 
+    pub rows: usize, 
+    pub columns: usize,
+    pub layout_type: LayoutType
+}
+pub struct Work(pub Box <dyn Layout>);
+
+pub enum LayoutType {
+    GridBased,
+    VoronoiBased,
+
+}
+
+impl Work {
+    pub fn new(parameters: Parameters) -> Self {
+        match parameters.layout_type {
+            LayoutType::GridBased => {
+                Work(Box::new(Grid::new(parameters)))
+            },
+            LayoutType::VoronoiBased => {
+                Work(Box::new(Voronoi::new(parameters)))
+            },
+        }
+    }
+
+        /// Adds a white background so png conversion is easier.
+    pub fn background(&self) -> node::element::Group {
+        let mut graph = node::element::Group::new();
+
+        let data = node::element::path::Data::new()
+            .move_to((0, 0))
+            .line_to((0, self.0.get_height()))
+            .line_to((self.0.get_width(), self.0.get_height()))
+            .line_to((self.0.get_width(), 0))
+            .close();
+
+        let path = path(data);
+        graph.append(path);
+        graph
+    }
+
+}
+/// Helper function for the background path.
+fn path(data: Data) -> Path {
+    let path = Path::new()
+        .set("fill", "white")
+        .set("stroke", "none")
+        .set("stroke-width", 1)
+        .set("d", data);
+
+    path
+}
+    
 #[derive(Debug, Clone)]
 pub struct Grid {
     /// Work height in pixels
@@ -52,17 +117,17 @@ pub struct Field {
     pub row_height: i32,
 }
 
-impl Grid {
+impl Layout for Grid {
     /// Creates a new grid.
-    pub fn new(height: i32, width: i32, margin: i32, rows: usize, columns: usize) -> Self {
-        let column_width = width / columns as i32;
-        let row_height = height / rows as i32;
+    fn new(parameters: Parameters) -> Self {
+        let column_width = parameters.width / parameters.columns as i32;
+        let row_height = parameters.height / parameters.rows as i32;
 
         let mut fields = Vec::new();
 
-        for row in 0..rows {
+        for row in 0..parameters.rows {
             let mut inner = Vec::new();
-            for col in 0..columns {
+            for col in 0..parameters.columns {
                 let field = Field {
                     x: column_width * col as i32,
                     y: row_height * row as i32,
@@ -75,43 +140,27 @@ impl Grid {
         }
 
         let work = Grid {
-            height: height,
-            width: width,
-            margin: margin,
-            rows: rows,
-            columns: columns,
+            height: parameters.height,
+            width: parameters.width,
+            margin: parameters.margin,
+            rows: parameters.rows,
+            columns: parameters.columns,
             field_container: fields,
         };
 
         work
     }
+
+    fn get_width(&self) -> i32 {
+        self.width
+    }
+
+    fn get_height(&self) -> i32 {
+        self.height
+    }
 }
 
-/// Adds a white background so png conversion is easier.
-pub fn background(layout: &Grid) -> node::element::Group {
-    let mut graph = node::element::Group::new();
 
-    let data = node::element::path::Data::new()
-        .move_to((0, 0))
-        .line_to((0, layout.height))
-        .line_to((layout.width, layout.height))
-        .line_to((layout.width, 0))
-        .close();
-
-    let path = path(data);
-    graph.append(path);
-    graph
-}
-/// Helper function for the background path.
-fn path(data: Data) -> Path {
-    let path = Path::new()
-        .set("fill", "white")
-        .set("stroke", "none")
-        .set("stroke-width", 1)
-        .set("d", data);
-
-    path
-}
 
 #[derive(Debug, Clone)]
 pub struct Voronoi {
@@ -121,18 +170,27 @@ pub struct Voronoi {
     pub width: i32,
     /// A margin, value is currently never applied anywhere.
     pub margin: i32,
-    /// Vector that contains the grid.
+    /// Vector that contains points for generating a voronoi diagram, can be empty.
     pub field_container: Vec<Point>,
 }
 
-impl Voronoi {
-    pub fn new(height: i32, width: i32, margin: i32) -> Self {
+impl Layout for Voronoi {
+    /// generates a new voronoi layout, with an empty point vector.
+    fn new(parameters: Parameters) -> Self {
         let work = Voronoi {
-            height: height,
-            width: width,
-            margin: margin,
+            height: parameters.height,
+            width: parameters.width,
+            margin: parameters.margin,
             field_container: Vec::new(),
         };
         work
+    }
+
+    fn get_width(&self) -> i32 {
+        self.width
+    }
+
+    fn get_height(&self) -> i32 {
+        self.height
     }
 }

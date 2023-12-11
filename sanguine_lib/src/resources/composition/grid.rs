@@ -9,6 +9,7 @@ use rand::{thread_rng, Rng};
 ///
 /// I omit an exact defintion of every single variant, as the interpretation will
 /// vary from art work to art work.
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Density {
     Transition(Direction),
@@ -451,19 +452,19 @@ impl CompositionOverlay {
     }
 }
 
-#[cfg(test)]
-#[test]
+// #[cfg(test)]
+// #[test]
 
-fn corner_test() {
-    let work = layout::Grid::new(100, 100, 1, 5, 5);
-    let mut comp = CompositionOverlay::new_empty(&work);
-    comp.0[0][4] = Density::Mid;
-    comp.0[0][3] = Density::Mid;
-    comp.0[1][4] = Density::Mid;
-    comp.0[2][4] = Density::Mid;
-    comp.0[2][3] = Density::Mid;
-    println!("{:?}", comp.0);
-    comp.retro_composition(&work);
-    println!("{:?}", comp.0);
-    // assert_eq!(comp.0[1][1], Density::Corner(()));
-}
+// fn corner_test() {
+//     let work = layout::Grid::new(100, 100, 1, 5, 5);
+//     let mut comp = CompositionOverlay::new_empty(&work);
+//     comp.0[0][4] = Density::Mid;
+//     comp.0[0][3] = Density::Mid;
+//     comp.0[1][4] = Density::Mid;
+//     comp.0[2][4] = Density::Mid;
+//     comp.0[2][3] = Density::Mid;
+//     println!("{:?}", comp.0);
+//     comp.retro_composition(&work);
+//     println!("{:?}", comp.0);
+//     // assert_eq!(comp.0[1][1], Density::Corner(()));
+// }

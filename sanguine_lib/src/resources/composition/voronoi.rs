@@ -24,10 +24,10 @@ pub enum VoronoiType {
 }
 
 impl VoronoiDiagram {
-    pub fn new(layout: &layout::Grid, diagram_type: VoronoiType) -> Self {
+    pub fn new(work: &layout::Work, diagram_type: VoronoiType) -> Self {
         let mut rng = rand::thread_rng();
-        let height = Uniform::new(0., layout.height as f64);
-        let width = Uniform::new(0., layout.width as f64);
+        let height = Uniform::new(0., work.0.get_height() as f64);
+        let width = Uniform::new(0., work.0.get_width() as f64);
 
         let mut centers = Vec::new();
 
@@ -46,7 +46,7 @@ impl VoronoiDiagram {
 
         let diagram = VoiDi::<VoiPoint>::from_tuple(
             &(0., 0.),
-            &(layout.width as f64, layout.height as f64),
+            &(work.0.get_width() as f64, work.0.get_height() as f64),
             &centers,
         )
         .unwrap();
