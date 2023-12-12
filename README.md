@@ -23,6 +23,13 @@ Hello, World!
 
 ## Changes, Thoughts and Learnings (newest first)
 
+### December 12th, 2023
+
+Refactored the way Grid and Voronoi Diagrams are constructed. Now all diagram types are constructed with the same constructor, only with different variants, which in the end decides, which diagram type is first built. I added a trait, so that the diagram types can share behavior regarding compositional aspects.
+This way I was able to remove a lot of somewhat similar, somewhat duplicate code, and suddenly I had way less types named Voronoi something.
+I slowly get the way, one needs to think code a lot bigger then what you're currently working on. The ability to see future variants of something, future expansions, and functions. Not being able to see that leads to rewriting code a lot.
+
+
 ### December 8th, 2023
 
 Added a characteristic timestamp to the filename of the generated images. The timestamp can later be part of the stamp on the backside of the image. 
