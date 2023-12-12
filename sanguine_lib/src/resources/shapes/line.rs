@@ -11,7 +11,7 @@ use super::Shape;
 
 /// A line between two points.
 
-#[derive(Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct Line {
     /// starting point
     pub start: Point,

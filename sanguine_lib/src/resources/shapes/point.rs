@@ -1,7 +1,7 @@
 use rand::{thread_rng, Rng};
 use svg::node::element::Circle as CirclePath;
 
-use crate::resources::layout;
+use crate::resources::layout::grid::Field;
 
 /// This module contains types related to shapes that show up in the rendered or plotted image.
 /// Everything is hard coded to generate black lines of 1px width, as this is the only relevant
@@ -24,18 +24,20 @@ impl Point {
         point
     }
     /// Creates a random Point within a field
-    pub fn random_coordinate(field: &layout::Field, margin: i32) -> Self {
+    pub fn random_coordinate(field: &Field, margin: i32) -> Self {
         let mut rng = thread_rng();
-
+        println!("random field: x{}, y{}, w{}, h{}, margin {}", field.x, field.y, field.column_width, field.row_height, margin);
         let horizontal: std::ops::Range<i32> = std::ops::Range {
             start: field.x + margin,
             end: field.x + field.column_width - margin,
         };
-
+        println!("random X start:{}, end: {}", field.x+margin, field.x+field.column_width-margin);
         let vertical: std::ops::Range<i32> = std::ops::Range {
             start: field.y + margin,
             end: field.y + field.row_height - margin,
         };
+        println!("random Y start:{}, end: {}", field.y+margin, field.y+field.row_height-margin);
+        println!("random hor: {:?}, vert: {:?}", horizontal, vertical);
         // println!("h {:?}, v {:?}", horizontal, vertical);
         Point::new(
             rng.gen_range(horizontal) as f32,

@@ -1,5 +1,7 @@
-use crate::resources::{layout, shapes::point::Point};
+use crate::resources::{layout::Work, shapes::point::Point};
 use rand::{thread_rng, Rng};
+
+use super::layout::grid::Field;
 
 /// This module contains a bunch of functions that create random coordinates on field borders.
 ///
@@ -96,7 +98,7 @@ pub struct BorderCoordinates(pub Vec<OneSide>);
 impl BorderCoordinates {
     /// Returns a vec of 4 vecs with a given number of random points, so you have random points
     /// around the edge of a field.
-    fn new(field: &layout::Field, amount: usize) -> Self {
+    fn new(field: Field, amount: usize) -> Self {
         let mut sides = Vec::new();
 
         let mut coordinates = OneSide::new();
@@ -148,14 +150,14 @@ pub struct AllBorderCoordinates(pub Vec<Vec<BorderCoordinates>>);
 
 impl AllBorderCoordinates {
     /// Returns a Vector of edge points for an entire work of art.
-    pub fn new(format: &layout::Grid, amount: usize) -> Self {
+    pub fn new(work: &Work, amount: usize) -> Self {
         let mut vec = Vec::new();
 
-        for row in 0..format.rows {
+        for row in 0..work.0.get_rows() {
             let mut inner = Vec::new();
-            for col in 0..format.columns {
+            for col in 0..work.0.get_columns() {
                 inner.push(BorderCoordinates::new(
-                    &format.field_container[row][col],
+                    work.0.get_fields()[row][col],
                     amount,
                 ));
             }

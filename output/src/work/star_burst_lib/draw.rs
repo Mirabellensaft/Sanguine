@@ -2,9 +2,8 @@ use super::{lines, threeways};
 use rand::{thread_rng, Rng};
 use sanguine_lib::resources::{
     border_coordinates::BorderCoordinates,
-    composition::grid::{Density, Direction},
-    layout::Field,
-    shapes::{circle::Circle, line::Line, point::Point},
+    composition::{Density, Direction},
+    shapes::{circle::Circle, line::Line, point::Point}, layout::grid::Field,
 };
 use svg::{node::element::Group, Node};
 
@@ -16,6 +15,8 @@ pub fn everything(
     mut graph: Group,
 ) -> Group {
     let mut rng = thread_rng();
+
+    println!("draw field: x{}, y{}, w{}, h{}", field.x, field.y, field.column_width, field.row_height);
     match density {
         Density::Empty => (),
         Density::Transition(Direction::UpDown) => {

@@ -1,0 +1,8 @@
+/target
+/Cargo.lock
+/output/image_*
+/output/image*
+.DS_Store
+.vscode/
+todo.todo
+*/nr*

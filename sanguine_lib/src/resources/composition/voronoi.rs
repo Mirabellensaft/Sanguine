@@ -1,118 +1,68 @@
-use rand::distributions::Uniform;
 use rand::prelude::*;
-use voronator::delaunator::Point as VoiPoint;
-use voronator::VoronoiDiagram as VoiDi;
 
-use crate::resources::{
-    layout,
-    shapes::{line::Line, point::Point},
-};
 
-/// Contains the border lines and center point of a cell in a voronoi diagram
-#[derive(Clone)]
-pub struct Cell {
-    pub border_lines: Vec<Line>,
-    pub center: Point,
-}
+use crate::resources::layout;
 
-/// Contains the cells and center points of a voronoi diagram
-#[derive(Clone)]
-pub struct VoronoiDiagram {
-    pub centers: Vec<(f64, f64)>,
-    pub cells: Vec<Cell>,
-}
+use super::{Density, Composition};
 
-/// Two ways a voronoi diagram can be constructed: by either
-#[derive(Clone)]
-pub enum VoronoiType {
-    /// providing a vector of points
-    Custom(Vec<Point>),
-    /// or an amount of points that will be distributed uniformly.
-    Uniform(i32),
-}
 
-impl VoronoiDiagram {
-    /// Constructs a voronoi diagram either from an amount of points or a vector of provided points
-    pub fn new(layout: &layout::Grid, diagram_type: VoronoiType) -> Self {
-        let mut rng = rand::thread_rng();
-        let height = Uniform::new(0., layout.height as f64);
-        let width = Uniform::new(0., layout.width as f64);
+impl Composition for layout::voronoi::VoronoiDiagram {
+    fn filled(&mut self, density_var: Density) {
+        
+        for item in 0..self.cells.len() {
+            self.cells[item].density = density_var;
+        }       
+    }
 
-        let mut centers = Vec::new();
+    fn add_random_center(&mut self, amount: usize) {
+        let mut rng = thread_rng();
 
-        match diagram_type {
-            VoronoiType::Custom(points) => {
-                for point in points {
-                    centers.push((point.x as f64, point.y as f64))
-                }
-            }
-            VoronoiType::Uniform(number_of_centers) => {
-                centers = (0..number_of_centers)
-                    .map(|_| (rng.sample(&width), rng.sample(&height)))
-                    .collect();
-            }
+        for _i in 0..amount {
+            let cell_index = rng.gen_range(0..self.cells.len());
+            
+            // high density around the focus can't be set yet, because 
+            // there's no way yet to find the neighbors
+
+            // for row in vertical - 1..=vertical + 1 {
+            //     for col in horizontal - 1..=horizontal + 1 {
+            //         self.field_container[row][col].density = Density::High;
+            //         println!("mid");
+            //     }
+            // }
+
+            self.cells[cell_index].density = Density::Focus;
         }
-        let mut centers_copy: Vec<(f64, f64)> = Vec::new();
-        centers.clone_into(&mut centers_copy);
+    }
 
-        let diagram = VoiDi::<VoiPoint>::from_tuple(
-            &(0., 0.),
-            &(layout.width as f64, layout.height as f64),
-            &centers,
-        )
-        .unwrap();
+    fn add_random_low(&mut self, amount: usize) {
+        let mut rng = thread_rng();
 
-        for cell in diagram.cells() {
-            let _poly: Vec<(f32, f32)> = cell
-                .points()
-                .into_iter()
-                .map(|x| (x.x as f32, x.y as f32))
-                .collect();
+        for _i in 0..amount {
+            let cell_index = rng.gen_range(0..self.cells.len());
+
+        self.cells[cell_index].density = Density::Low;
         }
+    }
 
-        let mut cells = Vec::new();
+    fn connect_centers(&mut self) {
+        unimplemented!()
+    }
 
-        for polygon in diagram.cells() {
-            let mut cell_border_lines = Vec::new();
+    fn add_center(&mut self, center: super::CompositionCenter) {
+        unimplemented!()
+    }
 
-            let points = polygon.points();
+    fn retro_composition(&mut self) {
+        unimplemented!()
+    }
 
-            for i in 0..points.len() - 1 {
-                let line = Line::new(
-                    Point::new(points[i].x as f32, points[i].y as f32),
-                    Point::new(points[i + 1].x as f32, points[i + 1].y as f32),
-                );
-
-                cell_border_lines.push(line);
-            }
-            // the closing line
-            let line = Line::new(
-                Point::new(
-                    points[points.len() - 1].x as f32,
-                    points[points.len() - 1].y as f32,
-                ),
-                Point::new(points[0].x as f32, points[0].y as f32),
-            );
-            cell_border_lines.push(line);
-
-            // The centers for each cell are currently set to zero.
-            cells.push(Cell {
-                border_lines: cell_border_lines,
-                center: Point::new(0.0, 0.0),
-            });
-        }
-
-        for i in 0..centers_copy.len() {
-            cells[i].center = Point::new(centers_copy[i].0 as f32, centers_copy[i].1 as f32);
-        }
-
-        let diagram = VoronoiDiagram {
-            centers: centers,
-            cells: cells,
-        };
-        diagram
+    fn direction_of_contact(&mut self, row: usize, col: usize) -> [bool; 4] {
+        unimplemented!()
     }
 }
+
+
+   
 
 // helpers
 

@@ -1,10 +1,10 @@
 use svg::node::element::path::Data;
 use svg::node::element::Path;
 
-use crate::resources::{
-    layout,
-    shapes::{line::Line, point::Point},
-};
+use crate::resources::
+    shapes::{line::Line, point::Point};
+
+use super::layout::grid::Field;
 
 pub mod circle;
 pub mod ellipse;
@@ -26,7 +26,7 @@ fn path(data: Data) -> Path {
 }
 
 /// Creates a random distorted square
-pub fn distorted_square(field: layout::Field) -> Path {
+pub fn distorted_square(field: Field) -> Path {
     let data = Data::new()
         .move_to((
             Point::random_coordinate(&field, 0).x,
