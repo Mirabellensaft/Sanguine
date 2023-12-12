@@ -3,7 +3,7 @@ use svg::node::element::Group;
 
 use sanguine_lib::resources::{
     border_coordinates::AllBorderCoordinates,
-    composition::{CompositionCenter, Density, Composition},
+    composition::grid::{CompositionCenter, CompositionOverlay, Density},
     layout,
 };
 
@@ -17,28 +17,28 @@ pub fn form_group(work: &layout::Work) -> Group {
     let mut graph = Group::new();
 
     // Creates a baseline composition
-    let mut grid = work.0.get_grid();
-    grid.add_center(CompositionCenter::Bottom);
-    grid.add_random_low(30);
-    grid.add_random_center(6);
-    grid.connect_centers();
-    grid.add_random_low(10);
+    let mut comp = CompositionOverlay::new_empty(layout);
+    comp.add_center(CompositionCenter::Bottom, layout);
+    comp.add_random_low(30, layout);
+    comp.add_random_center(6, layout);
+    comp.connect_centers();
+    comp.add_random_low(10, layout);
 
-    let mut all_coords = AllBorderCoordinates::new(work, 10);
+    let mut all_coords = AllBorderCoordinates::new(layout, 10);
     all_coords.tesselate();
     all_coords.slight_chaos();
 
     // Fills the gaps and edges in the baseline composition
-    grid.retro_composition();
+    comp.retro_composition(layout);
 
     // Drawing of the Elements
-    for row in 0..work.0.get_rows() {
-        for col in 0..work.0.get_columns() {
+    for row in 0..layout.rows {
+        for col in 0..layout.columns {
             let mut rng = thread_rng();
 
             let mut radius = 0;
 
-            match grid.container[row][col].density {
+            match comp.0[row][col] {
                 Density::Mid => radius = rng.gen_range(RADIUS_MID),
                 Density::High => radius = rng.gen_range(RADIUS_HIGH),
                 Density::Focus => radius = rng.gen_range(RADIUS_FOCUS),
@@ -46,12 +46,11 @@ pub fn form_group(work: &layout::Work) -> Group {
                 Density::ThreeWay(_) => radius = rng.gen_range(RADIUS_MID),
                 _ => (),
             }
-            let field = &work.0.get_fields()[row as usize][col as usize];
-            println!("field: x{}, y{}, width{}, height{}", field.x, field.y, field.column_width, field.row_height);
+
             graph = star_burst_lib::draw::everything(
-                grid.container[row][col].density,
+                comp.0[row][col],
                 &all_coords.0[row][col],
-                field,
+                &layout.field_container[row as usize][col as usize],
                 radius,
                 graph,
             );

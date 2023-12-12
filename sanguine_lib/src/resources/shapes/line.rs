@@ -10,6 +10,8 @@ use super::Shape;
 /// setting for the plotter
 
 /// A line between two points.
+
+#[derive(Copy, Clone, Debug)]
 pub struct Line {
     /// starting point
     pub start: Point,
