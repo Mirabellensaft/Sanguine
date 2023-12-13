@@ -4,11 +4,9 @@ use sanguine_lib::resources::{
 };
 use svg::{node, Node};
 
-pub fn form_group(work: &mut VoronoiDiagram) -> node::element::Group {
+pub fn form_group(work: &VoronoiDiagram) -> node::element::Group {
     // pub fn form_group() {
     let mut graph = node::element::Group::new();
-
-    work.filled(Density::Mid);
 
     for cell in work.get_points() {
         for line in &cell.border_lines {

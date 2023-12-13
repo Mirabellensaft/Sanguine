@@ -8,7 +8,7 @@ use svg::{
     Node,
 };
 
-use super::layout::{grid::{Grid, Field}, voronoi::{VoronoiDiagram, Cell}};
+use super::{layout::{grid::Field, voronoi::Cell}, errors::Error};
 
 use super::shapes::point::Point;
 
@@ -22,14 +22,29 @@ pub mod voronoi;
 /// Format contains the works's properties and a container for the grid.
 
 pub trait Layout {
-    fn new(parameters: Parameters) -> Self where Self: Sized;
+    fn new(parameters: Parameters) -> Result<Self, Error> where Self: Sized;
+    // would it be possible to have a default behavior that replaces the content of the new functions 
+    // of the single Types that implement the layout trait?
+    fn background(&self) -> node::element::Group {
+        let mut graph = node::element::Group::new();
+
+        let data = node::element::path::Data::new()
+            .move_to((0, 0))
+            .line_to((0, self.get_height()))
+            .line_to((self.get_width(), self.get_height()))
+            .line_to((self.get_width(), 0))
+            .close();
+
+        let path = path(data);
+        graph.append(path);
+        graph
+    }
     fn get_width(&self) -> i32;
     fn get_height(&self) -> i32;
     fn get_rows(&self) -> usize;
     fn get_columns(&self) -> usize;
     fn get_points(&self) -> Vec<Cell>;
     fn get_fields(&self) -> Vec<Vec<Field>>;
-    fn get_grid(&self) -> Grid;
 }
 
 pub struct Parameters {
@@ -40,7 +55,6 @@ pub struct Parameters {
     pub columns: usize,
     pub layout_type: LayoutType
 }
-pub struct Work(pub Box <dyn Layout>);
 
 pub enum VoronoiType {
     Custom(Vec<Point>),
@@ -53,35 +67,6 @@ pub enum LayoutType {
 
 }
 
-impl Work {
-    pub fn new(parameters: Parameters) -> Self {
-        match parameters.layout_type {
-            LayoutType::GridBased(_,_) => {
-                Work(Box::new(Grid::new(parameters)))
-            },
-            LayoutType::VoronoiBased(_) => {
-                Work(Box::new(VoronoiDiagram::new(parameters)))
-            },
-        }
-    }
-
-        /// Adds a white background so png conversion is easier.
-    pub fn background(&self) -> node::element::Group {
-        let mut graph = node::element::Group::new();
-
-        let data = node::element::path::Data::new()
-            .move_to((0, 0))
-            .line_to((0, self.0.get_height()))
-            .line_to((self.0.get_width(), self.0.get_height()))
-            .line_to((self.0.get_width(), 0))
-            .close();
-
-        let path = path(data);
-        graph.append(path);
-        graph
-    }
-
-}
 /// Helper function for the background path.
 fn path(data: Data) -> Path {
     let path = Path::new()

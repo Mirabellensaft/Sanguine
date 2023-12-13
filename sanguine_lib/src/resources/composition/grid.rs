@@ -31,7 +31,6 @@ impl Composition for Grid {
             for col in 0..self.get_columns() {
                 self.container[row][col].density = density_var;
             }
-
         }
     }
 
@@ -53,7 +52,8 @@ impl Composition for Grid {
             }
         }
 
-        // this finds the next center, connects it to the first, and repeats for the second center etc.
+        // This finds the next center, connects it to the first, and repeats for the second 
+        // center etc.
         for row in 0..self.get_rows() {
             for col in 0..self.get_columns() {
                 match self.container[row][col].density {
@@ -77,7 +77,8 @@ impl Composition for Grid {
         }
     }
 
-    /// Adds a specified number of random centers with Density::Focus and surrounds them Density::High.
+    /// Adds a specified number of random centers with Density::Focus and surrounds 
+    /// them Density::High.
     fn add_random_center(&mut self, amount: usize) {
         let mut rng = thread_rng();
 
@@ -90,7 +91,6 @@ impl Composition for Grid {
                     self.container[row][col].density = Density::High;
                 }
             }
-
             self.container[vertical][horizontal].density = Density::Focus;
         }
     }
@@ -132,6 +132,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::TopMid => {
                 for i in 0..multiplicator_rows + 1 {
                     for j in multiplicator_columns..multiplicator_columns * 2 {
@@ -139,6 +140,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::TopRight => {
                 for i in 0..multiplicator_rows + 1 {
                     for j in multiplicator_columns * 2..self.columns {
@@ -146,6 +148,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::MidLeft => {
                 for i in multiplicator_rows..multiplicator_rows * 2 {
                     for j in 0..multiplicator_columns + 1 {
@@ -153,6 +156,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::MidMid => {
                 for i in multiplicator_rows..multiplicator_rows * 2 {
                     for j in multiplicator_columns..multiplicator_columns * 2 {
@@ -160,6 +164,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::MidRight => {
                 for i in multiplicator_rows..multiplicator_rows * 2 {
                     for j in multiplicator_columns * 2..self.columns {
@@ -167,6 +172,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::BottomLeft => {
                 for i in multiplicator_rows * 2..self.rows {
                     for j in 0..multiplicator_columns + 1 {
@@ -174,6 +180,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::BottomMid => {
                 for i in multiplicator_rows * 2..self.rows {
                     for j in multiplicator_columns..multiplicator_columns * 2 {
@@ -181,6 +188,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::BottomRight => {
                 for i in multiplicator_rows * 2..self.rows {
                     for j in multiplicator_columns * 2..self.columns {
@@ -188,6 +196,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::Bottom => {
                 for i in multiplicator_rows * 2..self.rows {
                     for j in 0..self.columns {
@@ -200,6 +209,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::Top => {
                 for i in 0..multiplicator_rows + 1 {
                     for j in 0..self.columns {
@@ -207,6 +217,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::Left => {
                 for i in 0..self.rows {
                     for j in 0..multiplicator_columns {
@@ -214,6 +225,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::Right => {
                 for i in 0..self.rows {
                     for j in multiplicator_columns * 2..self.columns {
@@ -221,6 +233,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::VerticalCenter => {
                 for i in 0..self.rows {
                     for j in multiplicator_columns..multiplicator_columns * 2 {
@@ -228,6 +241,7 @@ impl Composition for Grid {
                     }
                 }
             }
+
             CompositionCenter::HorizontalCenter => {
                 for i in multiplicator_rows..multiplicator_rows * 2 {
                     for j in 0..self.columns {
@@ -246,7 +260,7 @@ impl Composition for Grid {
                 match self.container[row][col].density {
                     Density::Empty => {
                         let contact = self.direction_of_contact(row, col);
-                        match contact {
+                        match to_array(contact) {
                             [true, true, true, true] => self.container[row][col].density = Density::Low,
 
                             [true, true, true, false] => {
@@ -261,7 +275,6 @@ impl Composition for Grid {
                             [false, true, true, true] => {
                                 self.container[row][col].density = Density::ThreeWay(Direction::Up)
                             }
-
                             [true, true, false, false] => {
                                 self.container[row][col].density = Density::Corner(Direction::LeftUp)
                             }
@@ -274,7 +287,6 @@ impl Composition for Grid {
                             [true, false, false, true] => {
                                 self.container[row][col].density = Density::Corner(Direction::RightUp)
                             }
-
                             [false, false, false, true] => {
                                 self.container[row][col].density = Density::Edge(Direction::Left)
                             }
@@ -287,15 +299,14 @@ impl Composition for Grid {
                             [false, true, false, false] => {
                                 self.container[row][col].density = Density::Edge(Direction::Right)
                             }
-
                             [false, true, false, true] => {
                                 self.container[row][col].density = Density::Transition(Direction::LeftRight)
                             }
                             [true, false, true, false] => {
                                 self.container[row][col].density = Density::Transition(Direction::UpDown)
                             }
-
                             [false, false, false, false] => self.container[row][col].density = Density::Empty,
+                            _ => (),
                         }
                     }
                     _ => {}
@@ -307,10 +318,10 @@ impl Composition for Grid {
     /// Helper function that determines the contact points of each empty field detected by fn retro_composition and
     /// returns an array of 4 bools that each represent a side of the field.
     ///
-    fn direction_of_contact(&mut self, row: usize, col: usize) -> [bool; 4] {
+    fn direction_of_contact(&mut self, row: usize, col: usize) -> Vec<bool> {
         // Direction of the Edge variant points towards the block
         // edge on the right or left side of a block
-        let mut sides = [false; 4];
+        let mut sides = [false;4];
 
         if row != 0 {
             match self.container[row - 1][col].density {
@@ -383,7 +394,7 @@ impl Composition for Grid {
                 _ => sides[3] = true,
             }
         }
-        sides
+        sides.to_vec()
     }
 }
 
@@ -403,3 +414,9 @@ impl Composition for Grid {
 //     println!("{:?}", comp.0);
 //     // assert_eq!(comp.0[1][1], Density::Corner(()));
 // }
+use std::convert::TryInto;
+
+fn to_array<T, const N: usize>(v: Vec<T>) -> [T; N] {
+    v.try_into()
+        .unwrap_or_else(|v: Vec<T>| panic!("Expected a Vec of length {} but it was {}", N, v.len()))
+}

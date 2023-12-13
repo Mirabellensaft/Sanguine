@@ -1,5 +1,6 @@
 #[allow(implied_bounds_entailment)]
 use crate::resources::composition::Density;
+use crate::resources::errors::Error;
 
 use super::voronoi::Cell;
 use super::{Parameters, Layout, LayoutType};
@@ -36,7 +37,7 @@ pub struct Field {
 
 impl Layout for Grid {
     /// Creates a new grid, with empty grid fields.
-    fn new(parameters: Parameters) -> Self {
+    fn new(parameters: Parameters) -> Result<Self, Error> {
 
         let mut rows = 0;
         let mut columns = 0;
@@ -46,16 +47,16 @@ impl Layout for Grid {
                 rows = r;
                 columns = c;
             },
-            _ => (),
+            LayoutType::VoronoiBased(_) => return Err(Error::LayoutTypeError),
         }
         let column_width = parameters.width / columns as i32;
         let row_height = parameters.height / rows as i32;
 
         let mut fields = Vec::new();
 
-        for row in 0..parameters.rows {
+        for row in 0..rows {
             let mut inner = Vec::new();
-            for col in 0..parameters.columns {
+            for col in 0..columns {
                 let field = Field {
                     x: column_width * col as i32,
                     y: row_height * row as i32,
@@ -77,7 +78,7 @@ impl Layout for Grid {
             container: fields,
         };
 
-        work
+        Ok(work)
     }
 
     fn get_width(&self) -> i32 {
@@ -104,17 +105,16 @@ impl Layout for Grid {
         self.container.clone()
     }
 
-    fn get_grid(&self) -> Grid {
-        Self { 
-            height: self.height, 
-            width: self.width, 
-            margin: self.margin,
-            rows: self.rows, 
-            columns: self.columns,
-            container: self.container.clone(),
-        }
-    }
-
-    
+    // fn get_grid(&self) -> Grid {
+    //     Self { 
+    //         height: self.height, 
+    //         width: self.width, 
+    //         margin: self.margin,
+    //         rows: self.rows, 
+    //         columns: self.columns,
+    //         container: self.container.clone(),
+    //     }
+    // }
+  
 }
 

@@ -1,4 +1,4 @@
-use crate::resources::{layout::Work, shapes::point::Point};
+use crate::resources::{layout::{Layout, grid::Grid}, shapes::point::Point};
 use rand::{thread_rng, Rng};
 
 use super::layout::grid::Field;
@@ -150,14 +150,14 @@ pub struct AllBorderCoordinates(pub Vec<Vec<BorderCoordinates>>);
 
 impl AllBorderCoordinates {
     /// Returns a Vector of edge points for an entire work of art.
-    pub fn new(work: &Work, amount: usize) -> Self {
+    pub fn new(work: &Grid, amount: usize) -> Self {
         let mut vec = Vec::new();
 
-        for row in 0..work.0.get_rows() {
+        for row in 0..work.get_rows() {
             let mut inner = Vec::new();
-            for col in 0..work.0.get_columns() {
+            for col in 0..work.get_columns() {
                 inner.push(BorderCoordinates::new(
-                    work.0.get_fields()[row][col],
+                    work.get_fields()[row][col],
                     amount,
                 ));
             }

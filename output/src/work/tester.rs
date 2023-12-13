@@ -1,11 +1,16 @@
 use rand::thread_rng;
 use rand::Rng;
-use sanguine_lib::resources::{border_coordinates::AllBorderCoordinates, exclusion::Exclusion, layout::Work,  shapes::{circle::Circle, line::Line, point::Point, Shape}};
+use sanguine_lib::resources::{
+    border_coordinates::AllBorderCoordinates,
+    exclusion::Exclusion,
+    layout::{grid::Grid, Layout},
+    shapes::{circle::Circle, line::Line, point::Point, Shape},
+};
 
 use svg::node;
 use svg::Node;
 
-pub fn form_group(work: Work, ex: &Exclusion) -> node::element::Group {
+pub fn form_group(work: Grid, ex: &Exclusion) -> node::element::Group {
     let mut graph = node::element::Group::new();
 
     // let comp = CompositionOverlay::new_flat(work);
@@ -14,14 +19,14 @@ pub fn form_group(work: Work, ex: &Exclusion) -> node::element::Group {
     all_coords.tesselate();
     all_coords.slight_chaos();
 
-    for row in 0..work.0.get_rows() {
-        for col in 0..work.0.get_columns() {
+    for row in 0..work.get_rows() {
+        for col in 0..work.get_columns() {
             let mut rng = thread_rng();
 
             let radius = rng.gen_range(7..=15);
 
             let center = Point::random_coordinate(
-                &work.0.get_fields()[row as usize][col as usize],
+                &work.get_fields()[row as usize][col as usize],
                 radius * 2,
             );
 

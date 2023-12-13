@@ -56,7 +56,7 @@ impl Composition for layout::voronoi::VoronoiDiagram {
         unimplemented!()
     }
 
-    fn direction_of_contact(&mut self, row: usize, col: usize) -> [bool; 4] {
+    fn direction_of_contact(&mut self, row: usize, col: usize) -> Vec<bool> {
         unimplemented!()
     }
 }
