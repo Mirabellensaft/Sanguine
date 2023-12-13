@@ -11,11 +11,8 @@ pub trait Composition {
     fn connect_centers(&mut self);
     fn add_center(&mut self, center: CompositionCenter);
     fn retro_composition(&mut self);
-    fn direction_of_contact(&mut self, row: usize, col: usize) -> [bool; 4]; 
-
-
+    fn direction_of_contact(&mut self, row: usize, col: usize) -> Vec<bool>; 
 }
-
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Density {

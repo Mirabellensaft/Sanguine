@@ -2,9 +2,9 @@ use rand::distributions::Uniform;
 use rand::prelude::*;
 use voronator::delaunator::Point as VoiPoint;
 use voronator::VoronoiDiagram as VoiDi;
-use crate::resources::{shapes::{point::Point, line::Line}, composition::Density};
+use crate::resources::{shapes::{point::Point, line::Line}, composition::Density, errors::Error};
 
-use super::{Parameters, Layout, LayoutType, VoronoiType};
+use super::{Parameters, Layout, LayoutType, VoronoiType, grid::Field};
 
 #[derive(Clone, Debug)]
 pub struct Cell {
@@ -30,9 +30,9 @@ pub struct VoronoiDiagram {
     pub cells: Vec<Cell>,
 }
 
-impl Layout for VoronoiDiagram{
+impl Layout for VoronoiDiagram {
     /// generates a new voronoi layout, with an empty point vector.
-    fn new(parameters: Parameters) -> Self {
+    fn new(parameters: Parameters) -> Result<Self, Error> {
         let mut rng = rand::thread_rng();
         let height = Uniform::new(0., parameters.height as f64);
         let width = Uniform::new(0., parameters.width as f64);
@@ -55,7 +55,7 @@ impl Layout for VoronoiDiagram{
                     }
                 }
             },
-            _ => (),
+            LayoutType::GridBased(_, _) => return Err(Error::LayoutTypeError),
         }
 
         let diagram = VoiDi::<VoiPoint>::from_tuple(
@@ -114,7 +114,7 @@ impl Layout for VoronoiDiagram{
             cells: cells,
         };
 
-        work
+        Ok(work)
     }
 
 
@@ -138,11 +138,25 @@ impl Layout for VoronoiDiagram{
         self.cells.clone()
     }
 
-    fn get_fields(&self) -> Vec<Vec<super::grid::Field>> {
+    fn get_fields(&self) -> Vec<Vec<Field>> {
         unimplemented!()
     }
 
-    fn get_grid(&self) -> super::grid::Grid {
-        unimplemented!()
+    // fn get_grid(&self) -> super::grid::Grid {
+    //     unimplemented!()
+    // }
+
+    // fn get_diagram(&self) -> impl Layout {
+    //     Self { 
+    //         height: self.height, 
+    //         width: self.width, 
+    //         margin: self.margin,
+    //         centers:self.centers.clone(),
+    //         cells: self.cells.clone(),
+    //     }
+    // }
+
+    fn background(&self) -> svg::node::element::Group {
+        todo!()
     }
 }
