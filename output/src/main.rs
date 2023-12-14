@@ -8,7 +8,7 @@ use chrono::Local;
 use std::env;
 
 mod work;
-use work::{star_burst, voronoi, voronoi_simple};
+use work::{star_burst, voronoi, voronoi_simple, voronated_star_burst};
 
 fn main() {
     env::set_var("RUST_BACKTRACE", "1");
