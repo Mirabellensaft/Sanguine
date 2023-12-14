@@ -1,9 +1,10 @@
 use svg::node::element::path::Data;
 use svg::node::element::Path;
+use rand::seq::SliceRandom;
 
 use crate::resources::shapes::{path, point::Point};
 
-use super::Shape;
+use super::{Shape, is_x_range_larger, range};
 
 /// This module contains types related to shapes that show up in the rendered or plotted image.
 /// Everything is hard coded to generate black lines of 1px width, as this is the only relevant
@@ -32,10 +33,25 @@ impl Line {
 
     /// Returns the point on a line for a given x value. Returns none if there
     /// is no point for that x value, usually the case when the line is vertical.
-    pub fn return_point_on_line(&self, x: f32) -> Option<Point> {
+    pub fn return_point_from_x(&self, x: f32) -> Option<Point> {
         if let Some(y_i) = self.y_intercept() {
             if let Some(i) = self.slope() {
                 let y = (i * x) + y_i;
+                let point = Point { x: x, y: y };
+                Some(point)
+            } else {
+                None
+            }
+        } else {
+            None
+        }
+    }
+
+    pub fn return_point_from_y(&self, y: f32) -> Option<Point> {
+        if let Some(y_i) = self.y_intercept() {
+            if let Some(i) = self.slope() {
+                let x = (y - y_i)/i;
+                
                 let point = Point { x: x, y: y };
                 Some(point)
             } else {
@@ -70,6 +86,33 @@ impl Line {
         }
     }
 
+    /// Returns an amount of random, non duplicate points on a line
+    pub fn random_points(&self, amount: usize) -> Vec<Point> {
+
+        let mut points_on_line = Vec::new();
+        if is_x_range_larger(self.start.x, self.end.x, self.start.y, self.end.y) {
+            let chosen_values = return_chosen_value(self.start.x, self.end.x, amount);
+            // make y values
+            for x in chosen_values {
+
+                if let Some(point) = self.return_point_from_x(x as f32) {
+                    points_on_line.push(point);
+                }
+            }
+        } else {
+            let chosen_values = return_chosen_value(self.start.y, self.end.y, amount);
+            // make y values
+            for y in chosen_values {
+
+                if let Some(point) = self.return_point_from_y(y as f32) {
+                    points_on_line.push(point);
+                }
+            }
+
+        }
+        points_on_line
+    }
+
     /// Creates an svg path for a line
     pub fn draw(&self) -> Path {
         let data = Data::new()
@@ -101,8 +144,8 @@ impl Shape for Line {
         // compare slopes for easy "None" exit for parallel lines.
 
         for x in (0..300 * ((1.0 / step) as i32)).map(|x| x as f32 * step) {
-            if let Some(point_1) = self.return_point_on_line(x as f32) {
-                if let Some(point_2) = other.return_point_on_line(x as f32) {
+            if let Some(point_1) = self.return_point_from_x(x as f32) {
+                if let Some(point_2) = other.return_point_from_x(x as f32) {
                     println!("x: {}, y_1: {}, y_2: {}", x, point_1.y, point_2.y);
 
                     if point_1.y < point_2.y + 2.0 && point_1.y > point_2.y - 2.0 {
@@ -124,4 +167,24 @@ impl Shape for Line {
         }
         None
     }
+}
+
+
+// Helpers
+
+fn return_chosen_value(start_v: f32, end_v: f32, amount: usize) -> Vec<i32>{
+    let mut p_values =Vec::new();
+    let mut chosen_values =  Vec::new();
+            
+    let mut rng = &mut rand::thread_rng();
+    for value in range(start_v,end_v).step_by(2) {
+        p_values.push(value);
+        if amount < p_values.len() {
+            chosen_values = p_values.choose_multiple(&mut rng, amount).cloned().collect();
+        } else {
+            let amount = p_values.len()/2;
+            chosen_values = p_values.choose_multiple(&mut rng, amount).cloned().collect();
+        }
+    }
+    chosen_values
 }

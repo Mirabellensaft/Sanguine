@@ -1,7 +1,7 @@
 use crate::resources::shapes::{line::Line, point::Point};
 use svg::node::element;
 
-use super::{circle::smallest_x, Shape};
+use super::{smaller_value, Shape};
 
 /// This module contains types related to shapes that show up in the rendered or plotted image.
 /// Everything is hard coded to generate black lines of 1px width, as this is the only relevant
@@ -86,13 +86,17 @@ impl Shape for Ellipse {
             println!("Line completely inside");
             return None;
         }
-        let iter_min = smallest_x(self.center.x, line.start.x);
+        let mut iter_min = self.center.x;
+
+        if let Some(min) = smaller_value(self.center.x, line.start.x) {
+            iter_min = min.0;
+        }
         let iter_max = 800 * ((1.0 / step) as i32);
 
         for i in (0..iter_max).map(|x| x as f32 * step) {
             let x = iter_min + i;
 
-            if let Some(point_1) = line.return_point_on_line(x) {
+            if let Some(point_1) = line.return_point_from_x(x) {
                 // println!("x: {}, y: {}", point_1.x, point_1.y);
                 let number = ((point_1.x - self.center.x).powi(2) / (self.radius_x.powi(2)))
                     + ((point_1.y - self.center.y).powi(2) / (self.radius_y.powi(2)));

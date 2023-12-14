@@ -1,7 +1,7 @@
 use crate::resources::shapes::{line::Line, point::Point};
 use svg::node::element::Circle as CirclePath;
 
-use super::Shape;
+use super::{Shape, smaller_value};
 
 /// This module contains types related to shapes that show up in the rendered or plotted image.
 /// Everything is hard coded to generate black lines of 1px width, as this is the only relevant
@@ -68,13 +68,18 @@ impl Shape for Circle {
             }
         }
 
-        let iter_min = smallest_x(self.center.x, line.start.x);
+        let mut iter_min = self.center.x;
+
+        if let Some(min) = smaller_value(self.center.x, line.start.x) {
+            iter_min = min.0;
+        }
+
         let iter_max = 300 * ((1.0 / step) as i32);
 
         for i in (0..iter_max).map(|x| x as f32 * step) {
             let x = iter_min + i;
 
-            if let Some(point_1) = line.return_point_on_line(x) {
+            if let Some(point_1) = line.return_point_from_x(x) {
                 // println!("x: {}, y: {}", point_1.x, point_1.y);
 
                 // line starts from the outside, left of the center of the circle
@@ -133,32 +138,7 @@ impl Shape for Circle {
     }
 }
 
-/// Helper function that returns a valid range between two values.
-fn range(x_1: f32, x_2: f32) -> std::ops::Range<i32> {
-    if x_1 > x_2 {
-        let range = std::ops::Range {
-            start: x_2 as i32,
-            end: x_1 as i32,
-        };
-        return range;
-    } else {
-        let range = std::ops::Range {
-            start: x_1 as i32,
-            end: x_2 as i32,
-        };
 
-        return range;
-    };
-}
-
-/// Helper function that returns the lower of two values
-pub fn smallest_x(x_1: f32, x_2: f32) -> f32 {
-    if x_1 > x_2 {
-        x_2
-    } else {
-        x_1
-    }
-}
 
 #[cfg(test)]
 #[test]
