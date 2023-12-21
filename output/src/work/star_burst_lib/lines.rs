@@ -1,5 +1,5 @@
 use sanguine_lib::resources::{
-    border_coordinates::OneSide,
+    border_coordinates::one_side::OneSide,
     composition::Direction,
     shapes::{circle::Circle, line::Line, Shape},
 };
@@ -14,8 +14,11 @@ pub fn to_circle(graph: &mut Group, side: &OneSide, circle: &Circle, min: usize,
             // println!("Point {:?}, EP {:?}", point, endpoint);
             let line = Line::new(side.0[point], endpoint);
             graph.append(line.draw());
+            // println!("YEAH");
         } else {
-            println!("shit!");
+            //debug
+            graph.append(prelim_line.draw());
+            // println!("shit!\n");
         };
     }
 }

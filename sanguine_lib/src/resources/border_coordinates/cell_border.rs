@@ -16,6 +16,7 @@ pub struct CellBorderCoords(pub Vec<OneSide>);
 impl CellBorderCoords {
     /// Returns a vec of 4 vecs with a given number of random points, so you have random points
     /// around the edge of a field.
+    /// 
     pub fn new(field: Field, amount: usize) -> Self {
         let mut sides = Vec::new();
 
@@ -60,6 +61,15 @@ impl CellBorderCoords {
         coordinates.sort_points_on_line();
         sides.push(coordinates);
         CellBorderCoords(sides)
+    }
+
+    pub fn new_empty() -> Self {
+        let mut sides = Vec::new();
+
+        let coordinates = OneSide::new();
+        sides.push(coordinates);
+        CellBorderCoords(sides)
+
     }
 }
 

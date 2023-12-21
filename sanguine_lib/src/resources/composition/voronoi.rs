@@ -61,9 +61,6 @@ impl Composition for layout::voronoi::VoronoiDiagram {
     }
 }
 
-
-   
-
 // helpers
 
 // fn point_to_point(voi_point: (f64, f64)) -> Point {

@@ -1,6 +1,6 @@
-use crate::resources::layout::{Layout,grid::Grid}; 
+use crate::resources::{layout::{Layout,grid::Grid, voronoi::VoronoiDiagram}, shapes::line}; 
 
-use super::cell_border::CellBorderCoords;
+use super::{cell_border::CellBorderCoords, one_side::OneSide};
 
 /// This module contains a bunch of functions that create random coordinates on field borders.
 ///
@@ -25,6 +25,26 @@ impl AllBorderCoordinates {
             vec.push(inner);
         }
         AllBorderCoordinates(vec)
+    }
+
+    pub fn new_from_voronoi(work: &VoronoiDiagram, amount: usize) -> Self {
+        let mut vec = Vec::new();
+        
+
+        for cell in &work.cells {
+            let mut cell_v= CellBorderCoords::new_empty();
+            cell_v.0.clear();
+            println!("Cell: {:?}", cell_v);
+            for line in &cell.border_lines {
+                println!("Line: {:?}", line);
+                cell_v.0.push(OneSide::new_random(*line, amount));
+                println!("Cell: {:?}", cell_v);
+            }
+            vec.push(cell_v);
+        }
+        let mut outer = Vec::new();
+        outer.push(vec);
+        AllBorderCoordinates(outer)
     }
 
     /// Tesselation, makes sure that points on the edges of a field are corresponding with the neighboring edge
@@ -54,6 +74,29 @@ impl AllBorderCoordinates {
                 }
             }
         }
+    }
+
+    pub fn tesselate_voronoi(&mut self, work: &VoronoiDiagram) {
+        for cell_item in 0..work.cells.len() {
+            for line_item in 0..work.cells[cell_item].border_lines.len() {
+                let points = self.0[0][cell_item].0[line_item].clone();
+
+                for other_cell_item in 0..work.cells.len() {
+                    for other_line_item in 0..work.cells[other_cell_item].border_lines.len() {
+                        let line =work.cells[cell_item].border_lines[line_item];
+                        println!("Line: {:?}", line);
+                        let other_line =work.cells[other_cell_item].border_lines[other_line_item];
+                        println!("Other Line: {:?}\n", other_line);
+                        if line.equal(other_line) {
+                            println!("same");
+                            println!("Points: {:?}", points);
+                            println!("Other Points: {:?}\n", self.0[0][other_cell_item].0[other_line_item]);
+                            self.0[0][other_cell_item].0[other_line_item] = points.clone();
+                        }
+                    }
+                }
+            }
+        };
     }
 
     pub fn slight_chaos(&mut self) {

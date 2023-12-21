@@ -1,7 +1,7 @@
 use super::{lines, threeways};
 use rand::{thread_rng, Rng};
 use sanguine_lib::resources::{
-    border_coordinates::BorderCoordinates,
+    border_coordinates::cell_border::CellBorderCoords,
     composition::{Density, Direction},
     layout::grid::Field,
     shapes::{circle::Circle, line::Line, point::Point},
@@ -10,17 +10,13 @@ use svg::{node::element::Group, Node};
 
 pub fn everything(
     density: Density,
-    border_coordinates: &BorderCoordinates,
+    border_coordinates: &CellBorderCoords,
     field: &Field,
     radius: i32,
     mut graph: Group,
 ) -> Group {
     let mut rng = thread_rng();
 
-    println!(
-        "draw field: x{}, y{}, w{}, h{}",
-        field.x, field.y, field.column_width, field.row_height
-    );
     match density {
         Density::Empty => (),
         Density::Transition(Direction::UpDown) => {

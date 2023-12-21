@@ -1,5 +1,5 @@
 use sanguine_lib::resources::{
-    border_coordinates::OneSide, composition::Direction, shapes::line::Line,
+    border_coordinates::one_side::OneSide, composition::Direction, shapes::line::Line,
 };
 use svg::{node::element::Group, Node};
 

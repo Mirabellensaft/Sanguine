@@ -54,30 +54,26 @@ pub fn distorted_square(field: Field) -> Path {
     path
 }
 
-
-
 // Helpers
 pub fn is_x_range_larger(x_1: f32, x_2: f32, y_1: f32, y_2: f32) -> bool {
     let mut x_range = 0.0;
     let mut y_range = 0.0;
-    
     if let Some(x) = smaller_value(x_1, x_2) {
-        x_range = x.0 - x.1;
+        x_range = x.1 - x.0;
     } else {
         return false
     }
 
     if let Some(y) = smaller_value(y_1, y_2) {
-        y_range = y.0 - y.1;
+        y_range = y.1 - y.0;
     } else {
         return true;
     }
-    // x range
 
-    if x_range < y_range {
+    if x_range > y_range {
         true
     } else {
-        true
+        false
     }
 }
 

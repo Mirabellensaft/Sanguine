@@ -1,4 +1,4 @@
-use crate::resources::shapes::point::Point;
+use crate::resources::shapes::{point::Point, line::Line};
 use rand::{thread_rng, Rng};
 
 
@@ -13,6 +13,10 @@ impl OneSide {
     pub fn new() -> Self {
         let side: Vec<Point> = Vec::new();
         OneSide(side)
+    }
+
+    pub fn new_random(line: Line, amount: usize) -> Self {
+        OneSide(line.random_points(amount))
     }
 
     pub fn copy_side(&self) -> Self {

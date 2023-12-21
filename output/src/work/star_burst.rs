@@ -2,7 +2,7 @@ use rand::{thread_rng, Rng};
 use svg::node::element::Group;
 
 use sanguine_lib::resources::{
-    border_coordinates::AllBorderCoordinates,
+    border_coordinates::all::AllBorderCoordinates,
     composition::{Composition, CompositionCenter, Density},
     layout::{grid::Grid, Layout},
 };

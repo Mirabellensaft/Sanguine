@@ -12,7 +12,7 @@ use super::{Shape, is_x_range_larger, range};
 
 /// A line between two points.
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Line {
     /// starting point
     pub start: Point,
@@ -48,17 +48,20 @@ impl Line {
     }
 
     pub fn return_point_from_y(&self, y: f32) -> Option<Point> {
+        // println!("point from y on line: {:?}", self);
         if let Some(y_i) = self.y_intercept() {
             if let Some(i) = self.slope() {
                 let x = (y - y_i)/i;
                 
                 let point = Point { x: x, y: y };
-                Some(point)
+                return Some(point)
             } else {
-                None
+                let point = Point { x: self.start.x, y: y };
+                return Some(point)
             }
         } else {
-            None
+            let point = Point { x: self.start.x, y: y };
+                return Some(point)
         }
     }
 
@@ -88,29 +91,47 @@ impl Line {
 
     /// Returns an amount of random, non duplicate points on a line
     pub fn random_points(&self, amount: usize) -> Vec<Point> {
+        println!("random points on line");
 
         let mut points_on_line = Vec::new();
         if is_x_range_larger(self.start.x, self.end.x, self.start.y, self.end.y) {
+            // println!("x range is larger");
             let chosen_values = return_chosen_value(self.start.x, self.end.x, amount);
             // make y values
             for x in chosen_values {
 
                 if let Some(point) = self.return_point_from_x(x as f32) {
+                    println!("point: {:?}", point);
                     points_on_line.push(point);
+                } else {
+                    println!("No point for this x");
                 }
             }
         } else {
+            // println!("y range is larger");
             let chosen_values = return_chosen_value(self.start.y, self.end.y, amount);
             // make y values
             for y in chosen_values {
 
                 if let Some(point) = self.return_point_from_y(y as f32) {
+                    println!("point: {:?}", point);
                     points_on_line.push(point);
+                } else {
+                    println!("No point for this y");
                 }
             }
-
         }
         points_on_line
+    }
+
+    pub fn equal(&self, other: Line) -> bool {
+        if *self == other {
+            true
+        } else if self.start == other.end && self.end == other.start {
+            true
+        } else {
+            false
+        }
     }
 
     /// Creates an svg path for a line
@@ -187,4 +208,29 @@ fn return_chosen_value(start_v: f32, end_v: f32, amount: usize) -> Vec<i32>{
         }
     }
     chosen_values
+}
+
+#[cfg(test)]
+
+#[test]
+fn random_on_line_1() {
+    let line_1 = Line::new(Point::new(1.0, 5.0),Point::new(1.0, 300.0));
+    let points = line_1.random_points(10);
+    println!("{:?}", points);
+    assert_eq!(points.len(), 10);
+}
+#[test]
+fn random_on_line_2() {
+    let line_1 = Line::new(Point::new(1.0, 5.0),Point::new(3000.0, 5.0));
+    let points = line_1.random_points(10);
+    println!("{:?}", points);
+    assert_eq!(points.len(), 10);
+}
+
+#[test]
+fn random_on_line_3() {
+    let line_1 = Line::new(Point::new(1.0, 5.0),Point::new(2.0, 300.0));
+    let points = line_1.random_points(10);
+    println!("{:?}", points);
+    assert_eq!(points.len(), 10);
 }
