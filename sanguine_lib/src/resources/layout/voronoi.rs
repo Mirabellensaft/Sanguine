@@ -24,18 +24,19 @@ pub struct VoronoiDiagram {
     pub width: i32,
     /// A margin, value is currently never applied anywhere.
     pub margin: i32,
-
+    /// Vector that contains the voronoi centers.
     pub centers: Vec<(f64, f64)>,
-    /// Vector that contains points for generating a voronoi diagram, can be empty.
+    /// Vector that contains the voronoi cells.
     pub cells: Vec<Cell>,
 }
 
 impl Layout for VoronoiDiagram {
-    /// generates a new voronoi layout, with an empty point vector.
+    /// generates a new voronoi layout
     fn new(parameters: Parameters) -> Result<Self, Error> {
         let mut rng = rand::thread_rng();
         let height = Uniform::new(0., parameters.height as f64);
         let width = Uniform::new(0., parameters.width as f64);
+        let mut len_centers: usize = 0;
 
         let mut centers = Vec::new();
 
@@ -45,10 +46,12 @@ impl Layout for VoronoiDiagram {
                 match voronoi_type {
                     VoronoiType::Custom(points) => {
                         for point in points {
+                            len_centers += 1;
                             centers.push((point.x as f64, point.y as f64))
                         }
                     }
                     VoronoiType::Uniform(number_of_centers) => {
+                        len_centers = number_of_centers as usize;
                         centers = (0..number_of_centers)
                             .map(|_| (rng.sample(&width), rng.sample(&height)))
                             .collect();
@@ -80,12 +83,14 @@ impl Layout for VoronoiDiagram {
 
             let points = polygon.points();
 
+            // println!("Polygon Points {:?}", points);
+
             for i in 0..points.len() - 1 {
                 let line = Line::new(
                     Point::new(points[i].x as f32, points[i].y as f32),
                     Point::new(points[i + 1].x as f32, points[i + 1].y as f32),
                 );
-
+                // println!("Line {:?}", line);
                 cell_border_lines.push(line);
             }
             // the closing line
@@ -96,6 +101,7 @@ impl Layout for VoronoiDiagram {
                 ),
                 Point::new(points[0].x as f32, points[0].y as f32),
             );
+            // println!("Closing Line {:?}", line);
             cell_border_lines.push(line);
 
             // The centers for each cell are currently set to zero.
@@ -105,14 +111,19 @@ impl Layout for VoronoiDiagram {
                 density: Density::Empty,
             });
         }
-
-        let work = VoronoiDiagram {
+        
+        let mut work = VoronoiDiagram {
             height: parameters.height,
             width: parameters.width,
             margin: parameters.margin,
             centers: centers,
             cells: cells,
         };
+        
+        
+        for i in 0..len_centers{
+            work.cells[i].center = Point::new(work.centers[i].0 as f32, work.centers[i].1 as f32); 
+        }
 
         Ok(work)
     }
@@ -142,21 +153,7 @@ impl Layout for VoronoiDiagram {
         unimplemented!()
     }
 
-    // fn get_grid(&self) -> super::grid::Grid {
-    //     unimplemented!()
+    // fn background(&self) -> svg::node::element::Group {
+    //     todo!()
     // }
-
-    // fn get_diagram(&self) -> impl Layout {
-    //     Self { 
-    //         height: self.height, 
-    //         width: self.width, 
-    //         margin: self.margin,
-    //         centers:self.centers.clone(),
-    //         cells: self.cells.clone(),
-    //     }
-    // }
-
-    fn background(&self) -> svg::node::element::Group {
-        todo!()
-    }
 }
