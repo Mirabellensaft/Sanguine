@@ -54,16 +54,24 @@ impl Shape for Circle {
     /// ⚠️ If the provided line does not go through the center of the circle,
     /// the point returned will be off!
     fn intersection(&self, line: Line, step: f32) -> Option<Point> {
+        // println!("Center: {:?}, Line: {:?}, step: {}", self.center, line, step);
         let mut diff = 10000000000.0;
-        // println!("\n\nstep {}", step);
+        if step < 0.000001 {
+            // println!("step {}", step);
+            // println!("step too small");
+            return None
+        }
         // println!("line slope {:?}", line.slope());
-        if self.center.x == line.start.x {
+        if ((self.center.x-0.2)..=(self.center.x+0.2)).contains(&line.start.x){
             // println!("x=x");
             if self.center.y > line.start.y {
                 let point = Point::new(self.center.x, self.center.y - self.radius);
+                // println!("Endpoint: {:?},", point);
                 return Some(point);
+                
             } else {
                 let point = Point::new(self.center.x, self.center.y + self.radius);
+                // println!("Endpoint: {:?},", point);
                 return Some(point);
             }
         }
@@ -74,7 +82,7 @@ impl Shape for Circle {
             iter_min = min.0;
         }
 
-        let iter_max = 300 * ((1.0 / step) as i32);
+        let iter_max = 800 * ((1.0 / step) as i32);
 
         for i in (0..iter_max).map(|x| x as f32 * step) {
             let x = iter_min + i;
@@ -84,20 +92,23 @@ impl Shape for Circle {
 
                 // line starts from the outside, left of the center of the circle
                 if self.center.x > line.start.x {
+                    // println!("left to center");
                     // circle contains the point
                     if self.contains(point_1) {
                         // distance from the point to the center is smaller then radius - 0.5 aka the
                         // step over the circle boundary to the inside was too big
                         if self.center.distance_to(&point_1) < self.radius - 0.5 {
+                            // println!("recurse step/10: {}", step/10.0);
                             return self.intersection(line, step / 10.0);
 
                         // it was not too big but is inside, so we return the point as it is good enough.
                         } else {
-                            // println!("left to center");
+                            
                             let point = Point {
                                 x: x as f32,
                                 y: point_1.y,
                             };
+                            // println!("Endpoint: {:?},", point);
                             return Some(point);
                         }
 
@@ -110,6 +121,7 @@ impl Shape for Circle {
                             diff = self.center.distance_to(&point_1)
                         } else {
                             // we have shot out of the other side of the circle, so we restart with a more fine grained
+                            // println!("recurse step/10: {}", step/10.0);
                             return self.intersection(line, step / 10.0);
                         }
                     }
@@ -122,15 +134,18 @@ impl Shape for Circle {
                                 x: x as f32,
                                 y: point_1.y,
                             };
+                            // println!("Endpoint: {:?},", point);
                             return Some(point);
                             // if let Some(point) = line.return_point_on_line(x - step){
                             //     return Some(point)
                             // }
                         } else {
+                            // println!("recurse step/10: {}", step/10.0);
                             return self.intersection(line, step / 10.0);
                         }
                     }
                 } else {
+                    // println!("empty else");
                 }
             }
         }
@@ -181,4 +196,30 @@ fn circle_4() {
     let circle = Circle::new(point_1, 1.9);
 
     assert_eq!(circle.contains(point_2), false);
+}
+#[test]
+
+fn circle_5() {
+    let point_1 = Point::new(2.0, 4.0);
+    //center and end of line
+    let point_2 = Point::new(2.0, 2.0);
+    let circle = Circle::new(point_2, 1.0);
+    let line = Line::new(point_1, point_2);
+
+    let expected = Point::new(2.0, 3.0);
+
+    assert_eq!(circle.intersection(line, 1.0).unwrap(), expected);
+}
+
+#[test]
+fn circle_6() {
+    let point_1 = Point::new(2.5, 2.5);
+    //center and end of line
+    let point_2 = Point::new(10.0, 10.0);
+    let circle = Circle::new(point_2, 5.0);
+    let line = Line::new(point_1, point_2);
+
+    let expected = Point::new(6.5, 6.5);
+
+    assert_eq!(circle.intersection(line, 1.0).unwrap(), expected);
 }
