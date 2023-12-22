@@ -1,11 +1,13 @@
+use super::shapes::{point::Point, line::Line};
 
-/// This module only prescribes compositional elements. How they are rendered depends highly on the
+
+/// This module only provides a composition trait and some enums to help describe compositional
+/// properties. How they are rendered depends highly on the
 /// individual project. It's probably helpful to provide a code template for this.
-pub mod grid;
-pub mod voronoi;
+
 
 pub trait Composition {
-    fn filled(&mut self, density_var: Density);
+    fn filled(&mut self, density_var: &Density);
     fn add_random_center(&mut self, amount: usize); 
     fn add_random_low(&mut self, amount: usize);
     fn connect_centers(&mut self);
@@ -14,7 +16,20 @@ pub trait Composition {
     fn direction_of_contact(&mut self, row: usize, col: usize) -> Vec<bool>; 
 }
 
-#[derive(Copy, Clone, Debug, PartialEq)]
+// #[derive(Copy, Clone, Debug, PartialEq)]
+// pub enum Density {
+//     Transition(Direction),
+//     ThreeWay(Direction),
+//     Corner(Direction),
+//     Edge(Direction),
+//     Empty,
+//     Low,
+//     Mid,
+//     High,
+//     Focus,
+// }
+
+#[derive(Clone, Debug, PartialEq)]
 pub enum Density {
     Transition(Direction),
     ThreeWay(Direction),
@@ -33,7 +48,7 @@ pub enum Density {
 ///
 /// I omit an exact defintion of every single variant, as the interpretation will
 /// vary from art work to art work.
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Direction {
     LeftRight,
     UpDown,
@@ -45,6 +60,7 @@ pub enum Direction {
     Down,
     Left,
     Right,
+    Lines(Vec<Line>),
 }
 
 /// A possibility to set a center in the entire composition.

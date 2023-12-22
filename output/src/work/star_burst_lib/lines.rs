@@ -25,7 +25,7 @@ pub fn to_circle(graph: &mut Group, side: &OneSide, circle: &Circle, min: usize,
 
 pub fn diagonal(
     graph: &mut Group,
-    direction: Direction,
+    direction: &Direction,
     first_side: &OneSide,
     second_side: &OneSide,
     min: usize,

@@ -59,11 +59,11 @@ pub fn everything(
 
             let first = &border_coordinates.0[side];
             let second = &border_coordinates.0[second_side];
-            lines::diagonal(&mut graph, dir, first, second, 0, 10);
+            lines::diagonal(&mut graph, &dir, first, second, 0, 10);
 
             let first = &border_coordinates.0[third_side];
             let second = &border_coordinates.0[2];
-            lines::diagonal(&mut graph, dir, first, second, 0, 10);
+            lines::diagonal(&mut graph, &dir, first, second, 0, 10);
         }
 
         Density::Edge(direction) => {
@@ -89,22 +89,22 @@ pub fn everything(
                 Direction::LeftDown => {
                     let second_side = &border_coordinates.0[1];
                     let first_side = &border_coordinates.0[2];
-                    lines::diagonal(&mut graph, direction, first_side, second_side, 0, 10)
+                    lines::diagonal(&mut graph, &direction, first_side, second_side, 0, 10)
                 }
                 Direction::LeftUp => {
                     let first_side = &border_coordinates.0[1];
                     let second_side = &border_coordinates.0[0];
-                    lines::diagonal(&mut graph, direction, &first_side, &second_side, 0, 10)
+                    lines::diagonal(&mut graph, &direction, &first_side, &second_side, 0, 10)
                 }
                 Direction::RightDown => {
                     let second_side = &border_coordinates.0[3];
                     let first_side = &border_coordinates.0[2];
-                    lines::diagonal(&mut graph, direction, &first_side, &second_side, 0, 10)
+                    lines::diagonal(&mut graph, &direction, &first_side, &second_side, 0, 10)
                 }
                 Direction::RightUp => {
                     let first_side = &border_coordinates.0[3];
                     let second_side = &border_coordinates.0[0];
-                    lines::diagonal(&mut graph, direction, &first_side, &second_side, 0, 10)
+                    lines::diagonal(&mut graph, &direction, &first_side, &second_side, 0, 10)
                 }
                 _ => (),
             };

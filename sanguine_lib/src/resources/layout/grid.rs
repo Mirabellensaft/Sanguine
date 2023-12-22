@@ -21,7 +21,7 @@ pub struct Grid {
     pub container: Vec<Vec<Field>>,
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone)]
 pub struct Field {
     /// x value of the given field
     pub x: i32,

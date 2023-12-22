@@ -18,7 +18,8 @@ impl AllBorderCoordinates {
             let mut inner = Vec::new();
             for col in 0..work.get_columns() {
                 inner.push(CellBorderCoords::new(
-                    work.get_fields()[row][col],
+                    // is this clone ok???
+                    work.get_fields()[row][col].clone(),
                     amount,
                 ));
             }
@@ -34,11 +35,8 @@ impl AllBorderCoordinates {
         for cell in &work.cells {
             let mut cell_v= CellBorderCoords::new_empty();
             cell_v.0.clear();
-            println!("Cell: {:?}", cell_v);
             for line in &cell.border_lines {
-                println!("Line: {:?}", line);
                 cell_v.0.push(OneSide::new_random(*line, amount));
-                println!("Cell: {:?}", cell_v);
             }
             vec.push(cell_v);
         }
@@ -84,13 +82,8 @@ impl AllBorderCoordinates {
                 for other_cell_item in 0..work.cells.len() {
                     for other_line_item in 0..work.cells[other_cell_item].border_lines.len() {
                         let line =work.cells[cell_item].border_lines[line_item];
-                        println!("Line: {:?}", line);
                         let other_line =work.cells[other_cell_item].border_lines[other_line_item];
-                        println!("Other Line: {:?}\n", other_line);
                         if line.equal(other_line) {
-                            println!("same");
-                            println!("Points: {:?}", points);
-                            println!("Other Points: {:?}\n", self.0[0][other_cell_item].0[other_line_item]);
                             self.0[0][other_cell_item].0[other_line_item] = points.clone();
                         }
                     }

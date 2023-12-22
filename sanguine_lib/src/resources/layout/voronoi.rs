@@ -2,7 +2,7 @@ use rand::distributions::Uniform;
 use rand::prelude::*;
 use voronator::delaunator::Point as VoiPoint;
 use voronator::VoronoiDiagram as VoiDi;
-use crate::resources::{shapes::{point::Point, line::Line}, composition::Density, errors::Error};
+use crate::resources::{shapes::{point::Point, line::Line}, composition::{Density, Composition}, errors::Error};
 
 use super::{Parameters, Layout, LayoutType, VoronoiType, grid::Field};
 
@@ -157,3 +157,28 @@ impl Layout for VoronoiDiagram {
     //     todo!()
     // }
 }
+
+impl Cell {
+    pub fn find_neighbors(&self, diagram: &VoronoiDiagram) -> Vec<(Point, Density, Line)> {
+        let mut neighbors_centers = Vec::new();
+        for side in &self.border_lines {
+            for cell in &diagram.get_points() {
+                for other_side in &cell.border_lines {
+                    if side.equal(*other_side) {
+                        neighbors_centers.push((cell.center, cell.get_density(), *side));
+                    }
+                }
+            }
+        }
+        neighbors_centers
+    }
+
+    pub fn set_density(&mut self, density: Density) {
+        self.density = density
+    }
+
+    pub fn get_density(&self) -> Density {
+        let density = self.density.clone();
+        density
+    }
+} 

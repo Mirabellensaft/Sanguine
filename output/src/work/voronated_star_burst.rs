@@ -15,6 +15,7 @@ const RADIUS_FOCUS: std::ops::RangeInclusive<i32> = 10_i32..=20_i32;
 
 pub fn form_group(work: &mut VoronoiDiagram) -> Group {
     let mut graph = Group::new();
+    let mut rng = thread_rng();
 
     // Creates a baseline composition
     // work.add_center(CompositionCenter::Bottom);
@@ -23,33 +24,34 @@ pub fn form_group(work: &mut VoronoiDiagram) -> Group {
     // work.connect_centers();
     // work.add_random_low(10);
 
-    let mut all_coords = AllBorderCoordinates::new_from_voronoi(work, 10);
-    for cell_border in &all_coords.0[0] {
-        println!("Cell");
-        for side in &cell_border.0 {
-            println!("{:?}\n", side);
-        }
-
-    }
-    
+    let mut all_coords = AllBorderCoordinates::new_from_voronoi(work, 6);
     all_coords.tesselate_voronoi(&work);
-
-    for cell_border in &all_coords.0[0] {
-        println!("Cell");
-        for side in &cell_border.0 {
-            println!("{:?}\n", side);
-        }
-
-    }
     // all_coords.slight_chaos();
 
     // Fills the gaps and edges in the baseline composition
     // work.retro_composition();
-
+    println!("cmp starts");
+    for cell in 0..work.cells.len() {
+        if work.cells[cell].center.y > 1800.0 {
+            let truth = rng.gen_bool(1.0 / 3.0);
+            if truth {
+                work.cells[cell].density = Density::Mid;
+            } else {
+                work.cells[cell].density = Density::High;
+            }
+        } else {
+            let truth = rng.gen_bool(1.0 / 8.0);
+            if truth {
+                work.cells[cell].density = Density::Empty;
+            } else {
+                work.cells[cell].density = Density::Mid;
+            }
+        }
+    }
+    println!("drawing starts");
     // Drawing of the Elements
         // println!("len cells {}", work.cells.len());
         for cell in 0..work.cells.len() {
-            let mut rng = thread_rng();
 
             // println!("cell center {:?}", work.cells[cell].center);
 
@@ -61,26 +63,28 @@ pub fn form_group(work: &mut VoronoiDiagram) -> Group {
                 Density::Focus => radius = rng.gen_range(RADIUS_FOCUS),
                 Density::Edge(_) => radius = rng.gen_range(RADIUS_MID),
                 Density::ThreeWay(_) => radius = rng.gen_range(RADIUS_MID),
-                _ => radius = rng.gen_range(RADIUS_FOCUS),
+                _ => ()
             }
   
 
-            
+            match work.cells[cell].density {
+                Density::Mid|Density::High => {
+                    let circle = Circle::new(work.cells[cell].center, radius as f32);
+                    graph.append(circle.draw());
 
-            let circle = Circle::new(work.cells[cell].center, radius as f32);
-            graph.append(circle.draw());
-
-            for side in &all_coords.0[0][cell].0 {
-                lines::to_circle(&mut graph, &side, &circle, 0, side.0.len());
+                    for side in &all_coords.0[0][cell].0 {
+                    lines::to_circle(&mut graph, &side, &circle, 0, side.0.len());
+                    }
+                }
+                _ => ()
             }
-
             
         }
-        // for cell in work.get_points() {
-        //     for line in &cell.border_lines {
-        //         graph.append(line.draw());
-        //     }
-        // }
+        for cell in work.get_points() {
+            for line in &cell.border_lines {
+                graph.append(line.draw());
+            }
+        }
     
     graph
 }

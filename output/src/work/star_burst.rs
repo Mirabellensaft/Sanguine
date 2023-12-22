@@ -7,37 +7,38 @@ use sanguine_lib::resources::{
     layout::{grid::Grid, Layout},
 };
 
-use super::star_burst_lib;
+use super::star_burst_lib::{self, grid_comp::MyGrid};
 
 const RADIUS_MID: std::ops::RangeInclusive<i32> = 3_i32..=6_i32;
 const RADIUS_HIGH: std::ops::RangeInclusive<i32> = 5_i32..=10_i32;
 const RADIUS_FOCUS: std::ops::RangeInclusive<i32> = 10_i32..=20_i32;
 
-pub fn form_group(work: &mut Grid) -> Group {
+pub fn form_group(work: Grid) -> Group {
     let mut graph = Group::new();
+    let mut my_work = MyGrid(work);
 
     // Creates a baseline composition
-    work.add_center(CompositionCenter::Bottom);
-    work.add_random_low(30);
-    work.add_random_center(6);
-    work.connect_centers();
-    work.add_random_low(10);
+    my_work.add_center(CompositionCenter::Bottom);
+    my_work.add_random_low(30);
+    my_work.add_random_center(6);
+    my_work.connect_centers();
+    my_work.add_random_low(10);
 
-    let mut all_coords = AllBorderCoordinates::new(work, 10);
+    let mut all_coords = AllBorderCoordinates::new(&my_work.0, 10);
     all_coords.tesselate();
     all_coords.slight_chaos();
 
     // Fills the gaps and edges in the baseline composition
-    work.retro_composition();
+    my_work.retro_composition();
 
     // Drawing of the Elements
-    for row in 0..work.get_rows() {
-        for col in 0..work.get_columns() {
+    for row in 0..my_work.0.get_rows() {
+        for col in 0..my_work.0.get_columns() {
             let mut rng = thread_rng();
 
             let mut radius = 0;
 
-            match work.container[row][col].density {
+            match my_work.0.container[row][col].density {
                 Density::Mid => radius = rng.gen_range(RADIUS_MID),
                 Density::High => radius = rng.gen_range(RADIUS_HIGH),
                 Density::Focus => radius = rng.gen_range(RADIUS_FOCUS),
@@ -45,13 +46,13 @@ pub fn form_group(work: &mut Grid) -> Group {
                 Density::ThreeWay(_) => radius = rng.gen_range(RADIUS_MID),
                 _ => (),
             }
-            let field = &work.get_fields()[row as usize][col as usize];
+            let field = &my_work.0.get_fields()[row as usize][col as usize];
             println!(
                 "field: x{}, y{}, width{}, height{}",
                 field.x, field.y, field.column_width, field.row_height
             );
             graph = star_burst_lib::draw::everything(
-                work.container[row][col].density,
+                my_work.0.container[row][col].density.clone(),
                 &all_coords.0[row][col],
                 field,
                 radius,

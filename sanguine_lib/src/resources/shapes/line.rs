@@ -91,7 +91,6 @@ impl Line {
 
     /// Returns an amount of random, non duplicate points on a line
     pub fn random_points(&self, amount: usize) -> Vec<Point> {
-        println!("random points on line");
 
         let mut points_on_line = Vec::new();
         if is_x_range_larger(self.start.x, self.end.x, self.start.y, self.end.y) {
@@ -101,10 +100,8 @@ impl Line {
             for x in chosen_values {
 
                 if let Some(point) = self.return_point_from_x(x as f32) {
-                    println!("point: {:?}", point);
                     points_on_line.push(point);
                 } else {
-                    println!("No point for this x");
                 }
             }
         } else {
@@ -114,10 +111,8 @@ impl Line {
             for y in chosen_values {
 
                 if let Some(point) = self.return_point_from_y(y as f32) {
-                    println!("point: {:?}", point);
                     points_on_line.push(point);
                 } else {
-                    println!("No point for this y");
                 }
             }
         }

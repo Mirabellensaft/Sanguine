@@ -64,7 +64,6 @@ pub enum VoronoiType {
 pub enum LayoutType {
     GridBased(usize, usize),
     VoronoiBased(VoronoiType),
-
 }
 
 /// Helper function for the background path.
