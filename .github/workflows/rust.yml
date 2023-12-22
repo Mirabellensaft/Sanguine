@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Format check
-      run: cargo fmt --check
+      run: cargo fmt --check --manifest-path sanguine/Cargo.toml
     - uses: actions/checkout@v3
     - name: Build
       run: cargo build --verbose
