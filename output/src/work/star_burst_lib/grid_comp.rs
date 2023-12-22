@@ -1,6 +1,6 @@
-use crate::resources::layout::{grid::Grid, Layout};
-
-use super::{Density, Composition, CompositionCenter, Direction};
+use sanguine_lib::resources::layout::grid::{Field, Grid};
+use sanguine_lib::resources::layout::Layout;
+use sanguine_lib::resources::composition::{Density, Composition, CompositionCenter, Direction};
 use rand::{thread_rng, Rng};
 
 /// This module only prescribes compositional elements. How they are rendered depends highly on the
@@ -12,11 +12,12 @@ use rand::{thread_rng, Rng};
 /// I omit an exact defintion of every single variant, as the interpretation will
 /// vary from art work to art work.
 
-
+#[derive(Debug, Clone)]
+pub struct MyGrid(pub Grid);
 
 /// This type contains the density variants for the entire grid.
 
-impl Composition for Grid {
+impl Composition for MyGrid {
     /// Creates a new grid where all fields have the Density::Empty variant
     /// This is to start with a homogenous field of "nothing", depending
     /// on how rendering of the variant is set.
@@ -25,11 +26,11 @@ impl Composition for Grid {
     /// Creates a new grid where all fields have the Density::Mid variant.
     /// This is to start with a homogenous field of "something", depending
     /// on how rendering of the variant is set.
-    fn filled(&mut self, density_var: Density) {
+    fn filled(&mut self, density_var: &Density) {
 
-        for row in 0..self.get_rows() {
-            for col in 0..self.get_columns() {
-                self.container[row][col].density = density_var;
+        for row in 0..self.0.get_rows() {
+            for col in 0..self.0.get_columns() {
+                self.0.container[row][col].density = density_var.clone();
             }
         }
     }
@@ -40,9 +41,9 @@ impl Composition for Grid {
         let mut last_center: (usize, usize) = (0, 0);
 
         // this identifies the first center
-        'first: for row in 0..self.get_rows() {
-            for col in 0..self.get_columns() {
-                match self.container[row][col].density {
+        'first: for row in 0..self.0.get_rows() {
+            for col in 0..self.0.get_columns() {
+                match self.0.container[row][col].density {
                     Density::Focus => {
                         last_center = (row, col);
                         break 'first;
@@ -54,16 +55,16 @@ impl Composition for Grid {
 
         // This finds the next center, connects it to the first, and repeats for the second 
         // center etc.
-        for row in 0..self.get_rows() {
-            for col in 0..self.get_columns() {
-                match self.container[row][col].density {
+        for row in 0..self.0.get_rows() {
+            for col in 0..self.0.get_columns() {
+                match self.0.container[row][col].density {
                     Density::Focus => {
                         for i in last_center.0 + 1..=row {
                             for j in last_center.1 + 1..=col {
-                                match self.container[i][j].density {
+                                match self.0.container[i][j].density {
                                     Density::Empty => {
-                                        self.container[i][j].density = Density::Mid;
-                                        self.container[i][j + 1].density = Density::Mid;
+                                        self.0.container[i][j].density = Density::Mid;
+                                        self.0.container[i][j + 1].density = Density::Mid;
                                     }
                                     _ => (),
                                 }
@@ -83,15 +84,15 @@ impl Composition for Grid {
         let mut rng = thread_rng();
 
         for _i in 0..amount {
-            let horizontal = rng.gen_range(1..self.columns - 2);
-            let vertical = rng.gen_range(1..self.rows - 2);
+            let horizontal = rng.gen_range(1..self.0.columns - 2);
+            let vertical = rng.gen_range(1..self.0.rows - 2);
 
             for row in vertical - 1..=vertical + 1 {
                 for col in horizontal - 1..=horizontal + 1 {
-                    self.container[row][col].density = Density::High;
+                    self.0.container[row][col].density = Density::High;
                 }
             }
-            self.container[vertical][horizontal].density = Density::Focus;
+            self.0.container[vertical][horizontal].density = Density::Focus;
         }
     }
 
@@ -100,17 +101,17 @@ impl Composition for Grid {
         let mut rng = thread_rng();
 
         for _i in 0..amount {
-            let horizontal = rng.gen_range(0..self.columns);
-            let vertical = rng.gen_range(0..self.rows);
+            let horizontal = rng.gen_range(0..self.0.columns);
+            let vertical = rng.gen_range(0..self.0.rows);
 
-            self.container[vertical][horizontal].density = Density::Low;
+            self.0.container[vertical][horizontal].density = Density::Low;
         }
     }
 
     /// Implements a compositional center. Not properly implemented yet.
     fn add_center(&mut self, center: CompositionCenter) {
-        let multiplicator_rows = self.rows / 3;
-        let multiplicator_columns = self.columns / 3;
+        let multiplicator_rows = self.0.rows / 3;
+        let multiplicator_columns = self.0.columns / 3;
         println!("{}, {}", multiplicator_columns, multiplicator_rows);
 
         // let _center_row = format.rows / 2;
@@ -126,9 +127,9 @@ impl Composition for Grid {
                         truth = rng.gen_bool(1.0 / 3.0);
 
                         if truth {
-                            self.container[i][j].density = Density::Mid;
+                            self.0.container[i][j].density = Density::Mid;
                         }
-                        self.container[i][j].density = Density::Empty;
+                        self.0.container[i][j].density = Density::Empty;
                     }
                 }
             }
@@ -136,15 +137,15 @@ impl Composition for Grid {
             CompositionCenter::TopMid => {
                 for i in 0..multiplicator_rows + 1 {
                     for j in multiplicator_columns..multiplicator_columns * 2 {
-                        self.container[i][j].density = Density::Mid;
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
 
             CompositionCenter::TopRight => {
                 for i in 0..multiplicator_rows + 1 {
-                    for j in multiplicator_columns * 2..self.columns {
-                        self.container[i][j].density = Density::Mid;
+                    for j in multiplicator_columns * 2..self.0.columns {
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
@@ -152,7 +153,7 @@ impl Composition for Grid {
             CompositionCenter::MidLeft => {
                 for i in multiplicator_rows..multiplicator_rows * 2 {
                     for j in 0..multiplicator_columns + 1 {
-                        self.container[i][j].density = Density::Mid;
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
@@ -160,51 +161,51 @@ impl Composition for Grid {
             CompositionCenter::MidMid => {
                 for i in multiplicator_rows..multiplicator_rows * 2 {
                     for j in multiplicator_columns..multiplicator_columns * 2 {
-                        self.container[i][j].density = Density::Mid;
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
 
             CompositionCenter::MidRight => {
                 for i in multiplicator_rows..multiplicator_rows * 2 {
-                    for j in multiplicator_columns * 2..self.columns {
-                        self.container[i][j].density = Density::Mid;
+                    for j in multiplicator_columns * 2..self.0.columns {
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
 
             CompositionCenter::BottomLeft => {
-                for i in multiplicator_rows * 2..self.rows {
+                for i in multiplicator_rows * 2..self.0.rows {
                     for j in 0..multiplicator_columns + 1 {
-                        self.container[i][j].density = Density::Mid;
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
 
             CompositionCenter::BottomMid => {
-                for i in multiplicator_rows * 2..self.rows {
+                for i in multiplicator_rows * 2..self.0.rows {
                     for j in multiplicator_columns..multiplicator_columns * 2 {
-                        self.container[i][j].density = Density::Mid;
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
 
             CompositionCenter::BottomRight => {
-                for i in multiplicator_rows * 2..self.rows {
-                    for j in multiplicator_columns * 2..self.columns {
-                        self.container[i][j].density = Density::Mid;
+                for i in multiplicator_rows * 2..self.0.rows {
+                    for j in multiplicator_columns * 2..self.0.columns {
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
 
             CompositionCenter::Bottom => {
-                for i in multiplicator_rows * 2..self.rows {
-                    for j in 0..self.columns {
+                for i in multiplicator_rows * 2..self.0.rows {
+                    for j in 0..self.0.columns {
                         truth = rng.gen_bool(1.0 / 3.0);
                         if truth {
-                            self.container[i][j].density = Density::Mid;
+                            self.0.container[i][j].density = Density::Mid;
                         } else {
-                            self.container[i][j].density = Density::Empty;
+                            self.0.container[i][j].density = Density::Empty;
                         }
                     }
                 }
@@ -212,40 +213,40 @@ impl Composition for Grid {
 
             CompositionCenter::Top => {
                 for i in 0..multiplicator_rows + 1 {
-                    for j in 0..self.columns {
-                        self.container[i][j].density = Density::Mid;
+                    for j in 0..self.0.columns {
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
 
             CompositionCenter::Left => {
-                for i in 0..self.rows {
+                for i in 0..self.0.rows {
                     for j in 0..multiplicator_columns {
-                        self.container[i][j].density = Density::Mid;
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
 
             CompositionCenter::Right => {
-                for i in 0..self.rows {
-                    for j in multiplicator_columns * 2..self.columns {
-                        self.container[i][j].density = Density::Mid;
+                for i in 0..self.0.rows {
+                    for j in multiplicator_columns * 2..self.0.columns {
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
 
             CompositionCenter::VerticalCenter => {
-                for i in 0..self.rows {
+                for i in 0..self.0.rows {
                     for j in multiplicator_columns..multiplicator_columns * 2 {
-                        self.container[i][j].density = Density::Mid;
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
 
             CompositionCenter::HorizontalCenter => {
                 for i in multiplicator_rows..multiplicator_rows * 2 {
-                    for j in 0..self.columns {
-                        self.container[i][j].density = Density::Mid;
+                    for j in 0..self.0.columns {
+                        self.0.container[i][j].density = Density::Mid;
                     }
                 }
             }
@@ -255,57 +256,57 @@ impl Composition for Grid {
     /// Fills gaps in the composition with Density variants Edge, ThreeWay,
     /// Corner, Low and Transition in their respective direction.
     fn retro_composition(&mut self) {
-        for row in 0..self.rows {
-            for col in 0..self.columns {
-                match self.container[row][col].density {
+        for row in 0..self.0.rows {
+            for col in 0..self.0.columns {
+                match self.0.container[row][col].density {
                     Density::Empty => {
                         let contact = self.direction_of_contact(row, col);
                         match to_array(contact) {
-                            [true, true, true, true] => self.container[row][col].density = Density::Low,
+                            [true, true, true, true] => self.0.container[row][col].density = Density::Low,
 
                             [true, true, true, false] => {
-                                self.container[row][col].density = Density::ThreeWay(Direction::Right)
+                                self.0.container[row][col].density = Density::ThreeWay(Direction::Right)
                             }
                             [true, false, true, true] => {
-                                self.container[row][col].density = Density::ThreeWay(Direction::Left)
+                                self.0.container[row][col].density = Density::ThreeWay(Direction::Left)
                             }
                             [true, true, false, true] => {
-                                self.container[row][col].density = Density::ThreeWay(Direction::Down)
+                                self.0.container[row][col].density = Density::ThreeWay(Direction::Down)
                             }
                             [false, true, true, true] => {
-                                self.container[row][col].density = Density::ThreeWay(Direction::Up)
+                                self.0.container[row][col].density = Density::ThreeWay(Direction::Up)
                             }
                             [true, true, false, false] => {
-                                self.container[row][col].density = Density::Corner(Direction::LeftUp)
+                                self.0.container[row][col].density = Density::Corner(Direction::LeftUp)
                             }
                             [false, true, true, false] => {
-                                self.container[row][col].density = Density::Corner(Direction::LeftDown)
+                                self.0.container[row][col].density = Density::Corner(Direction::LeftDown)
                             }
                             [false, false, true, true] => {
-                                self.container[row][col].density = Density::Corner(Direction::RightDown)
+                                self.0.container[row][col].density = Density::Corner(Direction::RightDown)
                             }
                             [true, false, false, true] => {
-                                self.container[row][col].density = Density::Corner(Direction::RightUp)
+                                self.0.container[row][col].density = Density::Corner(Direction::RightUp)
                             }
                             [false, false, false, true] => {
-                                self.container[row][col].density = Density::Edge(Direction::Left)
+                                self.0.container[row][col].density = Density::Edge(Direction::Left)
                             }
                             [true, false, false, false] => {
-                                self.container[row][col].density = Density::Edge(Direction::Up)
+                                self.0.container[row][col].density = Density::Edge(Direction::Up)
                             }
                             [false, false, true, false] => {
-                                self.container[row][col].density = Density::Edge(Direction::Down)
+                                self.0.container[row][col].density = Density::Edge(Direction::Down)
                             }
                             [false, true, false, false] => {
-                                self.container[row][col].density = Density::Edge(Direction::Right)
+                                self.0.container[row][col].density = Density::Edge(Direction::Right)
                             }
                             [false, true, false, true] => {
-                                self.container[row][col].density = Density::Transition(Direction::LeftRight)
+                                self.0.container[row][col].density = Density::Transition(Direction::LeftRight)
                             }
                             [true, false, true, false] => {
-                                self.container[row][col].density = Density::Transition(Direction::UpDown)
+                                self.0.container[row][col].density = Density::Transition(Direction::UpDown)
                             }
-                            [false, false, false, false] => self.container[row][col].density = Density::Empty,
+                            [false, false, false, false] => self.0.container[row][col].density = Density::Empty,
                             _ => (),
                         }
                     }
@@ -324,7 +325,7 @@ impl Composition for Grid {
         let mut sides = [false;4];
 
         if row != 0 {
-            match self.container[row - 1][col].density {
+            match &self.0.container[row - 1][col].density {
                 Density::Transition(direction) => match direction {
                     Direction::UpDown => sides[0] = true,
                     _ => sides[0] = false,
@@ -341,8 +342,8 @@ impl Composition for Grid {
             }
         }
 
-        if row < self.rows - 1 {
-            match self.container[row + 1][col].density {
+        if row < self.0.rows - 1 {
+            match &self.0.container[row + 1][col].density {
                 Density::Transition(direction) => match direction {
                     Direction::UpDown => sides[2] = true,
                     _ => sides[2] = false,
@@ -360,7 +361,7 @@ impl Composition for Grid {
         }
 
         if col != 0 {
-            match self.container[row][col - 1].density {
+            match &self.0.container[row][col - 1].density {
                 Density::Transition(direction) => match direction {
                     Direction::LeftRight => sides[1] = true,
                     _ => sides[1] = false,
@@ -377,8 +378,8 @@ impl Composition for Grid {
             }
         }
 
-        if col < self.columns - 1 {
-            match self.container[row][col + 1].density {
+        if col < self.0.columns - 1 {
+            match &self.0.container[row][col + 1].density {
                 Density::Transition(direction) => match direction {
                     Direction::LeftRight => sides[3] = true,
                     _ => sides[3] = false,

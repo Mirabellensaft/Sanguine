@@ -1,7 +1,7 @@
 use rand::thread_rng;
 use rand::Rng;
 use sanguine_lib::resources::{
-    border_coordinates::AllBorderCoordinates,
+    border_coordinates::all::AllBorderCoordinates,
     exclusion::Exclusion,
     layout::{grid::Grid, Layout},
     shapes::{circle::Circle, line::Line, point::Point, Shape},
