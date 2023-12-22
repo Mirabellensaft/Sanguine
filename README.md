@@ -7,7 +7,7 @@ The goal is to build a framework for generative art for pen plotters in Rust.
 
 Hello, World!
 
-![Hello, World! a 3 by 3 grid of 9 groups of 2 distorted squares, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/hello_world.png?raw=true)
+![Hello, World! a 3 by 3 grid of 9 groups of 2 distorted squares, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/output/images/hello_world.png?raw=true)
 
 ## Features I have in mind:
 
@@ -42,7 +42,7 @@ I slowly get the way, one needs to think code a lot bigger then what you're curr
 
 <figure>
     <img 
-        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00012.png"
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00012.png"
         width="150"
         height="300"
         alt="Tesselated Voronoi Cells">
@@ -53,7 +53,7 @@ I slowly get the way, one needs to think code a lot bigger then what you're curr
 
 Added a characteristic timestamp to the filename of the generated images. The timestamp can later be part of the stamp on the backside of the image. 
 
-![Screenshot showing file names in the format "nr_000_%Y%m%d_%H%M%S.](https://github.com/Mirabellensaft/sanguine/blob/main/images/filename.png)
+![Screenshot showing file names in the format "nr_000_%Y%m%d_%H%M%S.](https://github.com/Mirabellensaft/sanguine/blob/main/output/images/filename.png)
 
 Added the type that keeps data for the polygons, so that the center may be saved with each cell, to be able to address each cell by the center point. Following this I am also starting to think about how to order the center points in a meaningful way. 
 
@@ -63,7 +63,7 @@ Off to new experiments! I implemented the ability to generate the cells of a vor
 
 <figure>
     <img 
-        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00011.png"
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00011.png"
         width="150"
         height="300"
         alt="Drawn cells of a voronoi diagram">
@@ -76,7 +76,7 @@ I have started to work on parsing svg files. While the results for my art work a
 
 <figure>
     <img 
-        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00010.png"
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00010.png"
         width="150"
         height="300"
         alt="An experiment with colliding lines with the edges of an ellipse that is in the parsed file">
@@ -99,7 +99,7 @@ You can buy one to support this work!
 
 <figure>
     <img 
-        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/plot.jpeg"
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/plot.jpeg"
         width="166"
         height="295"
         alt="Photograph of my plotter doing the work">
@@ -115,7 +115,7 @@ You can buy one to support this work!
 
 <figure>
     <img 
-        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00009.png"
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00009.png"
         width="150"
         height="300"
         alt="Empty space, different compositional elements derived from the star_burst pattern">
@@ -128,7 +128,7 @@ You can buy one to support this work!
 
 <figure>
     <img 
-        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00008.png"
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00008.png"
         width="150"
         height="300"
         alt="Few larger circles are surrounded by smaller ones, the rest are the smallest circles.">
@@ -141,7 +141,7 @@ You can buy one to support this work!
 - cleaner collision of lines with circles. Probably good enough for plotting. 
 - also, we now get into the territory of panics, calculations that go on indefinetly... so there was `Some()` introduction of Options.
 
-![the single tiles become less dominant when the rays of the cicle each meet a ray from the neighboring fiel on the border.](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00007.png?raw=true)
+![the single tiles become less dominant when the rays of the cicle each meet a ray from the neighboring fiel on the border.](https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00007.png?raw=true)
 
 
 ### November 17th, 2023
@@ -149,7 +149,7 @@ You can buy one to support this work!
  - added support for some math operations to generate lines and points and not just plot random shapes. This lead to an understanding, that this framework has different layers: a more abtract one that generates the lines to be plottet, and the svg functions that visualize the generated works. Currently it makes sense to me, to have the an `fn draw()` method for every shape that does just that. 
 - another oldie but good to remember: on paper algebraic solutions are simpler, in programming, iterative methods are more elegant and flexible. 
 
-![a 5x5 grid of the star burst shape, lines sort of end at the circle. sort of.](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00005.png?raw=true)
+![a 5x5 grid of the star burst shape, lines sort of end at the circle. sort of.](https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00005.png?raw=true)
 
 ### November 15th, 2023
 - split code into modules, reduced a lot of duplicate code.
@@ -159,13 +159,13 @@ You can buy one to support this work!
 
 - added lines from border from the grid field to the circle center
 
-![a 5x5 grid of random circles with lines going from the field border to the center of the circle. The star burst shape](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00003.png?raw=true)
+![a 5x5 grid of random circles with lines going from the field border to the center of the circle. The star burst shape](https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00003.png?raw=true)
 
 
 ### November 14th, 2023
 - changed distored squares to circles in a 5x5 grid
 
-![groups of 2 cirles in a 5 by 5 grid, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00001.png?raw=true)
+![groups of 2 cirles in a 5 by 5 grid, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00001.png?raw=true)
 
 
 ### November 11th, 2023
@@ -174,6 +174,6 @@ You can buy one to support this work!
 
 - Hello, World!
       
-![Hello, World! a 3 by 3 grid of 9 groups of 2 distorted squares, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/images/hello_world.png?raw=true)
+![Hello, World! a 3 by 3 grid of 9 groups of 2 distorted squares, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/output/images/hello_world.png?raw=true)
   
    
