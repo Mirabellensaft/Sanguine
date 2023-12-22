@@ -1,7 +1,4 @@
-use sanguine_lib::resources::{
-    composition::{Composition, Density},
-    layout::{voronoi::VoronoiDiagram, Layout},
-};
+use sanguine_lib::resources::layout::{voronoi::VoronoiDiagram, Layout};
 use svg::{node, Node};
 
 pub fn form_group(work: &VoronoiDiagram) -> node::element::Group {

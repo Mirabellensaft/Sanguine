@@ -1,5 +1,5 @@
 use crate::resources::{
-    composition::{Composition, Density},
+    composition::Density,
     errors::Error,
     shapes::{line::Line, point::Point},
 };

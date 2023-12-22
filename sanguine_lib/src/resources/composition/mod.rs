@@ -1,4 +1,4 @@
-use super::shapes::{line::Line, point::Point};
+use super::shapes::line::Line;
 
 /// This module only provides a composition trait and some enums to help describe compositional
 /// properties. How they are rendered depends highly on the

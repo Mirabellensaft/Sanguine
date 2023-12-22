@@ -1,7 +1,4 @@
-use crate::resources::{
-    layout::{grid::Grid, voronoi::VoronoiDiagram, Layout},
-    shapes::line,
-};
+use crate::resources::layout::{grid::Grid, voronoi::VoronoiDiagram, Layout};
 
 use super::{cell_border::CellBorderCoords, one_side::OneSide};
 
