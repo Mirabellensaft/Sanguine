@@ -1,5 +1,4 @@
 #[allow(implied_bounds_entailment)]
-
 use svg::{
     node::{
         self,
@@ -8,7 +7,10 @@ use svg::{
     Node,
 };
 
-use super::{layout::{grid::Field, voronoi::Cell}, errors::Error};
+use super::{
+    errors::Error,
+    layout::{grid::Field, voronoi::Cell},
+};
 
 use super::shapes::point::Point;
 
@@ -22,8 +24,10 @@ pub mod voronoi;
 /// Format contains the works's properties and a container for the grid.
 
 pub trait Layout {
-    fn new(parameters: Parameters) -> Result<Self, Error> where Self: Sized;
-    // would it be possible to have a default behavior that replaces the content of the new functions 
+    fn new(parameters: Parameters) -> Result<Self, Error>
+    where
+        Self: Sized;
+    // would it be possible to have a default behavior that replaces the content of the new functions
     // of the single Types that implement the layout trait?
     fn background(&self) -> node::element::Group {
         let mut graph = node::element::Group::new();
@@ -48,12 +52,12 @@ pub trait Layout {
 }
 
 pub struct Parameters {
-    pub height: i32, 
-    pub width: i32, 
-    pub margin: i32, 
-    pub rows: usize, 
+    pub height: i32,
+    pub width: i32,
+    pub margin: i32,
+    pub rows: usize,
     pub columns: usize,
-    pub layout_type: LayoutType
+    pub layout_type: LayoutType,
 }
 
 pub enum VoronoiType {
@@ -76,7 +80,7 @@ fn path(data: Data) -> Path {
 
     path
 }
-    
+
 /// Orientation type, not implemented for use.
 #[derive(Debug, Clone, Copy)]
 pub enum Orientation {
@@ -85,4 +89,3 @@ pub enum Orientation {
     Left,
     Right,
 }
-

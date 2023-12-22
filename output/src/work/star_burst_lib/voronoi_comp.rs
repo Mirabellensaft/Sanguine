@@ -1,20 +1,20 @@
-
-
 use rand::prelude::*;
 
+use sanguine_lib::resources::{
+    composition::CompositionCenter,
+    layout::voronoi::VoronoiDiagram,
+    shapes::{line::Line, point::Point},
+};
 
-use sanguine_lib::resources::{layout::voronoi::VoronoiDiagram, shapes::{point::Point, line::Line}, composition::CompositionCenter};
-
-use sanguine_lib::resources::composition::{Density, Composition, Direction::Lines};
+use sanguine_lib::resources::composition::{Composition, Density, Direction::Lines};
 
 #[derive(Debug, Clone)]
 pub struct MyVoronoiDiagram(pub VoronoiDiagram);
 impl Composition for MyVoronoiDiagram {
     fn filled(&mut self, density_var: &Density) {
-        
         for item in 0..self.0.cells.len() {
             self.0.cells[item].set_density(density_var.clone());
-        }       
+        }
     }
 
     fn add_random_center(&mut self, amount: usize) {
@@ -22,8 +22,8 @@ impl Composition for MyVoronoiDiagram {
 
         for _i in 0..amount {
             let cell_index = rng.gen_range(0..self.0.cells.len());
-            
-            // high density around the focus can't be set yet, because 
+
+            // high density around the focus can't be set yet, because
             // there's no way yet to find the neighbors
 
             // for row in vertical - 1..=vertical + 1 {
@@ -43,7 +43,7 @@ impl Composition for MyVoronoiDiagram {
         for _i in 0..amount {
             let cell_index = rng.gen_range(0..self.0.cells.len());
 
-        self.0.cells[cell_index].density = Density::Low;
+            self.0.cells[cell_index].density = Density::Low;
         }
     }
 
@@ -71,11 +71,11 @@ impl Composition for MyVoronoiDiagram {
                         4 => cell.set_density(Density::Edge(Lines(contactless))),
                         5 => cell.set_density(Density::Edge(Lines(contactless))),
                         6 => cell.density = Density::Empty,
-                        _ => {},
+                        _ => {}
                     }
                 }
                 _ => {}
-            }  
+            }
         }
     }
 
@@ -88,8 +88,8 @@ fn direction_of_contact(neighbors: Vec<(Point, Density, Line)>) -> Vec<Line> {
     let mut touch_line = Vec::new();
     for neighbor in neighbors {
         match neighbor.1 {
-            Density::Empty => touch_line.push(neighbor.2),    
-            _ =>{},
+            Density::Empty => touch_line.push(neighbor.2),
+            _ => {}
         }
     }
     touch_line

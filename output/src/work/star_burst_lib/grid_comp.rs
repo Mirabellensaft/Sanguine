@@ -1,7 +1,7 @@
+use rand::{thread_rng, Rng};
+use sanguine_lib::resources::composition::{Composition, CompositionCenter, Density, Direction};
 use sanguine_lib::resources::layout::grid::{Field, Grid};
 use sanguine_lib::resources::layout::Layout;
-use sanguine_lib::resources::composition::{Density, Composition, CompositionCenter, Direction};
-use rand::{thread_rng, Rng};
 
 /// This module only prescribes compositional elements. How they are rendered depends highly on the
 /// individual project. It's probably helpful to provide a code template for this.
@@ -22,12 +22,10 @@ impl Composition for MyGrid {
     /// This is to start with a homogenous field of "nothing", depending
     /// on how rendering of the variant is set.
 
-
     /// Creates a new grid where all fields have the Density::Mid variant.
     /// This is to start with a homogenous field of "something", depending
     /// on how rendering of the variant is set.
     fn filled(&mut self, density_var: &Density) {
-
         for row in 0..self.0.get_rows() {
             for col in 0..self.0.get_columns() {
                 self.0.container[row][col].density = density_var.clone();
@@ -53,7 +51,7 @@ impl Composition for MyGrid {
             }
         }
 
-        // This finds the next center, connects it to the first, and repeats for the second 
+        // This finds the next center, connects it to the first, and repeats for the second
         // center etc.
         for row in 0..self.0.get_rows() {
             for col in 0..self.0.get_columns() {
@@ -78,7 +76,7 @@ impl Composition for MyGrid {
         }
     }
 
-    /// Adds a specified number of random centers with Density::Focus and surrounds 
+    /// Adds a specified number of random centers with Density::Focus and surrounds
     /// them Density::High.
     fn add_random_center(&mut self, amount: usize) {
         let mut rng = thread_rng();
@@ -262,31 +260,41 @@ impl Composition for MyGrid {
                     Density::Empty => {
                         let contact = self.direction_of_contact(row, col);
                         match to_array(contact) {
-                            [true, true, true, true] => self.0.container[row][col].density = Density::Low,
+                            [true, true, true, true] => {
+                                self.0.container[row][col].density = Density::Low
+                            }
 
                             [true, true, true, false] => {
-                                self.0.container[row][col].density = Density::ThreeWay(Direction::Right)
+                                self.0.container[row][col].density =
+                                    Density::ThreeWay(Direction::Right)
                             }
                             [true, false, true, true] => {
-                                self.0.container[row][col].density = Density::ThreeWay(Direction::Left)
+                                self.0.container[row][col].density =
+                                    Density::ThreeWay(Direction::Left)
                             }
                             [true, true, false, true] => {
-                                self.0.container[row][col].density = Density::ThreeWay(Direction::Down)
+                                self.0.container[row][col].density =
+                                    Density::ThreeWay(Direction::Down)
                             }
                             [false, true, true, true] => {
-                                self.0.container[row][col].density = Density::ThreeWay(Direction::Up)
+                                self.0.container[row][col].density =
+                                    Density::ThreeWay(Direction::Up)
                             }
                             [true, true, false, false] => {
-                                self.0.container[row][col].density = Density::Corner(Direction::LeftUp)
+                                self.0.container[row][col].density =
+                                    Density::Corner(Direction::LeftUp)
                             }
                             [false, true, true, false] => {
-                                self.0.container[row][col].density = Density::Corner(Direction::LeftDown)
+                                self.0.container[row][col].density =
+                                    Density::Corner(Direction::LeftDown)
                             }
                             [false, false, true, true] => {
-                                self.0.container[row][col].density = Density::Corner(Direction::RightDown)
+                                self.0.container[row][col].density =
+                                    Density::Corner(Direction::RightDown)
                             }
                             [true, false, false, true] => {
-                                self.0.container[row][col].density = Density::Corner(Direction::RightUp)
+                                self.0.container[row][col].density =
+                                    Density::Corner(Direction::RightUp)
                             }
                             [false, false, false, true] => {
                                 self.0.container[row][col].density = Density::Edge(Direction::Left)
@@ -301,12 +309,16 @@ impl Composition for MyGrid {
                                 self.0.container[row][col].density = Density::Edge(Direction::Right)
                             }
                             [false, true, false, true] => {
-                                self.0.container[row][col].density = Density::Transition(Direction::LeftRight)
+                                self.0.container[row][col].density =
+                                    Density::Transition(Direction::LeftRight)
                             }
                             [true, false, true, false] => {
-                                self.0.container[row][col].density = Density::Transition(Direction::UpDown)
+                                self.0.container[row][col].density =
+                                    Density::Transition(Direction::UpDown)
                             }
-                            [false, false, false, false] => self.0.container[row][col].density = Density::Empty,
+                            [false, false, false, false] => {
+                                self.0.container[row][col].density = Density::Empty
+                            }
                             _ => (),
                         }
                     }
@@ -322,7 +334,7 @@ impl Composition for MyGrid {
     fn direction_of_contact(&mut self, row: usize, col: usize) -> Vec<bool> {
         // Direction of the Edge variant points towards the block
         // edge on the right or left side of a block
-        let mut sides = [false;4];
+        let mut sides = [false; 4];
 
         if row != 0 {
             match &self.0.container[row - 1][col].density {

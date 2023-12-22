@@ -4,7 +4,8 @@ use svg::{node::element::Group, Node};
 use sanguine_lib::resources::{
     border_coordinates::{all::AllBorderCoordinates, cell_border},
     composition::{Composition, CompositionCenter, Density},
-    layout::{voronoi::VoronoiDiagram, Layout}, shapes::circle::Circle,
+    layout::{voronoi::VoronoiDiagram, Layout},
+    shapes::circle::Circle,
 };
 
 use super::star_burst_lib::{self, lines};
@@ -50,41 +51,38 @@ pub fn form_group(work: &mut VoronoiDiagram) -> Group {
     }
     println!("drawing starts");
     // Drawing of the Elements
-        // println!("len cells {}", work.cells.len());
-        for cell in 0..work.cells.len() {
+    // println!("len cells {}", work.cells.len());
+    for cell in 0..work.cells.len() {
+        // println!("cell center {:?}", work.cells[cell].center);
 
-            // println!("cell center {:?}", work.cells[cell].center);
+        let mut radius = 0;
 
-            let mut radius = 0;
+        match work.cells[cell].density {
+            Density::Mid => radius = rng.gen_range(RADIUS_MID),
+            Density::High => radius = rng.gen_range(RADIUS_HIGH),
+            Density::Focus => radius = rng.gen_range(RADIUS_FOCUS),
+            Density::Edge(_) => radius = rng.gen_range(RADIUS_MID),
+            Density::ThreeWay(_) => radius = rng.gen_range(RADIUS_MID),
+            _ => (),
+        }
 
-            match work.cells[cell].density {
-                Density::Mid => radius = rng.gen_range(RADIUS_MID),
-                Density::High => radius = rng.gen_range(RADIUS_HIGH),
-                Density::Focus => radius = rng.gen_range(RADIUS_FOCUS),
-                Density::Edge(_) => radius = rng.gen_range(RADIUS_MID),
-                Density::ThreeWay(_) => radius = rng.gen_range(RADIUS_MID),
-                _ => ()
-            }
-  
+        match work.cells[cell].density {
+            Density::Mid | Density::High => {
+                let circle = Circle::new(work.cells[cell].center, radius as f32);
+                graph.append(circle.draw());
 
-            match work.cells[cell].density {
-                Density::Mid|Density::High => {
-                    let circle = Circle::new(work.cells[cell].center, radius as f32);
-                    graph.append(circle.draw());
-
-                    for side in &all_coords.0[0][cell].0 {
+                for side in &all_coords.0[0][cell].0 {
                     lines::to_circle(&mut graph, &side, &circle, 0, side.0.len());
-                    }
                 }
-                _ => ()
             }
-            
+            _ => (),
         }
-        for cell in work.get_points() {
-            for line in &cell.border_lines {
-                graph.append(line.draw());
-            }
+    }
+    for cell in work.get_points() {
+        for line in &cell.border_lines {
+            graph.append(line.draw());
         }
-    
+    }
+
     graph
 }

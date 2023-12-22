@@ -1,7 +1,5 @@
-use crate::resources::shapes::{point::Point, line::Line};
+use crate::resources::shapes::{line::Line, point::Point};
 use rand::{thread_rng, Rng};
-
-
 
 /// This module contains a bunch of functions that create random coordinates on field borders.
 ///
@@ -42,7 +40,7 @@ impl OneSide {
                 self.0.swap(point, point - 1);
                 execution += 1;
             }
-        } 
+        }
 
         if execution != 0 {
             self.sort_points_on_line()

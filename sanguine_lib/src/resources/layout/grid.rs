@@ -3,7 +3,7 @@ use crate::resources::composition::Density;
 use crate::resources::errors::Error;
 
 use super::voronoi::Cell;
-use super::{Parameters, Layout, LayoutType};
+use super::{Layout, LayoutType, Parameters};
 
 #[derive(Debug, Clone)]
 pub struct Grid {
@@ -38,7 +38,6 @@ pub struct Field {
 impl Layout for Grid {
     /// Creates a new grid, with empty grid fields.
     fn new(parameters: Parameters) -> Result<Self, Error> {
-
         let mut rows = 0;
         let mut columns = 0;
 
@@ -46,7 +45,7 @@ impl Layout for Grid {
             LayoutType::GridBased(r, c) => {
                 rows = r;
                 columns = c;
-            },
+            }
             LayoutType::VoronoiBased(_) => return Err(Error::LayoutTypeError),
         }
         let column_width = parameters.width / columns as i32;
@@ -106,15 +105,13 @@ impl Layout for Grid {
     }
 
     // fn get_grid(&self) -> Grid {
-    //     Self { 
-    //         height: self.height, 
-    //         width: self.width, 
+    //     Self {
+    //         height: self.height,
+    //         width: self.width,
     //         margin: self.margin,
-    //         rows: self.rows, 
+    //         rows: self.rows,
     //         columns: self.columns,
     //         container: self.container.clone(),
     //     }
     // }
-  
 }
-

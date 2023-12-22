@@ -1,7 +1,7 @@
 use crate::resources::shapes::{line::Line, point::Point};
 use svg::node::element::Circle as CirclePath;
 
-use super::{Shape, smaller_value};
+use super::{smaller_value, Shape};
 
 /// This module contains types related to shapes that show up in the rendered or plotted image.
 /// Everything is hard coded to generate black lines of 1px width, as this is the only relevant
@@ -59,16 +59,15 @@ impl Shape for Circle {
         if step < 0.000001 {
             // println!("step {}", step);
             // println!("step too small");
-            return None
+            return None;
         }
         // println!("line slope {:?}", line.slope());
-        if ((self.center.x-0.2)..=(self.center.x+0.2)).contains(&line.start.x){
+        if ((self.center.x - 0.2)..=(self.center.x + 0.2)).contains(&line.start.x) {
             // println!("x=x");
             if self.center.y > line.start.y {
                 let point = Point::new(self.center.x, self.center.y - self.radius);
                 // println!("Endpoint: {:?},", point);
                 return Some(point);
-                
             } else {
                 let point = Point::new(self.center.x, self.center.y + self.radius);
                 // println!("Endpoint: {:?},", point);
@@ -103,7 +102,6 @@ impl Shape for Circle {
 
                         // it was not too big but is inside, so we return the point as it is good enough.
                         } else {
-                            
                             let point = Point {
                                 x: x as f32,
                                 y: point_1.y,
@@ -152,8 +150,6 @@ impl Shape for Circle {
         None
     }
 }
-
-
 
 #[cfg(test)]
 #[test]

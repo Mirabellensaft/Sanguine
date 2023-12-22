@@ -1,8 +1,7 @@
 use svg::node::element::path::Data;
 use svg::node::element::Path;
 
-use crate::resources::
-    shapes::{line::Line, point::Point};
+use crate::resources::shapes::{line::Line, point::Point};
 
 use super::layout::grid::Field;
 
@@ -61,7 +60,7 @@ pub fn is_x_range_larger(x_1: f32, x_2: f32, y_1: f32, y_2: f32) -> bool {
     if let Some(x) = smaller_value(x_1, x_2) {
         x_range = x.1 - x.0;
     } else {
-        return false
+        return false;
     }
 
     if let Some(y) = smaller_value(y_1, y_2) {
@@ -95,12 +94,12 @@ pub fn range(x_1: f32, x_2: f32) -> std::ops::Range<i32> {
     };
 }
 
-/// Helper function that returns a tuple, lower value first. 
+/// Helper function that returns a tuple, lower value first.
 /// Returns None if values are the same.
 pub fn smaller_value(v_1: f32, v_2: f32) -> Option<(f32, f32)> {
     if v_1 > v_2 {
         Some((v_2, v_1))
-    } else if v_1 < v_2{
+    } else if v_1 < v_2 {
         Some((v_1, v_2))
     } else {
         None
