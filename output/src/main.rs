@@ -27,7 +27,7 @@ fn main() {
                 margin: 2,
                 rows: 20,
                 columns: 10,
-                layout_type: LayoutType::VoronoiBased(VoronoiType::Uniform(50)),
+                layout_type: LayoutType::VoronoiBased(VoronoiType::Uniform(200)),
             };
 
             match layout::voronoi::VoronoiDiagram::new(parameters) {
