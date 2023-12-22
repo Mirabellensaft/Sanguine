@@ -1,19 +1,17 @@
-use super::shapes::{point::Point, line::Line};
-
+use super::shapes::{line::Line, point::Point};
 
 /// This module only provides a composition trait and some enums to help describe compositional
 /// properties. How they are rendered depends highly on the
 /// individual project. It's probably helpful to provide a code template for this.
 
-
 pub trait Composition {
     fn filled(&mut self, density_var: &Density);
-    fn add_random_center(&mut self, amount: usize); 
+    fn add_random_center(&mut self, amount: usize);
     fn add_random_low(&mut self, amount: usize);
     fn connect_centers(&mut self);
     fn add_center(&mut self, center: CompositionCenter);
     fn retro_composition(&mut self);
-    fn direction_of_contact(&mut self, row: usize, col: usize) -> Vec<bool>; 
+    fn direction_of_contact(&mut self, row: usize, col: usize) -> Vec<bool>;
 }
 
 // #[derive(Copy, Clone, Debug, PartialEq)]
@@ -82,4 +80,3 @@ pub enum CompositionCenter {
     VerticalCenter,
     HorizontalCenter,
 }
-

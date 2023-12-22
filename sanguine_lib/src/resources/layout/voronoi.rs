@@ -1,10 +1,14 @@
+use crate::resources::{
+    composition::{Composition, Density},
+    errors::Error,
+    shapes::{line::Line, point::Point},
+};
 use rand::distributions::Uniform;
 use rand::prelude::*;
 use voronator::delaunator::Point as VoiPoint;
 use voronator::VoronoiDiagram as VoiDi;
-use crate::resources::{shapes::{point::Point, line::Line}, composition::{Density, Composition}, errors::Error};
 
-use super::{Parameters, Layout, LayoutType, VoronoiType, grid::Field};
+use super::{grid::Field, Layout, LayoutType, Parameters, VoronoiType};
 
 #[derive(Clone, Debug)]
 pub struct Cell {
@@ -41,21 +45,18 @@ impl Layout for VoronoiDiagram {
         let mut centers = Vec::new();
 
         match parameters.layout_type {
-            
-            LayoutType::VoronoiBased(voronoi_type) => {
-                match voronoi_type {
-                    VoronoiType::Custom(points) => {
-                        for point in points {
-                            len_centers += 1;
-                            centers.push((point.x as f64, point.y as f64))
-                        }
+            LayoutType::VoronoiBased(voronoi_type) => match voronoi_type {
+                VoronoiType::Custom(points) => {
+                    for point in points {
+                        len_centers += 1;
+                        centers.push((point.x as f64, point.y as f64))
                     }
-                    VoronoiType::Uniform(number_of_centers) => {
-                        len_centers = number_of_centers as usize;
-                        centers = (0..number_of_centers)
-                            .map(|_| (rng.sample(&width), rng.sample(&height)))
-                            .collect();
-                    }
+                }
+                VoronoiType::Uniform(number_of_centers) => {
+                    len_centers = number_of_centers as usize;
+                    centers = (0..number_of_centers)
+                        .map(|_| (rng.sample(&width), rng.sample(&height)))
+                        .collect();
                 }
             },
             LayoutType::GridBased(_, _) => return Err(Error::LayoutTypeError),
@@ -111,7 +112,7 @@ impl Layout for VoronoiDiagram {
                 density: Density::Empty,
             });
         }
-        
+
         let mut work = VoronoiDiagram {
             height: parameters.height,
             width: parameters.width,
@@ -119,15 +120,13 @@ impl Layout for VoronoiDiagram {
             centers: centers,
             cells: cells,
         };
-        
-        
-        for i in 0..len_centers{
-            work.cells[i].center = Point::new(work.centers[i].0 as f32, work.centers[i].1 as f32); 
+
+        for i in 0..len_centers {
+            work.cells[i].center = Point::new(work.centers[i].0 as f32, work.centers[i].1 as f32);
         }
 
         Ok(work)
     }
-
 
     fn get_width(&self) -> i32 {
         self.width
@@ -181,4 +180,4 @@ impl Cell {
         let density = self.density.clone();
         density
     }
-} 
+}

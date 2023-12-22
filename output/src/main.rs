@@ -8,7 +8,7 @@ use chrono::Local;
 use std::env;
 
 mod work;
-use work::{star_burst, voronoi, voronoi_simple, voronated_star_burst};
+use work::{star_burst, voronated_star_burst, voronoi, voronoi_simple};
 
 fn main() {
     env::set_var("RUST_BACKTRACE", "1");
@@ -27,7 +27,7 @@ fn main() {
                 margin: 2,
                 rows: 20,
                 columns: 10,
-                layout_type: LayoutType::VoronoiBased(VoronoiType::Uniform(50)),
+                layout_type: LayoutType::VoronoiBased(VoronoiType::Uniform(200)),
             };
 
             match layout::voronoi::VoronoiDiagram::new(parameters) {

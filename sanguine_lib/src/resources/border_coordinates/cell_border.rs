@@ -1,6 +1,4 @@
-use crate::resources::{
-    layout::grid::Field, 
-    shapes::point::Point};
+use crate::resources::{layout::grid::Field, shapes::point::Point};
 use rand::{thread_rng, Rng};
 
 use super::one_side::OneSide;
@@ -9,14 +7,13 @@ use super::one_side::OneSide;
 ///
 /// It's currently limited to fields with 4 sides.
 
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct CellBorderCoords(pub Vec<OneSide>);
 
 impl CellBorderCoords {
     /// Returns a vec of 4 vecs with a given number of random points, so you have random points
     /// around the edge of a field.
-    /// 
+    ///
     pub fn new(field: Field, amount: usize) -> Self {
         let mut sides = Vec::new();
 
@@ -69,7 +66,6 @@ impl CellBorderCoords {
         let coordinates = OneSide::new();
         sides.push(coordinates);
         CellBorderCoords(sides)
-
     }
 }
 

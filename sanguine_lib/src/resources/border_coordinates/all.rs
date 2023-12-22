@@ -1,4 +1,7 @@
-use crate::resources::{layout::{Layout,grid::Grid, voronoi::VoronoiDiagram}, shapes::line}; 
+use crate::resources::{
+    layout::{grid::Grid, voronoi::VoronoiDiagram, Layout},
+    shapes::line,
+};
 
 use super::{cell_border::CellBorderCoords, one_side::OneSide};
 
@@ -30,10 +33,9 @@ impl AllBorderCoordinates {
 
     pub fn new_from_voronoi(work: &VoronoiDiagram, amount: usize) -> Self {
         let mut vec = Vec::new();
-        
 
         for cell in &work.cells {
-            let mut cell_v= CellBorderCoords::new_empty();
+            let mut cell_v = CellBorderCoords::new_empty();
             cell_v.0.clear();
             for line in &cell.border_lines {
                 cell_v.0.push(OneSide::new_random(*line, amount));
@@ -81,15 +83,15 @@ impl AllBorderCoordinates {
 
                 for other_cell_item in 0..work.cells.len() {
                     for other_line_item in 0..work.cells[other_cell_item].border_lines.len() {
-                        let line =work.cells[cell_item].border_lines[line_item];
-                        let other_line =work.cells[other_cell_item].border_lines[other_line_item];
+                        let line = work.cells[cell_item].border_lines[line_item];
+                        let other_line = work.cells[other_cell_item].border_lines[other_line_item];
                         if line.equal(other_line) {
                             self.0[0][other_cell_item].0[other_line_item] = points.clone();
                         }
                     }
                 }
             }
-        };
+        }
     }
 
     pub fn slight_chaos(&mut self) {

@@ -2,6 +2,5 @@
 ///
 /// It's currently limited to fields with 4 sides.
 pub mod all;
-pub mod one_side;
 pub mod cell_border;
-
+pub mod one_side;
