@@ -16,6 +16,7 @@ Hello, World!
 - [x] add more organic ways to generate images, such as voronoi diagrams
 - [ ] adapt composition things to work with voronoi diagrams
 - [ ] experiment with L-systems.
+- [ ] add noise generator
 - [ ] add camera input, so the generated art can be a reaction to what already is on paper.
 - [ ] project layout that allows for easy transitions between creating art work with lots of predefined functions, writing custom parts for the frame work and switching between different works of art.
 - [ ] generate art without svg output, by addressing the pen plotter directly
@@ -23,12 +24,30 @@ Hello, World!
 
 ## Changes, Thoughts and Learnings (newest first)
 
+### December 21st, 2023
+
+Epiphany!💡 I have been on this track, implementing traits for shared behavior of the types `VoronoiDiagram` and `Grid`. But the actual breakthrough in reducing tons of somewhat similar code is the idea, that the `Grid` is only a special case of a voronoi diagram. One, where all cells have exactly four sides, and corresponding sides have the same length throughout the entire thing. The main difference besides the data type is that in the `Grid` version, the cell sides are constructed first, and the center point follows, the `VoronoiDiagram` type does it the other way around. In the `Grid` type, single fields can be addressed by their row and column number, which is mostly convenient as a picture in my head, but in practice requires the same iteration over and over again.And maybe it's not needed? Maybe each `Grid` cell has enough identifying properties to work without that, just like the `VoronoiDiagram`. 
+
+I am not sure if I will implement this fully soon, as I feel I am also due to make more art. But realization definitely feels like a huge lesson towards more generic, reusable and thus cleaner code. The key to avoid writing so much duplicate code in the first place is to think bigger, with more use cases from the start. 
+
+Another step I took towards making the library part more generic is moving most of the composition implementation to the project part, and only keep the traits and type definitions in place. This seems way more logic, as the implementations were rather specific for my artistic work, and this is not the purpose of the crate. 
+
+
+
 ### December 12th, 2023
 
 Refactored the way Grid and Voronoi Diagrams are constructed. Now all diagram types are constructed with the same constructor, only with different variants, which in the end decides, which diagram type is first built. I added a trait, so that the diagram types can share behavior regarding compositional aspects.
 This way I was able to remove a lot of somewhat similar, somewhat duplicate code, and suddenly I had way less types named Voronoi something.
 I slowly get the way, one needs to think code a lot bigger then what you're currently working on. The ability to see future variants of something, future expansions, and functions. Not being able to see that leads to rewriting code a lot.
 
+<figure>
+    <img 
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/images/image_00012.png"
+        width="150"
+        height="300"
+        alt="Tesselated Voronoi Cells">
+    <figcaption>Tesselated Voronoi Cells.</figcaption>
+</figure>
 
 ### December 8th, 2023
 
