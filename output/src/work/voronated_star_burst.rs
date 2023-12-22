@@ -2,13 +2,13 @@ use rand::{thread_rng, Rng};
 use svg::{node::element::Group, Node};
 
 use sanguine_lib::resources::{
-    border_coordinates::{all::AllBorderCoordinates, cell_border},
-    composition::{Composition, CompositionCenter, Density},
+    border_coordinates::all::AllBorderCoordinates,
+    composition::Density,
     layout::{voronoi::VoronoiDiagram, Layout},
     shapes::circle::Circle,
 };
 
-use super::star_burst_lib::{self, lines};
+use super::star_burst_lib::lines;
 
 const RADIUS_MID: std::ops::RangeInclusive<i32> = 3_i32..=6_i32;
 const RADIUS_HIGH: std::ops::RangeInclusive<i32> = 5_i32..=10_i32;

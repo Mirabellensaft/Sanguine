@@ -4,5 +4,5 @@ members = [
     "sanguine_lib",
     "output",
 ]
-exclude = ["output/images"]
+
 

@@ -1,6 +1,6 @@
 use rand::{thread_rng, Rng};
 use sanguine_lib::resources::composition::{Composition, CompositionCenter, Density, Direction};
-use sanguine_lib::resources::layout::grid::{Field, Grid};
+use sanguine_lib::resources::layout::grid::Grid;
 use sanguine_lib::resources::layout::Layout;
 
 /// This module only prescribes compositional elements. How they are rendered depends highly on the
