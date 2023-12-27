@@ -149,7 +149,26 @@ impl Shape for Line {
     }
 
     fn contains(&self, point: Point) -> bool {
-        unimplemented!()
+        if self.start.x == self.end.x {
+            if point.x == self.start.x {
+                return true;
+            } else {
+                return false;
+            }
+        } else if let Some(y_i) = self.y_intercept() {
+            if let Some(i) = self.slope() {
+                let test = (i * point.x) + y_i - point.y;
+                if test == 0.0 {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /// Returns the point where two lines intersect, returns None, if they don't intersect.

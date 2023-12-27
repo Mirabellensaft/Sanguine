@@ -160,10 +160,17 @@ impl Layout for VoronoiDiagram {
 impl Cell {
     pub fn find_neighbors(&self, diagram: &VoronoiDiagram) -> Vec<(Point, Density, Line)> {
         let mut neighbors_centers = Vec::new();
+        println!("self center: {:?}", self.center);
         for side in &self.border_lines {
             for cell in &diagram.get_points() {
                 for other_side in &cell.border_lines {
-                    if side.equal(*other_side) {
+                    if side.equal(*other_side) && cell.center != self.center {
+                        println!(
+                            "center: {:?}, density: {:?}, side: {:?}",
+                            cell.center,
+                            cell.get_density(),
+                            *side,
+                        );
                         neighbors_centers.push((cell.center, cell.get_density(), *side));
                     }
                 }

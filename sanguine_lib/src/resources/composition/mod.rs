@@ -29,6 +29,7 @@ pub trait Composition {
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Density {
+    Lopsided(Direction),
     Transition(Direction),
     ThreeWay(Direction),
     Corner(Direction),
@@ -58,7 +59,7 @@ pub enum Direction {
     Down,
     Left,
     Right,
-    Lines(Vec<Line>),
+    Lines(Vec<(Line, usize)>),
 }
 
 /// A possibility to set a center in the entire composition.

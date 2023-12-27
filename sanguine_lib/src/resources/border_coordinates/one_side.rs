@@ -1,4 +1,4 @@
-use crate::resources::shapes::{line::Line, point::Point};
+use crate::resources::shapes::{line::Line, point::Point, Shape};
 use rand::{thread_rng, Rng};
 
 /// This module contains a bunch of functions that create random coordinates on field borders.
@@ -60,5 +60,22 @@ impl OneSide {
             }
             i = rng.gen_range(0..=1);
         }
+    }
+
+    pub fn equal(&self, line: &Line) -> bool {
+        println!("cell equal line");
+        for point in &self.0 {
+            if line.contains(*point) {
+                println!("true");
+                true;
+            } else {
+                return false;
+            }
+        }
+        false
+    }
+
+    pub fn number_of_points(&self) -> usize {
+        self.0.len()
     }
 }

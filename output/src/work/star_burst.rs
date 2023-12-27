@@ -51,7 +51,7 @@ pub fn form_group(work: Grid) -> Group {
                 "field: x{}, y{}, width{}, height{}",
                 field.x, field.y, field.column_width, field.row_height
             );
-            graph = star_burst_lib::draw::everything(
+            graph = star_burst_lib::draw_grid::everything(
                 my_work.0.container[row][col].density.clone(),
                 &all_coords.0[row][col],
                 field,

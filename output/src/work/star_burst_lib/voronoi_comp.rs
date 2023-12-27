@@ -2,7 +2,7 @@ use rand::prelude::*;
 
 use sanguine_lib::resources::{
     composition::CompositionCenter,
-    layout::voronoi::VoronoiDiagram,
+    layout::voronoi::{Cell, VoronoiDiagram},
     shapes::{line::Line, point::Point},
 };
 
@@ -56,22 +56,32 @@ impl Composition for MyVoronoiDiagram {
     }
 
     fn retro_composition(&mut self) {
+        println!("retro");
         let clone_d = self.0.clone();
         for cell in &mut self.0.cells {
             match cell.density {
                 Density::Empty => {
                     let neighbors = cell.find_neighbors(&clone_d);
                     let number = neighbors.len();
-                    let contactless = direction_of_contact(neighbors);
-                    match contactless.len() {
-                        0 => cell.set_density(Density::Low),
-                        1 => cell.set_density(Density::ThreeWay(Lines(contactless))),
-                        2 => cell.set_density(Density::Transition(Lines(contactless))),
-                        3 => cell.set_density(Density::Corner(Lines(contactless))),
-                        4 => cell.set_density(Density::Edge(Lines(contactless))),
-                        5 => cell.set_density(Density::Edge(Lines(contactless))),
-                        6 => cell.density = Density::Empty,
-                        _ => {}
+                    let filled_neighbors = direction_of_contact(cell, neighbors);
+                    println!("number {}, empty: {:?}", number, filled_neighbors.len());
+                    // missing case: both are the same
+                    match (number, filled_neighbors.len()) {
+                        (_, 0) => cell.set_density(Density::Empty),
+                        (_, 1) => cell.set_density(Density::Edge(Lines(filled_neighbors))),
+                        (_, 2) => {
+                            cell.set_density(Density::Transition(Lines(filled_neighbors)));
+                            println!("transition")
+                        }
+
+                        (_, 3) => cell.set_density(Density::ThreeWay(Lines(filled_neighbors))),
+
+                        //or corner
+                        (5, 4) | (6, 4..=5) | (7, 4..=6) | (8, 4..=7) | (9, 4..=8) => {
+                            cell.set_density(Density::Lopsided(Lines(filled_neighbors)))
+                        }
+
+                        _ => cell.set_density(Density::Low),
                     }
                 }
                 _ => {}
@@ -84,14 +94,29 @@ impl Composition for MyVoronoiDiagram {
     }
 }
 
-fn direction_of_contact(neighbors: Vec<(Point, Density, Line)>) -> Vec<Line> {
+fn direction_of_contact(cell: &Cell, neighbors: Vec<(Point, Density, Line)>) -> Vec<(Line, usize)> {
     let mut touch_line = Vec::new();
+
     for neighbor in neighbors {
         match neighbor.1 {
-            Density::Empty => touch_line.push(neighbor.2),
-            _ => {}
+            Density::Empty
+            | Density::Lopsided(_)
+            | Density::Edge(_)
+            | Density::Transition(_)
+            | Density::Corner(_) => {}
+
+            _ => touch_line.push((neighbor.2, 0)),
         }
     }
+
+    for border in 0..cell.border_lines.len() {
+        for mut line in touch_line.iter_mut() {
+            if cell.border_lines[border].equal(line.0) {
+                line.1 = border;
+            }
+        }
+    }
+    // println!("touch line: {:?}", touch_line);
     touch_line
 }
 
