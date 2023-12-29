@@ -35,7 +35,10 @@ impl AllBorderCoordinates {
             let mut cell_v = CellBorderCoords::new_empty();
             cell_v.0.clear();
             for line in &cell.border_lines {
-                cell_v.0.push(OneSide::new_random(*line, amount));
+                let mut side = OneSide::new_random(*line, amount);
+                println!("sort");
+                side.sort_points_on_line();
+                cell_v.0.push(side);
             }
             vec.push(cell_v);
         }
@@ -101,3 +104,5 @@ impl AllBorderCoordinates {
         }
     }
 }
+
+

@@ -28,22 +28,40 @@ impl OneSide {
 
     pub fn sort_points_on_line(&mut self) {
         let mut execution = 0;
+        if self.0.len() > 1 {
+            if self.0[0].y == self.0[1].y {
+                for point in 1..self.0.len() {
+                    if self.0[point].x < self.0[point - 1].x {
+                        self.0.swap(point, point - 1);
+                        execution += 1;
+                    }
+                }
 
-        for point in 1..self.0.len() {
-            if self.0[point].x < self.0[point - 1].x {
-                self.0.swap(point, point - 1);
-                execution += 1;
-            }
-        }
-        for point in 1..self.0.len() {
-            if self.0[point].y < self.0[point - 1].y {
-                self.0.swap(point, point - 1);
-                execution += 1;
-            }
-        }
+                if execution != 0 {
+                    self.sort_points_on_line()
+                }
+            } else if self.0[0].x == self.0[1].x {
+                for point in 1..self.0.len() {
+                    if self.0[point].y < self.0[point - 1].y {
+                        self.0.swap(point, point - 1);
+                        execution += 1;
+                    }
+                }
 
-        if execution != 0 {
-            self.sort_points_on_line()
+                if execution != 0 {
+                    self.sort_points_on_line()
+                }
+            } else {
+                for point in 1..self.0.len() {
+                    if self.0[point].x < self.0[point - 1].x {
+                        self.0.swap(point, point - 1);
+                        execution += 1;
+                    }
+                }
+                if execution != 0 {
+                    self.sort_points_on_line()
+                }
+            }
         }
     }
 
@@ -63,10 +81,10 @@ impl OneSide {
     }
 
     pub fn equal(&self, line: &Line) -> bool {
-        println!("cell equal line");
+        // println!("cell equal line");
         for point in &self.0 {
             if line.contains(*point) {
-                println!("true");
+                // println!("true");
                 true;
             } else {
                 return false;
@@ -78,4 +96,36 @@ impl OneSide {
     pub fn number_of_points(&self) -> usize {
         self.0.len()
     }
+}
+
+#[cfg(test)]
+#[test]
+
+fn sort_test_1() {
+    use crate::resources::shapes::point::Point;
+
+    let point_1 = Point::new(11.0, 10.0);
+    let point_2 = Point::new(10.0, 8.0);
+    let point_3 = Point::new(5.0, 5.0);
+    let point_4 = Point::new(3.0, 1.0);
+
+    let mut points = Vec::new();
+    points.push(point_1);
+    points.push(point_2);
+    points.push(point_3);
+    points.push(point_4);
+
+    let mut side = OneSide(points);
+    side.sort_points_on_line();
+    // println!("side: {:?}", side);
+
+    assert_eq!(
+        side.0,
+        [
+            Point { x: 3.0, y: 1.0 },
+            Point { x: 5.0, y: 5.0 },
+            Point { x: 10.0, y: 8.0 },
+            Point { x: 11.0, y: 10.0 }
+        ]
+    );
 }
