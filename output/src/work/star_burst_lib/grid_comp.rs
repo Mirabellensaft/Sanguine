@@ -110,7 +110,7 @@ impl Composition for MyGrid {
     fn add_center(&mut self, center: CompositionCenter) {
         let multiplicator_rows = self.0.rows / 3;
         let multiplicator_columns = self.0.columns / 3;
-        println!("{}, {}", multiplicator_columns, multiplicator_rows);
+        // println!("{}, {}", multiplicator_columns, multiplicator_rows);
 
         // let _center_row = format.rows / 2;
         // let _center_col = format.columns / 2;

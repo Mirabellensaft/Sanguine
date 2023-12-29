@@ -56,7 +56,7 @@ impl Composition for MyVoronoiDiagram {
     }
 
     fn retro_composition(&mut self) {
-        println!("retro");
+        // println!("retro");
         let clone_d = self.0.clone();
         for cell in &mut self.0.cells {
             match cell.density {
@@ -64,14 +64,14 @@ impl Composition for MyVoronoiDiagram {
                     let neighbors = cell.find_neighbors(&clone_d);
                     let number = neighbors.len();
                     let filled_neighbors = direction_of_contact(cell, neighbors);
-                    println!("number {}, empty: {:?}", number, filled_neighbors.len());
+                    // println!("number {}, empty: {:?}", number, filled_neighbors.len());
                     // missing case: both are the same
                     match (number, filled_neighbors.len()) {
                         (_, 0) => cell.set_density(Density::Empty),
                         (_, 1) => cell.set_density(Density::Edge(Lines(filled_neighbors))),
                         (_, 2) => {
                             cell.set_density(Density::Transition(Lines(filled_neighbors)));
-                            println!("transition")
+                            // println!("transition")
                         }
 
                         (_, 3) => cell.set_density(Density::ThreeWay(Lines(filled_neighbors))),
