@@ -5,17 +5,15 @@ use sanguine_lib::resources::{
     border_coordinates::all::AllBorderCoordinates,
     composition::{Composition, Density},
     layout::{voronoi::VoronoiDiagram, Layout},
-    shapes::circle::Circle,
 };
 
 use crate::work::star_burst_lib;
 
-use super::star_burst_lib::lines;
 use super::star_burst_lib::voronoi_comp::MyVoronoiDiagram;
-
-const RADIUS_MID: std::ops::RangeInclusive<i32> = 3_i32..=6_i32;
-const RADIUS_HIGH: std::ops::RangeInclusive<i32> = 5_i32..=10_i32;
-const RADIUS_FOCUS: std::ops::RangeInclusive<i32> = 10_i32..=20_i32;
+const RADIUS_LOW: std::ops::RangeInclusive<i32> = 3_i32..=5_i32;
+const RADIUS_MID: std::ops::RangeInclusive<i32> = 5_i32..=8_i32;
+const RADIUS_HIGH: std::ops::RangeInclusive<i32> = 8_i32..=12_i32;
+const RADIUS_FOCUS: std::ops::RangeInclusive<i32> = 12_i32..=20_i32;
 
 pub fn form_group(work: VoronoiDiagram) -> Group {
     let mut graph = Group::new();
@@ -24,10 +22,10 @@ pub fn form_group(work: VoronoiDiagram) -> Group {
     let mut my_work = MyVoronoiDiagram(work);
     // Creates a baseline composition
     // work.add_center(CompositionCenter::Bottom);
-    // work.add_random_low(30);
+    my_work.add_random_low(30);
     my_work.add_random_center(6);
     // work.connect_centers();
-    // work.add_random_low(10);
+    my_work.add_random_low(10);
 
     let mut all_coords = AllBorderCoordinates::new_from_voronoi(&my_work.0, 6);
     all_coords.tesselate_voronoi(&my_work.0);
@@ -38,14 +36,14 @@ pub fn form_group(work: VoronoiDiagram) -> Group {
     println!("cmp starts {} cells", my_work.0.cells.len());
     for cell in 0..my_work.0.cells.len() {
         if my_work.0.cells[cell].center.y > 1800.0 {
-            let truth = rng.gen_bool(1.0 / 3.0);
+            let truth = rng.gen_bool(1.0 / 2.0);
             if truth {
                 my_work.0.cells[cell].density = Density::High;
             } else {
-                my_work.0.cells[cell].density = Density::Mid;
+                my_work.0.cells[cell].density = Density::Empty;
             }
         } else {
-            let truth = rng.gen_bool(1.0 / 2.0);
+            let truth = rng.gen_bool(1.0 / 8.0);
             if truth {
                 my_work.0.cells[cell].density = Density::Mid;
             } else {
@@ -66,9 +64,10 @@ pub fn form_group(work: VoronoiDiagram) -> Group {
             Density::Mid => radius = rng.gen_range(RADIUS_MID),
             Density::High => radius = rng.gen_range(RADIUS_HIGH),
             Density::Focus => radius = rng.gen_range(RADIUS_FOCUS),
-            Density::Edge(_) => radius = rng.gen_range(RADIUS_MID),
+            Density::Edge(_) => radius = rng.gen_range(RADIUS_LOW),
             Density::ThreeWay(_) => radius = rng.gen_range(RADIUS_MID),
-            Density::Lopsided(_) => radius = 20,
+            Density::Lopsided(_) => radius = rng.gen_range(RADIUS_MID),
+            Density::Transition(_) => radius = rng.gen_range(RADIUS_LOW),
             _ => (),
         }
         graph = star_burst_lib::draw_voronoi::everything(
@@ -92,7 +91,7 @@ pub fn form_group(work: VoronoiDiagram) -> Group {
 
     for cell in my_work.0.get_points() {
         for line in &cell.border_lines {
-            graph.append(line.draw());
+            graph.append(line.debug_draw("red"));
         }
     }
 

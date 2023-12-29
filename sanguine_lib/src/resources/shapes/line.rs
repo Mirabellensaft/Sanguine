@@ -2,7 +2,7 @@ use rand::seq::SliceRandom;
 use svg::node::element::path::Data;
 use svg::node::element::Path;
 
-use crate::resources::shapes::{path, point::Point};
+use crate::resources::shapes::{debug_path, path, point::Point};
 
 use super::{is_x_range_larger, range, Shape};
 
@@ -141,6 +141,16 @@ impl Line {
         let path = path(data);
         path
     }
+
+    /// Creates an svg path for a line
+    pub fn debug_draw(&self, color: &str) -> Path {
+        let data = Data::new()
+            .move_to((self.start.x, self.start.y))
+            .line_to((self.end.x, self.end.y));
+
+        let path = debug_path(data, color);
+        path
+    }
 }
 
 impl Shape for Line {
@@ -214,7 +224,7 @@ fn return_chosen_value(start_v: f32, end_v: f32, amount: usize) -> Vec<i32> {
     let mut chosen_values = Vec::new();
 
     let mut rng = &mut rand::thread_rng();
-    for value in range(start_v, end_v).step_by(2) {
+    for value in range(start_v, end_v).step_by(3) {
         p_values.push(value);
         if amount < p_values.len() {
             chosen_values = p_values

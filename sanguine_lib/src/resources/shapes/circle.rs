@@ -36,6 +36,17 @@ impl Circle {
             .set("r", self.radius);
         circle
     }
+
+    pub fn debug_draw(&self, color: &str) -> CirclePath {
+        let circle = CirclePath::new()
+            .set("fill", "none")
+            .set("stroke", color)
+            .set("stroke-width", 1)
+            .set("cx", self.center.x)
+            .set("cy", self.center.y)
+            .set("r", self.radius);
+        circle
+    }
 }
 
 impl Shape for Circle {

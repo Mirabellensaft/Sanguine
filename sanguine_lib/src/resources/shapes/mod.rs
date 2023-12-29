@@ -28,6 +28,16 @@ fn path(data: Data) -> Path {
     path
 }
 
+fn debug_path(data: Data, color: &str) -> Path {
+    let path = Path::new()
+        .set("fill", "none")
+        .set("stroke", color)
+        .set("stroke-width", 1)
+        .set("d", data);
+
+    path
+}
+
 /// Creates a random distorted square
 pub fn distorted_square(field: Field) -> Path {
     let data = Data::new()
