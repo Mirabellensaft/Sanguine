@@ -5,6 +5,11 @@ Since the renaissance it has been shaped into a kind of pencil, used mainly for 
 
 The goal is to build a framework for generative art for pen plotters in Rust.
 
+Support this work by buying the art work that comes out of it at ko-fi, or by buying me a ko-fi. Or by buying me one every month!
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0N8I4U)
+
+
 Hello, World!
 
 ![Hello, World! a 3 by 3 grid of 9 groups of 2 distorted squares, black lines on white ground](https://github.com/Mirabellensaft/sanguine/blob/main/output/images/hello_world.png?raw=true)
@@ -31,6 +36,10 @@ Epiphany!💡 I have been on this track, implementing traits for shared behavior
 I am not sure if I will implement this fully soon, as I feel I am also due to make more art. But realization definitely feels like a huge lesson towards more generic, reusable and thus cleaner code. The key to avoid writing so much duplicate code in the first place is to think bigger, with more use cases from the start.
 
 Another step I took towards making the library part more generic is moving most of the composition implementation to the project part, and only keep the traits and type definitions in place. This seems way more logic, as the implementations were rather specific for my artistic work, and this is not the purpose of the crate.
+
+### December 18th, 2023
+
+Set up a Raspberry Pi with [Saxi](https://github.com/nornagon/saxi) so my computer does not need to be tethered to the AxiDraw in order for the plotter to be active.
 
 ### December 12th, 2023
 
