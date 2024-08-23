@@ -50,11 +50,16 @@ pub fn form_group(work: Grid) -> Group {
             let line = Line::new(point_4, point_2);
             graph.append(line.draw());
 
+            // Things to improve:
+            // - Currently this works for 6 points on each side, needs to be changed so it works if the entire
+            // number of points is even.
+            // - current algorithm may favor a certain distribution of crossings, change it
+            // - move to a lib when it's better and more general
+
             let mut points = Vec::new();
             let mut other_points = Vec::new();
             let mut min = 0;
             for side in 0..3 {
-                // let the_side = &all_coords.0[row][col].0[side];
                 for point in min..amount {
                     points.push(all_coords.0[row][col].0[side].0[point])
                 }
