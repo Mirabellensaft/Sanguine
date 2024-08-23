@@ -11,7 +11,7 @@ pub struct Grid {
     pub height: i32,
     /// Work width in pixels
     pub width: i32,
-    /// A margin, value is currently never applied anywhere.
+    /// A margin
     pub margin: i32,
     /// Number of rows the grid has.
     pub rows: usize,
@@ -48,8 +48,8 @@ impl Layout for Grid {
             }
             LayoutType::VoronoiBased(_) => return Err(Error::LayoutTypeError),
         }
-        let column_width = parameters.width / columns as i32;
-        let row_height = parameters.height / rows as i32;
+        let column_width = (parameters.width / columns as i32) - parameters.margin as i32;
+        let row_height = (parameters.height / rows as i32) - parameters.margin as i32;
 
         let mut fields = Vec::new();
 
@@ -57,10 +57,10 @@ impl Layout for Grid {
             let mut inner = Vec::new();
             for col in 0..columns {
                 let field = Field {
-                    x: column_width * col as i32,
-                    y: row_height * row as i32,
-                    column_width: column_width,
-                    row_height: row_height,
+                    x: (column_width + parameters.margin) * col as i32,
+                    y: (row_height + parameters.margin) * row as i32,
+                    column_width: column_width, // - parameters.margin,
+                    row_height: row_height,     // - parameters.margin,
                     density: Density::Empty,
                 };
                 inner.push(field)
@@ -86,6 +86,10 @@ impl Layout for Grid {
 
     fn get_height(&self) -> i32 {
         self.height
+    }
+
+    fn get_margin(&self) -> i32 {
+        self.margin
     }
 
     fn get_rows(&self) -> usize {
