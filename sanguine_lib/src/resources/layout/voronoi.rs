@@ -136,6 +136,10 @@ impl Layout for VoronoiDiagram {
         self.height
     }
 
+    fn get_margin(&self) -> i32 {
+        self.margin
+    }
+
     fn get_rows(&self) -> usize {
         unimplemented!()
     }

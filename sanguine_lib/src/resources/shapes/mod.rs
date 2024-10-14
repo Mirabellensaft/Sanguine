@@ -6,6 +6,7 @@ use crate::resources::shapes::{line::Line, point::Point};
 use super::layout::grid::Field;
 
 pub mod circle;
+pub mod curve;
 pub mod ellipse;
 pub mod line;
 pub mod point;
