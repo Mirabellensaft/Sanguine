@@ -5,9 +5,9 @@ Since the renaissance it has been shaped into a kind of pencil, used mainly for 
 
 The goal is to build a framework for generative art for pen plotters in Rust.
 
-Support this work by buying the art work that comes out of it at ko-fi, or by buying me a ko-fi. Or by buying me one every month!
+<!-- Support this work by buying the art work that comes out of it at ko-fi, or by buying me a ko-fi. Or by buying me one every month!
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0N8I4U)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0N8I4U) -->
 
 
 Hello, World!
@@ -28,6 +28,21 @@ Hello, World!
 - [ ] input from hardware rngs
 
 ## Changes, Thoughts and Learnings (newest first)
+
+### October 14th, 2023
+
+Inspired by mushroom lamellas.
+
+<figure>
+    <img
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00013.png"
+        width="1200"
+        height="1300"
+        alt="Mushroom Lamellas">
+    <figcaption>Inspired by mushroom lamellas.</figcaption>
+</figure>
+
+Bezier Arcs are now possible.
 
 ### December 21st, 2023
 

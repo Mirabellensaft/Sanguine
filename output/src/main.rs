@@ -8,7 +8,7 @@ use chrono::Local;
 use std::env;
 
 mod work;
-use work::{blocks, star_burst, voronated_star_burst, voronoi, voronoi_simple};
+use work::{mush, star_burst, voronated_star_burst, voronoi, voronoi_simple};
 
 fn main() {
     env::set_var("RUST_BACKTRACE", "1");
@@ -35,7 +35,7 @@ fn main() {
                     let document = Document::new()
                         .set("viewBox", (0, 0, work.get_width(), work.get_height()))
                         .add(work.background())
-                        .add(blocks::form_group(work));
+                        .add(mush::form_group(work));
 
                     let local_time = Local::now();
                     let path = format!("nr_{:03}_{}.svg", i, local_time.format("%Y%m%d_%H%M%S"));
