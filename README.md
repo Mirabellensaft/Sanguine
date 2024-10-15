@@ -29,6 +29,28 @@ Hello, World!
 
 ## Changes, Thoughts and Learnings (newest first)
 
+### October 15th, 2023
+
+New shape dropped. Circloid.
+<figure>
+    <img
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00014.png"
+        width="800"
+        height="800"
+        alt="5 Circloids">
+    <figcaption>5 Circloids.</figcaption>
+</figure>
+
+<figure>
+    <img
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00014.png"
+        width="800"
+        height="800"
+        alt="Many Circloids">
+    <figcaption>Many Circloids.</figcaption>
+</figure>
+
+
 ### October 14th, 2023
 
 Inspired by mushroom lamellas.
@@ -36,8 +58,8 @@ Inspired by mushroom lamellas.
 <figure>
     <img
         src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00013.png"
-        width="1200"
-        height="1300"
+        width="800"
+        height="800"
         alt="Mushroom Lamellas">
     <figcaption>Inspired by mushroom lamellas.</figcaption>
 </figure>
