@@ -48,7 +48,7 @@ pub trait Layout {
     fn get_margin(&self) -> i32;
     fn get_rows(&self) -> usize;
     fn get_columns(&self) -> usize;
-    fn get_points(&self) -> Vec<Cell>;
+    fn get_cells(&self) -> Vec<Cell>;
     fn get_fields(&self) -> Vec<Vec<Field>>;
 }
 

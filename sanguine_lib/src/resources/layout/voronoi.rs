@@ -148,7 +148,7 @@ impl Layout for VoronoiDiagram {
         unimplemented!()
     }
 
-    fn get_points(&self) -> Vec<Cell> {
+    fn get_cells(&self) -> Vec<Cell> {
         self.cells.clone()
     }
 
@@ -165,7 +165,7 @@ impl Cell {
     pub fn find_neighbors(&self, diagram: &VoronoiDiagram) -> Vec<(Point, Density, Line)> {
         let mut neighbors_centers = Vec::new();
         for side in &self.border_lines {
-            for cell in &diagram.get_points() {
+            for cell in &diagram.get_cells() {
                 for other_side in &cell.border_lines {
                     if side.equal(*other_side) {
                         neighbors_centers.push((cell.center, cell.get_density(), *side));
