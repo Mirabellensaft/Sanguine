@@ -35,8 +35,8 @@ New shape dropped. Circloid.
 <figure>
     <img
         src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00014.png"
-        width="800"
-        height="800"
+        width="300"
+        height="300"
         alt="5 Circloids">
     <figcaption>5 Circloids.</figcaption>
 </figure>
@@ -44,8 +44,8 @@ New shape dropped. Circloid.
 <figure>
     <img
         src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00014.png"
-        width="800"
-        height="800"
+        width="300"
+        height="300"
         alt="Many Circloids">
     <figcaption>Many Circloids.</figcaption>
 </figure>
@@ -53,18 +53,18 @@ New shape dropped. Circloid.
 
 ### October 14th, 2023
 
-Inspired by mushroom lamellas.
+Inspired by mushroom lamellas. Bezier Arcs are now possible.
 
 <figure>
     <img
         src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00013.png"
-        width="800"
-        height="800"
+        width="300"
+        height="300"
         alt="Mushroom Lamellas">
     <figcaption>Inspired by mushroom lamellas.</figcaption>
 </figure>
 
-Bezier Arcs are now possible.
+
 
 ### December 21st, 2023
 
