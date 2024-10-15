@@ -43,7 +43,7 @@ New shape dropped. Circloid.
 
 <figure>
     <img
-        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00014.png"
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00015.png"
         width="300"
         height="300"
         alt="Many Circloids">
