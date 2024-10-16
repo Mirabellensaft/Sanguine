@@ -4,7 +4,7 @@ use svg::node::element::Path;
 
 use crate::resources::shapes::{path, point::Point};
 
-use super::{is_x_range_larger, range, Shape};
+use super::range;
 
 /// This module contains types related to shapes that show up in the rendered or plotted image.
 /// Everything is hard coded to generate black curves of 1px width, as this is the only relevant
@@ -39,11 +39,11 @@ impl Curve {
 
     /// Returns the point on a curve for a given x value. Returns none if there
     /// is no point for that x value, usually the case when the curve is vertical.
-    pub fn return_point_from_x(&self, x: f32) -> Option<Point> {
+    pub fn return_point_from_x(&self, _x: f32) -> Option<Point> {
         unimplemented!()
     }
 
-    pub fn return_point_from_y(&self, y: f32) -> Option<Point> {
+    pub fn return_point_from_y(&self, _y: f32) -> Option<Point> {
         unimplemented!()
     }
 
@@ -59,7 +59,7 @@ impl Curve {
     }
 
     /// Returns an amount of random, non duplicate points on a curve
-    pub fn random_points(&self, amount: usize) -> Vec<Point> {
+    pub fn random_points(&self, _amount: usize) -> Vec<Point> {
         unimplemented!()
     }
 
@@ -105,28 +105,3 @@ impl Curve {
 //         unimplemented!()
 //     }
 // }
-
-// Helpers
-
-fn return_chosen_value(start_v: f32, end_v: f32, amount: usize) -> Vec<i32> {
-    let mut p_values = Vec::new();
-    let mut chosen_values = Vec::new();
-
-    let mut rng = &mut rand::thread_rng();
-    for value in range(start_v, end_v).step_by(2) {
-        p_values.push(value);
-        if amount < p_values.len() {
-            chosen_values = p_values
-                .choose_multiple(&mut rng, amount)
-                .cloned()
-                .collect();
-        } else {
-            let amount = p_values.len() / 2;
-            chosen_values = p_values
-                .choose_multiple(&mut rng, amount)
-                .cloned()
-                .collect();
-        }
-    }
-    chosen_values
-}

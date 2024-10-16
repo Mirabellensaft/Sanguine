@@ -78,7 +78,7 @@ pub fn form_group(work: &mut VoronoiDiagram) -> Group {
             _ => (),
         }
     }
-    for cell in work.get_points() {
+    for cell in work.get_cells() {
         for line in &cell.border_lines {
             graph.append(line.draw());
         }

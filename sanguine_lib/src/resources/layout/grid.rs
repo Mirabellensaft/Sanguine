@@ -1,6 +1,5 @@
 #[allow(implied_bounds_entailment)]
-use crate::resources::composition::Density;
-use crate::resources::errors::Error;
+use crate::resources::{composition::Density, errors::Error, shapes::point::Point};
 
 use super::voronoi::Cell;
 use super::{Layout, LayoutType, Parameters};
@@ -33,6 +32,8 @@ pub struct Field {
     pub row_height: i32,
     /// Density
     pub density: Density,
+    /// center point
+    pub center: Point,
 }
 
 impl Layout for Grid {
@@ -56,13 +57,20 @@ impl Layout for Grid {
         for row in 0..rows {
             let mut inner = Vec::new();
             for col in 0..columns {
+                let x = (column_width + parameters.margin) * col as i32;
+                let y = (row_height + parameters.margin) * row as i32;
                 let field = Field {
-                    x: (column_width + parameters.margin) * col as i32,
-                    y: (row_height + parameters.margin) * row as i32,
+                    x: x,
+                    y: x,
                     column_width: column_width, // - parameters.margin,
                     row_height: row_height,     // - parameters.margin,
                     density: Density::Empty,
+                    center: Point::new(
+                        x as f32 + (column_width / 2) as f32,
+                        y as f32 + (row_height / 2) as f32,
+                    ),
                 };
+
                 inner.push(field)
             }
             fields.push(inner)
@@ -100,7 +108,7 @@ impl Layout for Grid {
         self.columns
     }
 
-    fn get_points(&self) -> Vec<Cell> {
+    fn get_cells(&self) -> Vec<Cell> {
         unimplemented!()
     }
 

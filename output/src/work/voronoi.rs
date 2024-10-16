@@ -12,7 +12,7 @@ pub fn form_group(work: VoronoiDiagram) -> node::element::Group {
     let mut my_work = MyVoronoiDiagram(work);
     my_work.filled(&Density::Mid);
 
-    for cell in my_work.0.get_points() {
+    for cell in my_work.0.get_cells() {
         for line in &cell.border_lines {
             graph.append(line.draw());
         }

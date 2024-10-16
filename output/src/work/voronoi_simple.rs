@@ -5,7 +5,7 @@ pub fn form_group(work: &VoronoiDiagram) -> node::element::Group {
     // pub fn form_group() {
     let mut graph = node::element::Group::new();
 
-    for cell in work.get_points() {
+    for cell in work.get_cells() {
         for line in &cell.border_lines {
             graph.append(line.draw());
         }

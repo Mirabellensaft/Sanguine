@@ -8,7 +8,7 @@ pub fn form_group(work: &VoronoiDiagram) -> node::element::Group {
     let mut graph = node::element::Group::new();
     let mut rng = rand::thread_rng();
 
-    for cell in work.get_points() {
+    for cell in work.get_cells() {
         for i in 0..5 {
             let circloid = Circloid::new(
                 cell.center,
