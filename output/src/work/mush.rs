@@ -1,33 +1,21 @@
-use rand::{seq::SliceRandom, thread_rng, Rng};
+use rand::Rng;
 
-use sanguine_lib::resources::{
-    border_coordinates::all::AllBorderCoordinates,
-    composition::{Composition, CompositionCenter, Density},
-    layout::{grid::Grid, Layout},
-    shapes::{circle::Circle, curve::Curve, line::Line, point::Point},
-};
+use sanguine_lib::resources::shapes::{curve::Curve, point::Point};
 
 use std::f64::consts::PI;
 use svg::{node::element::Group, Node};
 
-pub fn form_group(work: Grid) -> Group {
+pub fn form_group() -> Group {
     let mut graph = Group::new();
-    let mut rng = &mut rand::thread_rng();
+    let rng = &mut rand::thread_rng();
     let center = Point::new(250.0, 250.0);
     let inner_radius = rng.gen_range(30.0..60.0);
     let outer_radius = rng.gen_range(80.0..230.0);
     let num_lines = 150;
 
-    // Add inner and outer circles
-    let inner_circle = Circle::new(center, inner_radius);
-    // graph.append(inner_circle.draw());
-
-    let outer_circle = Circle::new(center, outer_radius);
-    // graph.append(outer_circle.draw());
-
     // Add wiggly lines between the circles
     for i in 0..num_lines {
-        let mut rng = &mut rand::thread_rng();
+        // let rng = &mut rand::thread_rng();
         let angle = (i as f64 / num_lines as f64) * 2.0 * PI;
 
         // Start point on the inner circle

@@ -148,7 +148,7 @@ impl Shape for Line {
         unimplemented!()
     }
 
-    fn contains(&self, point: Point) -> bool {
+    fn contains(&self, _point: Point) -> bool {
         unimplemented!()
     }
 

@@ -121,6 +121,9 @@ impl Layout for VoronoiDiagram {
             cells: cells,
         };
 
+        // sets centers for each cell.
+        // this is the point around which the voronoi cell has been built, not the the center point!!
+        // add the center point also!!
         for i in 0..len_centers {
             work.cells[i].center = Point::new(work.centers[i].0 as f32, work.centers[i].1 as f32);
         }

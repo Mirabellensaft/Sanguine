@@ -20,7 +20,6 @@ impl Circloid {
         // Generate a random starting angle between 0 and 2*pi
         let mut rng = rand::thread_rng();
         let random_start_angle: f64 = rng.gen_range(0.0..2.0 * PI);
-        let mut first_point = (0.0, 0.0);
         let num_points = 1000;
         let mut point_collection: Vec<Point> = vec![];
 
@@ -51,12 +50,7 @@ impl Circloid {
             let y = center.y + (modulated_radius * angle.sin()) as f32;
 
             // Store the first point and move to it
-            if i == 0 {
-                first_point = (x, y);
-                point_collection.push(Point { x, y });
-            } else {
-                point_collection.push(Point { x, y });
-            }
+            point_collection.push(Point { x, y });
         }
 
         // Arc that covers the remaining 1/3 of the shape
@@ -90,13 +84,11 @@ impl Circloid {
     }
 
     pub fn draw(&self) -> Path {
-        let mut first_point = (0.0, 0.0);
         let mut data = Data::new();
         let mut i = 0;
 
         for point in &self.point_collection {
             if i == 0 {
-                first_point = (point.x, point.y);
                 data = data.move_to((point.x, point.y));
                 i += 1;
             } else {

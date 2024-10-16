@@ -1,4 +1,3 @@
-// use geo::Point;
 #[allow(implied_bounds_entailment)]
 use crate::resources::{composition::Density, errors::Error, shapes::point::Point};
 
