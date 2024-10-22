@@ -1,7 +1,9 @@
 pub mod blocks;
 pub mod mush;
+pub mod mushroom;
 pub mod star_burst;
 pub mod star_burst_lib;
+pub mod test_circloid;
 pub mod tester;
 pub mod voronated_star_burst;
 pub mod voronoi;
