@@ -22,9 +22,10 @@ impl Circloid {
         let random_start_angle: f64 = rng.gen_range(0.0..2.0 * PI);
         let num_points = 1000;
         let mut point_collection: Vec<Point> = vec![];
+        let mut zero_angle_point = Point::new(0.0, 0.0);
 
         // 2/3 of the shape will be a sine wave
-        let sine_fraction = 2.0 / 3.0;
+        let sine_fraction = 4.0 / 6.0;
         let sine_wave_points = (num_points as f64 * sine_fraction).round() as usize;
 
         for i in 0..=sine_wave_points {
@@ -51,9 +52,13 @@ impl Circloid {
 
             // Store the first point and move to it
             point_collection.push(Point { x, y });
+
+            if find_smallest_angle(angle) {
+                zero_angle_point = Point { x, y };
+            }
         }
 
-        // Arc that covers the remaining 1/3 of the shape
+        // Arc that covers the 1/3 of the shape
         let arc_radius = base_radius;
         let arc_start_angle = sine_fraction * 2.0 * PI;
         let arc_end_angle = 2.0 * PI;
@@ -71,7 +76,24 @@ impl Circloid {
             // Draw the line for the arc
             point_collection.push(Point { x, y });
             // data = data.line_to((x, y));
+            if find_smallest_angle(angle) {
+                zero_angle_point = Point { x, y };
+            }
         }
+
+        // note for later:
+        // Arc that covers the remaining 1/6 of the shape
+        // this arc transitions from tangent at last former arc point to tangent of first sinus point
+        if let Some(sorted_point_collection) = reorder_vec_to_0(zero_angle_point, &point_collection)
+        {
+            return Circloid {
+                center: center,
+                base_radius: base_radius,
+                amplitude: amplitude, // 2.0..8.0
+                frequency: frequency, //1.2..3.0
+                point_collection: sorted_point_collection,
+            };
+        };
 
         let circloid = Circloid {
             center: center,
@@ -101,5 +123,23 @@ impl Circloid {
 
         let path = path(data);
         path
+    }
+}
+
+// Helpers
+fn reorder_vec_to_0(point: Point, vec: &Vec<Point>) -> Option<Vec<Point>> {
+    if let Some(index) = vec.iter().position(|&r| r == point) {
+        let (before, after) = vec.split_at(index);
+        Some([after, before].concat())
+    } else {
+        None
+    }
+}
+
+fn find_smallest_angle(angle: f64) -> bool {
+    if angle > 6.27 && angle < 6.29 {
+        return true;
+    } else {
+        return false;
     }
 }
