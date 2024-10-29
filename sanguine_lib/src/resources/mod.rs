@@ -10,3 +10,4 @@ pub mod shapes;
 pub mod exclusion;
 
 pub mod errors;
+pub mod lsystems;
