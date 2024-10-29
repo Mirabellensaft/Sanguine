@@ -20,7 +20,7 @@ Hello, World!
 - [ ] parse a limited number of shapes from svg files (WIP).
 - [x] add more organic ways to generate images, such as voronoi diagrams
 - [ ] adapt composition things to work with voronoi diagrams
-- [ ] experiment with L-systems.
+- [x] experiment with L-systems.
 - [ ] add noise generator
 - [ ] add camera input, so the generated art can be a reaction to what already is on paper.
 - [ ] project layout that allows for easy transitions between creating art work with lots of predefined functions, writing custom parts for the frame work and switching between different works of art.
@@ -29,9 +29,21 @@ Hello, World!
 
 ## Changes, Thoughts and Learnings (newest first)
 
+### October 29th, 2023
+
+I added a basic implementation of L-Systems, as described here [https://paulbourke.net/fractals/lsys/]. I omitted rules about filled polygons, and will add more rules about shapes that are already present in the lib. There is also a need for more randomness in the parameters. 
+<figure>
+    <img
+        src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00016.png"
+        width="300"
+        height="300"
+        alt="A generated Tree">
+    <figcaption>A generated Tree.</figcaption>
+</figure>
+
 ### October 15th, 2023
 
-New shape dropped. Circloid.
+New shape dropped. The Circloid.
 <figure>
     <img
         src="https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00014.png"
