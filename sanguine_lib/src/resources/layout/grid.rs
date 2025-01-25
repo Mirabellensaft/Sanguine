@@ -49,19 +49,24 @@ impl Layout for Grid {
             }
             LayoutType::VoronoiBased(_) => return Err(Error::LayoutTypeError),
         }
-        let column_width = (parameters.width / columns as i32) - parameters.margin as i32;
-        let row_height = (parameters.height / rows as i32) - parameters.margin as i32;
+        let column_width = (parameters.width / columns as i32)
+            - (parameters.margin as i32 / columns as i32)
+            - parameters.margin as i32;
+        let row_height = (parameters.height / rows as i32)
+            - (parameters.margin as i32 / columns as i32)
+            - parameters.margin as i32;
 
         let mut fields = Vec::new();
 
         for row in 0..rows {
             let mut inner = Vec::new();
             for col in 0..columns {
-                let x = (column_width + parameters.margin) * col as i32;
-                let y = (row_height + parameters.margin) * row as i32;
+                let x = parameters.margin + ((column_width + parameters.margin) * col as i32);
+                let y = parameters.margin + ((row_height + parameters.margin) * row as i32);
+
                 let field = Field {
                     x: x,
-                    y: x,
+                    y: y,
                     column_width: column_width, // - parameters.margin,
                     row_height: row_height,     // - parameters.margin,
                     density: Density::Empty,
@@ -70,7 +75,6 @@ impl Layout for Grid {
                         y as f32 + (row_height / 2) as f32,
                     ),
                 };
-
                 inner.push(field)
             }
             fields.push(inner)
