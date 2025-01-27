@@ -40,7 +40,7 @@ pub enum Density {
     Focus,
 }
 
-/// Direction variants describe from where to where something is going in a field.
+/// Direction variants describe from where to where something is going in a tile.
 /// There is currently no 'None' option, a workouround is to just not read out a
 /// set direction when rendering the Density variant that has a direction.
 ///

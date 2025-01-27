@@ -1,7 +1,7 @@
 use rand::{thread_rng, Rng};
 use svg::node::element::Circle as CirclePath;
 
-use crate::resources::layout::grid::Field;
+use crate::resources::layout::grid::Tile;
 
 /// This module contains types related to shapes that show up in the rendered or plotted image.
 /// Everything is hard coded to generate black lines of 1px width, as this is the only relevant
@@ -23,30 +23,30 @@ impl Point {
 
         point
     }
-    /// Creates a random Point within a field
-    pub fn random_coordinate(field: &Field, margin: i32) -> Self {
+    /// Creates a random Point within a tile
+    pub fn random_coordinate(tile: &Tile, margin: i32) -> Self {
         let mut rng = thread_rng();
         println!(
-            "random field: x{}, y{}, w{}, h{}, margin {}",
-            field.x, field.y, field.column_width, field.row_height, margin
+            "random tile: x{}, y{}, w{}, h{}, margin {}",
+            tile.x, tile.y, tile.width, tile.height, margin
         );
         let horizontal: std::ops::Range<i32> = std::ops::Range {
-            start: field.x + margin,
-            end: field.x + field.column_width - margin,
+            start: tile.x + margin,
+            end: tile.x + tile.width - margin,
         };
         println!(
             "random X start:{}, end: {}",
-            field.x + margin,
-            field.x + field.column_width - margin
+            tile.x + margin,
+            tile.x + tile.width - margin
         );
         let vertical: std::ops::Range<i32> = std::ops::Range {
-            start: field.y + margin,
-            end: field.y + field.row_height - margin,
+            start: tile.y + margin,
+            end: tile.y + tile.height - margin,
         };
         println!(
             "random Y start:{}, end: {}",
-            field.y + margin,
-            field.y + field.row_height - margin
+            tile.y + margin,
+            tile.y + tile.height - margin
         );
         println!("random hor: {:?}, vert: {:?}", horizontal, vertical);
         // println!("h {:?}, v {:?}", horizontal, vertical);

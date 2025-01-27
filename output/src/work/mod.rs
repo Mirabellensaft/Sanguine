@@ -6,6 +6,7 @@ pub mod star_burst;
 pub mod star_burst_lib;
 pub mod test_circloid;
 pub mod tester;
+pub mod veranator;
 pub mod voronated_star_burst;
 pub mod voronoi;
 pub mod voronoi_circloid;

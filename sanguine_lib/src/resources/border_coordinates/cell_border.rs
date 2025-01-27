@@ -1,26 +1,26 @@
-use crate::resources::{layout::grid::Field, shapes::point::Point};
+use crate::resources::{layout::grid::Tile, shapes::point::Point};
 use rand::{thread_rng, Rng};
 
 use super::one_side::OneSide;
 
-/// This module contains a bunch of functions that create random coordinates on field borders.
+/// This module contains a bunch of functions that create random coordinates on tile borders.
 ///
-/// It's currently limited to fields with 4 sides.
+/// It's currently limited to tiles with 4 sides.
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct CellBorderCoords(pub Vec<OneSide>);
 
 impl CellBorderCoords {
     /// Returns a vec of 4 vecs with a given number of random points, so you have random points
-    /// around the edge of a field.
+    /// around the edge of a tile.
     ///
-    pub fn new(field: Field, amount: usize) -> Self {
+    pub fn new(tile: Tile, amount: usize) -> Self {
         let mut sides = Vec::new();
 
         let mut coordinates = OneSide::new();
-        let x = array_of_values(field.x, field.column_width, 1);
+        let x = array_of_values(tile.x, tile.width, 1);
         for i in 0..amount {
-            coordinates.0.push(Point::new(x[i], field.y as f32));
+            coordinates.0.push(Point::new(x[i], tile.y as f32));
             // println!("coordinates:{:?}", coordinates[side][i]);
         }
         coordinates.sort_points_on_line();
@@ -28,31 +28,31 @@ impl CellBorderCoords {
         sides.push(coordinates);
 
         let mut coordinates = OneSide::new();
-        let y = array_of_values(field.y, field.row_height, 1);
+        let y = array_of_values(tile.y, tile.height, 1);
         for i in 0..amount {
-            coordinates.0.push(Point::new(field.x as f32, y[i]));
+            coordinates.0.push(Point::new(tile.x as f32, y[i]));
             // println!("coordinates:{:?}", coordinates[side][i]);
         }
         coordinates.sort_points_on_line();
         sides.push(coordinates);
 
         let mut coordinates = OneSide::new();
-        let x = array_of_values(field.x, field.column_width, 1);
+        let x = array_of_values(tile.x, tile.width, 1);
         for i in 0..amount {
             coordinates
                 .0
-                .push(Point::new(x[i], field.y as f32 + field.row_height as f32));
+                .push(Point::new(x[i], tile.y as f32 + tile.height as f32));
             // println!("coordinates:{:?}", coordinates[side][i]);
         }
         coordinates.sort_points_on_line();
         sides.push(coordinates);
 
         let mut coordinates = OneSide::new();
-        let y = array_of_values(field.y, field.row_height, 1);
+        let y = array_of_values(tile.y, tile.height, 1);
         for i in 0..amount {
             coordinates
                 .0
-                .push(Point::new(field.x as f32 + field.column_width as f32, y[i]));
+                .push(Point::new(tile.x as f32 + tile.width as f32, y[i]));
             // println!("coordinates:{:?}", coordinates[side][i]);
         }
         coordinates.sort_points_on_line();

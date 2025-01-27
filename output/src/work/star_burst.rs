@@ -46,15 +46,15 @@ pub fn form_group(work: Grid) -> Group {
                 Density::ThreeWay(_) => radius = rng.gen_range(RADIUS_MID),
                 _ => (),
             }
-            let field = &my_work.0.get_fields()[row as usize][col as usize];
+            let tile = &my_work.0.get_tiles()[row as usize][col as usize];
             println!(
-                "field: x{}, y{}, width{}, height{}",
-                field.x, field.y, field.column_width, field.row_height
+                "tile: x{}, y{}, width{}, height{}",
+                tile.x, tile.y, tile.width, tile.height
             );
             graph = star_burst_lib::draw::everything(
                 my_work.0.container[row][col].density.clone(),
                 &all_coords.0[row][col],
-                field,
+                tile,
                 radius,
                 graph,
             );

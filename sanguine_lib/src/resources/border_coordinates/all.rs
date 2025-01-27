@@ -2,9 +2,9 @@ use crate::resources::layout::{grid::Grid, voronoi::VoronoiDiagram, Layout};
 
 use super::{cell_border::CellBorderCoords, one_side::OneSide};
 
-/// This module contains a bunch of functions that create random coordinates on field borders.
+/// This module contains a bunch of functions that create random coordinates on tile borders.
 ///
-/// It's currently limited to fields with 4 sides.
+/// It's currently limited to tiles with 4 sides.
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct AllBorderCoordinates(pub Vec<Vec<CellBorderCoords>>);
@@ -19,7 +19,7 @@ impl AllBorderCoordinates {
             for col in 0..work.get_columns() {
                 inner.push(CellBorderCoords::new(
                     // is this clone ok???
-                    work.get_fields()[row][col].clone(),
+                    work.get_tiles()[row][col].clone(),
                     amount,
                 ));
             }
@@ -44,7 +44,7 @@ impl AllBorderCoordinates {
         AllBorderCoordinates(outer)
     }
 
-    /// Tesselation, makes sure that points on the edges of a field are corresponding with the neighboring edge
+    /// Tesselation, makes sure that points on the edges of a tile are corresponding with the neighboring edge
     /// 0 = top
     /// 1 = left
     /// 2 = bottom

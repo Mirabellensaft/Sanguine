@@ -1,9 +1,9 @@
 use crate::resources::shapes::{line::Line, point::Point};
 use rand::{thread_rng, Rng};
 
-/// This module contains a bunch of functions that create random coordinates on field borders.
+/// This module contains a bunch of functions that create random coordinates on tile borders.
 ///
-/// It's currently limited to fields with 4 sides.
+/// It's currently limited to tiles with 4 sides.
 #[derive(Clone, Debug, PartialEq)]
 pub struct OneSide(pub Vec<Point>);
 

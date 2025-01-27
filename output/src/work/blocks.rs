@@ -1,12 +1,11 @@
-use rand::{thread_rng, Rng};
+use rand::{seq::SliceRandom, thread_rng, Rng};
 
 use svg::{node::element::Group, Node};
 
 use sanguine_lib::resources::{
     border_coordinates::all::AllBorderCoordinates,
-    composition::{Composition, CompositionCenter, Density},
     layout::{grid::Grid, Layout},
-    shapes::{circle::Circle, line::Line, point::Point},
+    shapes::{line::Line, point::Point},
 };
 
 pub fn form_group(work: Grid) -> Group {
@@ -20,25 +19,23 @@ pub fn form_group(work: Grid) -> Group {
     // Drawing of the Elements
     for row in 0..work.get_rows() {
         for col in 0..work.get_columns() {
-            let mut rng = thread_rng();
-
-            let field = &work.get_fields()[row as usize][col as usize];
-            // println!(
-            //     "field: x{}, y{}, width{}, height{}",
-            //     field.x, field.y, field.column_width, field.row_height
-            // );
-            let point_1 = Point::new((field.x + margin) as f32, (field.y + margin) as f32);
+            let tile = &work.get_tiles()[row as usize][col as usize];
+            println!(
+                "tile: x{}, y{}, width{}, height{}",
+                tile.x, tile.y, tile.width, tile.height
+            );
+            let point_1 = Point::new((tile.x + margin) as f32, (tile.y + margin) as f32);
             let point_2 = Point::new(
-                (field.x + margin) as f32,
-                (field.y + field.row_height - margin) as f32,
+                (tile.x + margin) as f32,
+                (tile.y + tile.height - margin) as f32,
             );
             let point_3 = Point::new(
-                (field.x + field.column_width - margin) as f32,
-                (field.y + margin) as f32,
+                (tile.x + tile.width - margin) as f32,
+                (tile.y + margin) as f32,
             );
             let point_4 = Point::new(
-                (field.x + field.column_width - margin) as f32,
-                (field.y + field.row_height - margin) as f32,
+                (tile.x + tile.width - margin) as f32,
+                (tile.y + tile.height - margin) as f32,
             );
 
             let line = Line::new(point_1, point_2);
@@ -70,10 +67,14 @@ pub fn form_group(work: Grid) -> Group {
                     }
                 }
                 println!("len vec {}, {}", points.len(), other_points.len());
-                for i in 0..points.len() {
+
+                other_points.shuffle(&mut thread_rng());
+                points.shuffle(&mut thread_rng());
+                for i in 0..points.len() / 2 {
                     let line = Line::new(points[i], other_points[i]);
                     graph.append(line.draw());
                 }
+
                 points.clear();
                 other_points.clear();
                 min += 2;

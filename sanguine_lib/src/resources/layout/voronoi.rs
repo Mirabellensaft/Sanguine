@@ -8,7 +8,7 @@ use rand::prelude::*;
 use voronator::delaunator::Point as VoiPoint;
 use voronator::VoronoiDiagram as VoiDi;
 
-use super::{grid::Field, Layout, LayoutType, Parameters, VoronoiType};
+use super::{grid::Tile, Layout, LayoutType, Parameters, VoronoiType};
 
 #[derive(Clone, Debug)]
 pub struct Cell {
@@ -17,8 +17,8 @@ pub struct Cell {
     pub density: Density,
 }
 
-/// Measurement properties of one field.
-/// Maybe width and height can go somewhere else, because its the same for every field?
+/// Measurement properties of one tile.
+/// Maybe width and height can go somewhere else, because its the same for every tile?
 
 #[derive(Debug, Clone)]
 pub struct VoronoiDiagram {
@@ -155,7 +155,7 @@ impl Layout for VoronoiDiagram {
         self.cells.clone()
     }
 
-    fn get_fields(&self) -> Vec<Vec<Field>> {
+    fn get_tiles(&self) -> Vec<Vec<Tile>> {
         unimplemented!()
     }
 

@@ -25,10 +25,8 @@ pub fn form_group(work: Grid, ex: &Exclusion) -> node::element::Group {
 
             let radius = rng.gen_range(7..=15);
 
-            let center = Point::random_coordinate(
-                &work.get_fields()[row as usize][col as usize],
-                radius * 2,
-            );
+            let center =
+                Point::random_coordinate(&work.get_tiles()[row as usize][col as usize], radius * 2);
 
             if ex.0[0].contains(center) == false {
                 let circle = {
