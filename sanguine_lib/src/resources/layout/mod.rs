@@ -9,7 +9,7 @@ use svg::{
 
 use super::{
     errors::Error,
-    layout::{grid::Field, voronoi::Cell},
+    layout::{grid::Tile, voronoi::Cell},
 };
 
 use super::shapes::point::Point;
@@ -49,7 +49,7 @@ pub trait Layout {
     fn get_rows(&self) -> usize;
     fn get_columns(&self) -> usize;
     fn get_cells(&self) -> Vec<Cell>;
-    fn get_fields(&self) -> Vec<Vec<Field>>;
+    fn get_tiles(&self) -> Vec<Vec<Tile>>;
 }
 
 pub struct Parameters {

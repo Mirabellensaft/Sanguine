@@ -3,8 +3,9 @@ use svg::node::element::Path;
 
 use crate::resources::shapes::{line::Line, point::Point};
 
-use super::layout::grid::Field;
+use super::layout::grid::Tile;
 
+pub mod arc;
 pub mod circle;
 pub mod circloid;
 pub mod curve;
@@ -31,23 +32,23 @@ fn path(data: Data) -> Path {
 }
 
 /// Creates a random distorted square
-pub fn distorted_square(field: Field) -> Path {
+pub fn distorted_square(tile: Tile) -> Path {
     let data = Data::new()
         .move_to((
-            Point::random_coordinate(&field, 0).x,
-            Point::random_coordinate(&field, 0).y,
+            Point::random_coordinate(&tile, 0).x,
+            Point::random_coordinate(&tile, 0).y,
         ))
         .line_to((
-            Point::random_coordinate(&field, 0).x,
-            Point::random_coordinate(&field, 0).y,
+            Point::random_coordinate(&tile, 0).x,
+            Point::random_coordinate(&tile, 0).y,
         ))
         .line_to((
-            Point::random_coordinate(&field, 0).x,
-            Point::random_coordinate(&field, 0).y,
+            Point::random_coordinate(&tile, 0).x,
+            Point::random_coordinate(&tile, 0).y,
         ))
         .line_to((
-            Point::random_coordinate(&field, 0).x,
-            Point::random_coordinate(&field, 0).y,
+            Point::random_coordinate(&tile, 0).x,
+            Point::random_coordinate(&tile, 0).y,
         ))
         .close();
 

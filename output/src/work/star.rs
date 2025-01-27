@@ -9,12 +9,12 @@
 //                     let mut rng = thread_rng();
 //                     let radius = rng.gen_range(3..=10);
 
-//                     let center = random_numbers::coordinate(&layout.field_container[row as usize][col as usize], radius);
+//                     let center = random_numbers::coordinate(&layout.tile_container[row as usize][col as usize], radius);
 
 //                     let circle =shapes::Circle::new(center, radius as f32);
 //                     graph.append(circle.draw());
 
-//                     // let coordinates = random_numbers::coordinates_on_border(&layout.field_container[row as usize][col as usize]);
+//                     // let coordinates = random_numbers::coordinates_on_border(&layout.tile_container[row as usize][col as usize]);
 
 //                     for i in 0..40 {
 

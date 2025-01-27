@@ -18,12 +18,12 @@ pub struct MyGrid(pub Grid);
 /// This type contains the density variants for the entire grid.
 
 impl Composition for MyGrid {
-    /// Creates a new grid where all fields have the Density::Empty variant
-    /// This is to start with a homogenous field of "nothing", depending
+    /// Creates a new grid where all tiles have the Density::Empty variant
+    /// This is to start with a homogenous tile of "nothing", depending
     /// on how rendering of the variant is set.
 
-    /// Creates a new grid where all fields have the Density::Mid variant.
-    /// This is to start with a homogenous field of "something", depending
+    /// Creates a new grid where all tiles have the Density::Mid variant.
+    /// This is to start with a homogenous tile of "something", depending
     /// on how rendering of the variant is set.
     fn filled(&mut self, density_var: &Density) {
         for row in 0..self.0.get_rows() {
@@ -34,7 +34,7 @@ impl Composition for MyGrid {
     }
 
     /// This function makes sure, that different Focal points are connected
-    /// through fields of Density::Mid.
+    /// through tiles of Density::Mid.
     fn connect_centers(&mut self) {
         let mut last_center: (usize, usize) = (0, 0);
 
@@ -328,8 +328,8 @@ impl Composition for MyGrid {
         }
     }
 
-    /// Helper function that determines the contact points of each empty field detected by fn retro_composition and
-    /// returns an array of 4 bools that each represent a side of the field.
+    /// Helper function that determines the contact points of each empty tile detected by fn retro_composition and
+    /// returns an array of 4 bools that each represent a side of the tile.
     ///
     fn direction_of_contact(&mut self, row: usize, col: usize) -> Vec<bool> {
         // Direction of the Edge variant points towards the block

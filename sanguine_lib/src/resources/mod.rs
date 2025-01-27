@@ -1,4 +1,4 @@
-/// This module contains a bunch of functions that create random coordinates on field borders.
+/// This module contains a bunch of functions that create random coordinates on tile borders.
 pub mod border_coordinates;
 /// This module only prescribes compositional elements.
 pub mod composition;

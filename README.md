@@ -80,7 +80,7 @@ Inspired by mushroom lamellas. Bezier Arcs are now possible.
 
 ### December 21st, 2023
 
-Epiphany!💡 I have been on this track, implementing traits for shared behavior of the types `VoronoiDiagram` and `Grid`. But the actual breakthrough in reducing tons of somewhat similar code is the idea, that the `Grid` is only a special case of a voronoi diagram. One, where all cells have exactly four sides, and corresponding sides have the same length throughout the entire thing. The main difference besides the data type is that in the `Grid` version, the cell sides are constructed first, and the center point follows, the `VoronoiDiagram` type does it the other way around. In the `Grid` type, single fields can be addressed by their row and column number, which is mostly convenient as a picture in my head, but in practice requires the same iteration over and over again.And maybe it's not needed? Maybe each `Grid` cell has enough identifying properties to work without that, just like the `VoronoiDiagram`.
+Epiphany!💡 I have been on this track, implementing traits for shared behavior of the types `VoronoiDiagram` and `Grid`. But the actual breakthrough in reducing tons of somewhat similar code is the idea, that the `Grid` is only a special case of a voronoi diagram. One, where all cells have exactly four sides, and corresponding sides have the same length throughout the entire thing. The main difference besides the data type is that in the `Grid` version, the cell sides are constructed first, and the center point follows, the `VoronoiDiagram` type does it the other way around. In the `Grid` type, single tiles can be addressed by their row and column number, which is mostly convenient as a picture in my head, but in practice requires the same iteration over and over again.And maybe it's not needed? Maybe each `Grid` cell has enough identifying properties to work without that, just like the `VoronoiDiagram`.
 
 I am not sure if I will implement this fully soon, as I feel I am also due to make more art. But realization definitely feels like a huge lesson towards more generic, reusable and thus cleaner code. The key to avoid writing so much duplicate code in the first place is to think bigger, with more use cases from the start.
 
@@ -210,9 +210,9 @@ You can buy one to support this work!
 - split code into modules, reduced a lot of duplicate code.
 - wrote abstractions for the functions provided by the svg crate, since colors, line width, the absence of fill etc. can be hard coded, as those things don't matter to a pen plotter.
 
-- added lines from border from the grid field to the circle center
+- added lines from border from the grid tile to the circle center
 
-![a 5x5 grid of random circles with lines going from the field border to the center of the circle. The star burst shape](https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00003.png?raw=true)
+![a 5x5 grid of random circles with lines going from the tile border to the center of the circle. The star burst shape](https://github.com/Mirabellensaft/sanguine/blob/main/output/images/image_00003.png?raw=true)
 
 ### November 14th, 2023
 

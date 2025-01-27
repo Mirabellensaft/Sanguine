@@ -3,7 +3,7 @@ use rand::{thread_rng, Rng};
 use sanguine_lib::resources::{
     border_coordinates::cell_border::CellBorderCoords,
     composition::{Density, Direction},
-    layout::grid::Field,
+    layout::grid::Tile,
     shapes::{circle::Circle, line::Line, point::Point},
 };
 use svg::{node::element::Group, Node};
@@ -11,7 +11,7 @@ use svg::{node::element::Group, Node};
 pub fn everything(
     density: Density,
     border_coordinates: &CellBorderCoords,
-    field: &Field,
+    tile: &Tile,
     radius: i32,
     mut graph: Group,
 ) -> Group {
@@ -67,7 +67,7 @@ pub fn everything(
         }
 
         Density::Edge(direction) => {
-            let center = Point::random_coordinate(field, radius * 2);
+            let center = Point::random_coordinate(tile, radius * 2);
 
             let side = match direction {
                 Direction::Up => 0,
@@ -145,7 +145,7 @@ pub fn everything(
         }
 
         _ => {
-            let center = Point::random_coordinate(field, radius);
+            let center = Point::random_coordinate(tile, radius);
 
             let circle = Circle::new(center, radius as f32);
             graph.append(circle.draw());

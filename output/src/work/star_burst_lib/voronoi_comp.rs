@@ -28,7 +28,7 @@ impl Composition for MyVoronoiDiagram {
 
             // for row in vertical - 1..=vertical + 1 {
             //     for col in horizontal - 1..=horizontal + 1 {
-            //         self.0.field_container[row][col].density = Density::High;
+            //         self.0.tile_container[row][col].density = Density::High;
             //         println!("mid");
             //     }
             // }
